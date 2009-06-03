@@ -1,0 +1,108 @@
+.msg-body{
+	line-height: 32px;
+}
+
+.msg-body p{
+	font-size: 14px;
+}
+.msg-body .welcome{
+	margin-bottom: 10px;	
+}
+
+.msg-body .userName{
+	color: navy;
+	font-weight: bold;
+	padding: 0px 5px;
+}
+
+.msg-body .feedbackMsg{
+	color: navy;
+}
+
+.msg-body .new{
+	font-weight: bold;
+}
+
+.msg-body .countNumber{
+	color: red;
+	font-weight: bold;
+	text-decoration:none;
+	padding: 0px 5px;
+}
+
+.msg-body .date{
+	color: grey;
+	padding: 0px 5px;
+}
+.msg-body .block{
+	padding:3px;
+	font-size: 13px;
+	text-decoration:none;
+	font-weight: bold;
+}
+
+.msg-body .reading{
+	color: green;
+}
+
+.msg-body .reading:HOVER{
+	background-color:green;
+	color: white;
+}
+
+.msg-body .feedback{
+	color: #FF8000;
+}
+
+.msg-body .feedback:HOVER{
+	background-color: #FF8000;
+	color: white;
+}
+
+.msg-body .refreshBt{
+	color: white;
+	background-color: navy;
+	margin-left: 30px;
+}
+
+.msg-body .refreshBt:HOVER{
+	background-color: #FF8000;
+	color: white;
+}
+
+.msg-body .company{
+	color: #800000;
+	font-weight: bold;
+	padding: 0px 5px;
+}
+
+.msg-body .message{
+	color: navy;
+	font-weight: bold;
+}
+
+.msg-body .even{
+	background-color: #F2F2F2;
+}
+
+.msg-body .alertImage{
+	background-image: url( ../image/alertLight.gif ) !important;
+	background-repeat: no-repeat;
+	padding-right: 30px;
+	width: 30px;
+}
+
+.info-ct{
+	padding-bottom: 30px;
+}
+
+.info-ct H3{
+	color: #800000;
+	font-size: 16px;
+}
+
+.info-ct p{
+	color: grey;
+	font-size: 14px;
+	line-height: 24px;
+}
