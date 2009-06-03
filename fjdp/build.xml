@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fjdp" basedir="." default="initDbData">
+	
+	<!-- hibernate.cfg文件目录 -->
+	<property name="src.dir" value="./conf" />
+	
+	<!-- 输出的Class文件目录-->
+	<property name="class.dir" value="./build/classes" />
+	
+	<!-- hibernate Tools库文件目录  -->
+	<property name="lib.dir" value="./WebContent/WEB-INF/lib" />
+	
+	<!-- 定义类路径 -->
+	<path id="toolslib">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${class.dir}" />
+	</path>
+	
+	<taskdef name="hibernatetool"
+		classname="org.hibernate.tool.ant.HibernateToolTask"
+		classpathref="toolslib" />
+		
+	<target name="initDb">
+		<echo>执行数据库初始化任务！</echo>
+		<hibernatetool destdir="${class.dir}">
+			<annotationconfiguration 
+				configurationfile="${src.dir}/hibernate.cfg.xml"/>
+			<!-- 生成数据库中的表和建表SQL文件 -->
+			<hbm2ddl 
+				export="true" 
+				update="false"
+				drop="true" 
+				create="true" 
+				delimiter=";" 
+				format="true" 
+				haltonerror="false"
+				outputfilename="db.sql" />
+		</hibernatetool>
+	</target>
+	
+	<target name="initDbData" depends="initDb">
+		<echo>执行数据初始化任务！</echo>
+		<java classname="misc.InitDb"
+			classpathref="toolslib" />
+		<echo>所有任务执行完成！</echo>
+	</target>
+	
+</project>
