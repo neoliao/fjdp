@@ -104,6 +104,13 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	 */
 	protected int limit;
 	
+	
+	/**
+	 * rootPath 
+	 */
+	protected String rootPath;
+	
+	
 	/**
 	 * action方法拦截器方法,在action方法执行前执行
 	 * @return 跳转页面result name,为null时不跳转
@@ -113,6 +120,8 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	public String beforeDoAction() throws Exception {
 		//绑定一个httpSession到本地线程,供其它层调用		
 		Helper.setHttpSessionInThread(request.getSession());
+		
+		rootPath = request.getSession().getServletContext().getRealPath("/");
 		
 		//身份验证
 		authedUser = (User)getSessionMap().get(Helper.AUTHED_USER);
@@ -207,14 +216,17 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	 * @return null
 	 * @throws Exception
 	 */
-	protected String render(byte[] bytes,String contentType,String fileName)throws Exception{
-		return render(bytes, contentType);
+	protected String renderFile(byte[] bytes,String fileName)throws Exception{
+		response.addHeader("Content-Disposition", 
+				"attachment;filename="+new String(fileName.getBytes("GBK"),"iso8859-1"));
+		return render(bytes, "application/octet-stream");
 	}
+	
 	
 	/**
 	 * 输出一个二进制流,主要用于显示图片等
 	 * @param bytes 二进制数据
-	 * @param contentType 数据MIME
+	 * @param contentType Image数据MIME
 	 * @return null
 	 * @throws Exception
 	 */

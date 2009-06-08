@@ -8,8 +8,8 @@
 	<s:param name="extTheme">xtheme-gray</s:param>
 </s:component>
 
-<link rel="stylesheet" type="text/css" href="<s:url value="/include/css/fort-all.css"/>" />
-<link rel="stylesheet" type="text/css" href="<s:url value="/include/css/myhome.css"/>" />
+<link rel="stylesheet" type="text/css" href="<s:url value="/include/css/fjdp-all.css"/>" />
+<link rel="stylesheet" type="text/css" href="<s:url value="/include/css/app-all.css"/>" />
 
 <script type="text/javascript" src="<s:url value="/include/js/ext-lang-zh_CN.js"/>" charset="utf-8"></script>
 <script>
@@ -29,5 +29,5 @@
 </script>
 <script type="text/javascript" src="<s:url value="/include/js/ext-override.js"/>"></script>
 <script type="text/javascript" src="<s:url value="/include/js/ext-extends.js"/>"></script>
-<script type="text/javascript" src="<s:url value="/include/js/ext-app.js"/>"></script>
-<script type="text/javascript" src="<s:url value="/include/js/fort-all.js"/>"></script>
+<script type="text/javascript" src="<s:url value="/include/js/fjdp-all.js"/>"></script>
+<script type="text/javascript" src="<s:url value="/include/js/app-all.js"/>"></script>

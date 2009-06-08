@@ -15,12 +15,18 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 /* safari / chrome combo grid editor height */
 .ext-safari .x-form-text{height:22px!important;padding-top:3px;font-size:100%;}
 .ext-safari .x-toolbar .x-form-text,.ext-chrome .x-toolbar .x-form-text{padding:2px;height:20px!important;font-size:100%;}
+
+/* ie patch */
+.ext-ie .x-menu-item-icon {left: -24px; top: 0px;}
+.ext-strict .x-menu-item-icon {left: 3px; top: 3px;}
+.ext-ie6 .x-menu-item-icon {left: -24px; top: 0px;}
 /*
  * busyIcon
  */
 .busyIcon {
 	background:#F00000;
 	color:white;
+	font-weight: bold;
 }
 .right-icon .x-btn-center .x-btn-text {
 	background-position:40px 2px;
@@ -32,6 +38,19 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 /*
  * icons
  */
+ 
+ .html {
+    background-image:url( ../image/icon/web.gif ) !important;
+} 
+.pdf {
+    background-image:url( ../image/icon/pdf.gif ) !important;
+}
+.word {
+    background-image:url( ../image/icon/word.gif ) !important;
+}
+.help {
+    background-image:url( ../image/icon/help.gif ) !important;
+}
 .importFile {
     background-image:url( ../image/icon/page_white_go.gif ) !important;
 }
@@ -470,13 +489,4 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     color: #777;
 }
 
-.controlInfoDetail{
-	line-height: 20px;
-}
-
-.controlInfoDetail p .c{
-	font-size: 14px;
-	font-weight: bold;
-	color: navy;
-}
 

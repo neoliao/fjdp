@@ -1,7 +1,12 @@
 package net.fortunes.admin.action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+
+import com.fortunes.Constants;
 
 import net.fortunes.admin.helper.AdminHelper;
 import net.fortunes.admin.model.Menu;
@@ -67,8 +72,14 @@ public class SystemAction extends BaseAction {
 		return render(jo);
 	}
 	
-	//private method
+	public String downloadManual() throws  Exception{
+		String fileType = p("fileType");
+		File file = new File(rootPath + Constants.MANUAL_DOC_PATH_NAME + "." + fileType);
+		return renderFile(FileUtils.readFileToByteArray(file), 
+				Constants.PROJECT_CNAME+"-操作手册."+fileType);
+	}
 	
+	//====================== private method ============================
 	private List<String> getWidgetUrlsList() throws Exception{
 		List<String> list = new ArrayList<String>();
 		Menu rootMenu = menuService.getRoot();
@@ -153,7 +164,7 @@ public class SystemAction extends BaseAction {
 		return jo;
 	}
 	
-	//setter and getter ============================================
+	//======================== setter and getter ====================
 	
 	public PrivilegeService getPrivilegeService() {
 		return privilegeService;

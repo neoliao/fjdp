@@ -90,6 +90,22 @@ App.Header = Ext.extend(Ext.Panel,{
 				busyIconCls:'busyIcon',
 				busyText:'数据加载中...',
 				items:['当前登陆：'+loginUser.userName,'-',{
+					xtype : 'splitbutton',
+					id:'userManual',
+					text:'用户手册',
+					tooltip:'浏览或者下载用户操作手册',  
+					iconCls: 'help',
+					fileType : 'htm',
+					scope : this,
+					handler: this.downloadManual,
+					menu: new Ext.menu.Menu({
+				        items: [
+				        	//{text: '打开为网页', iconCls: 'html',fileType : 'htm',handler: this.downloadManual},
+					        //{text: '下载为Word文档', iconCls: 'word',fileType : 'doc',handler: this.downloadManual},
+					        {text: '下载为Pdf文档', iconCls: 'pdf',fileType : 'pdf',handler: this.downloadManual}
+				        ]
+				   	})
+				},'-',{
 					id:'settingButton',	
 					text:'个人设置',
 					tooltip:'设置个人信息',  
@@ -113,6 +129,13 @@ App.Header = Ext.extend(Ext.Panel,{
 			}]
 		});		
     	App.Header.superclass.initComponent.call(this);					
+    },
+    downloadManual : function(item){
+    	if(item.fileType == "htm")
+    		window.open(ctx+'/doc/manual.htm');
+    	else
+    		window.location = ctx+'/system/downloadManual?fileType='+ item.fileType;
+    
     }
 });
 
