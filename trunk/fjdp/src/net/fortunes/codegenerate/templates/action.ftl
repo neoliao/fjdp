@@ -10,27 +10,41 @@ import ${packagePrefix}.model.${modelName};
 
 public class ${modelName}Action extends GenericAction<${modelName}> {
 	
-	private ${modelName}Service ${modelNameLower}Service;
+	private ${modelName}Service ${modelName?uncap_first}Service;
 	
 	protected void setEntity(${modelName} e) throws ParseException{
-		e.setCode(p("code"));
-		e.setStatus(AdminHelper.toDict(p("status")));
-		e.setHireDate(AdminHelper.toDate(p("hireDate")));
+<#list fields as field>
+	<#if field.type == "text" || field.type == "textArea">
+		e.set${field.name?cap_first}(p("${field.name}"));
+	<#elseif field.type == "number">
+		e.set${field.name?cap_first}(Integer.paserInt(p("${field.name}")));
+	<#elseif field.type == "dict">
+		e.set${field.name?cap_first}(AppHelper.toDict(p("${field.name}")));
+	<#elseif field.type == "date">
+		e.set${field.name?cap_first}(AppHelper.toDate(p("${field.name}")));
+	</#if>
+</#list> 
 	}
 	
 	protected JSONObject toJsonObject(${modelName} e) throws ParseException{
 		AdminHelper record = new AdminHelper();
 		record.put("id", e.getId());
-		record.put("code", e.getCode());		
+		record.put("code", e.getCode());
+<#list fields as field>
+	record.put("${field.name}", e.get${field.name?cap_first}());
+</#list> 		
 		return record.getJsonObject();
 	}
 	
-	public void set${modelName}Service(${modelName}Service ${modelNameLower}Service) {
-		this.${modelNameLower}Service = ${modelNameLower}Service;
+	
+	/*=============== setter and getter =================*/
+	
+	public void set${modelName}Service(${modelName}Service ${modelName?uncap_first}Service) {
+		this.${modelName?uncap_first}Service = ${modelName?uncap_first}Service;
 	}
 
 	public ${modelName}Service get${modelName}Service() {
-		return ${modelNameLower}Service;
+		return ${modelName?uncap_first}Service;
 	}
 
 }

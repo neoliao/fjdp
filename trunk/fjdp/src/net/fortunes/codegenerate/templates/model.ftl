@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import net.fortunes.core.Model;
 
 @Entity
@@ -21,29 +20,27 @@ public class ${modelName} extends Model{
 	@Id @GeneratedValue
 	private long id;
 	
-	private String code;
+<#list fields as field>
+<#if field.type == "text">
+	private String ${field.name};
 	
-	private String name;
+<#elseif field.type == "textArea">
+	@Column(length = ${field.extend!"500"})
+	private String ${field.name};
 	
-	private String nickName;
+<#elseif field.type == "number">
+	private int ${field.name};
 	
+<#elseif field.type == "dict">
 	@ManyToOne
-	private Dict sex;
+	private Dict ${field.name};
 	
-	@ManyToOne
-	private Dict post;
+<#elseif field.type == "date">
+	@Temporal(TemporalType.<#if field.extend == "time">TIME<#elseif field.extend == "dateTime">TIMESTAMP<#else>DATE</#if>)
+	private Date ${field.name};
 	
-	private String email;
-	
-	private String phone;
-	
-	private String mobile;
-	
-	@Temporal(TemporalType.DATE)
-	private Date hireDate;
-	
-	@ManyToOne
-	private Dict status;
+</#if>
+</#list> 
 	
     public ${modelName}() {
     }
@@ -57,34 +54,15 @@ public class ${modelName} extends Model{
 		return "";
 	}
     
-    /*===============setter and getter=================*/
-
-	public void setCode(String code) {
-		this.code = code;
+    /*=============== setter and getter =================*/
+<#list fields as field>
+	public void set${field.name?cap_first}(<#if field.type == "text" || field.type == "textArea">Stirng<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> ${field.name}) {
+		this.${field.name} = ${field.name};
 	}
 
-	public String getName() {
-		return name;
+	public <#if field.type == "text" || field.type == "textArea">Stirng<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> get${field.name?cap_first}() {
+		return ${field.name};
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-
-	public Dict getSex() {
-		return sex;
-	}
-
-	public void setSex(Dict sex) {
-		this.sex = sex;
-	}
+</#list>
 
 }

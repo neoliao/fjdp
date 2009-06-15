@@ -354,9 +354,9 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 });
 
 Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {	
-	closable: true,
-	border:true,
-	
+	closable : true,
+	border : true,
+	reloadAfterUpdate : false,
 	initComponent : function(){
 		Ext.apply(this, {			
 			loader: new Ext.tree.TreeLoader({
@@ -566,8 +566,11 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 				scope:this,
 				success:function(form, action) {
 					this.closeWin();
-					this.loadRoot();
-	            },        	
+					if(this.reloadAfterUpdate)
+						this.loadRoot();
+					else
+						this.appendChild(action.result.entity);
+				},        	
 	            failure:function(form, action) {
 	            	this.saveBt.enable();
 	            }
@@ -582,7 +585,10 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 				scope:this,
 				success:function(form, action) {
 					this.closeWin();
-					this.loadRoot();	
+					if(this.reloadAfterUpdate)
+						this.loadRoot();
+					else
+						this.updateNode(action.result.entity);
 	            },        	
 	            failure:function(form, action) {
 	            	this.saveBt.enable();
@@ -590,6 +596,19 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 	        });
 		}		
 		
+	},
+	appendChild : function(nodeJson){
+		var newNode = new Ext.tree.TreeNode(nodeJson);
+		var parentNode = this.getSelectionModel().getSelectedNode();
+		parentNode.appendChild(newNode);
+		var textEl = Ext.get(newNode.getUI().getTextEl());
+		if(textEl)
+			textEl.highlight();
+	},
+	updateNode : function(nodeJson){
+		var node = this.getSelectionModel().getSelectedNode();
+		node.setText(nodeJson.text);
+		Ext.get(node.getUI().getTextEl()).highlight();
 	},
 	prepareDel : function(){
 		this.ajaxParams = {};
@@ -605,7 +624,14 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 				params: this.ajaxParams,
 				scope:this,
 				success:function(response , options) {
-					this.loadRoot();
+					if(this.reloadAfterUpdate)
+						this.loadRoot();
+					else{
+						var node = this.getSelectionModel().getSelectedNode();
+						var parent = node.parentNode;
+						node.remove();
+						Ext.get(parent.getUI().getTextEl()).highlight();
+					}
 				}
 			});
 		}	

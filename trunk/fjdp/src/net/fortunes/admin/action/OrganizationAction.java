@@ -24,43 +24,42 @@ public class OrganizationAction extends GenericAction<Organization> {
 	private int[] checkedId;
 
 
-	protected void setEntity(Organization department) throws ParseException{
-		department.setName(p("name"));
-		department.setCode(p("code"));
-		department.setShortName(p("shortName"));
-		department.setAddress(p("address"));
-		department.setTel(p("tel"));
-		department.setType(AdminHelper.toDict(p("type")));
-		if(p("parentId").equals("0")){
-			department.setParent(getOrganizationService().getRoot());
-		}else{
-			department.setParent(AdminHelper.toDepartment(getParentId()));
-		}		
+	protected void setEntity(Organization o) throws ParseException{
+		o.setName(p("name"));
+		o.setCode(p("code"));
+		o.setShortName(p("shortName"));
+		o.setAddress(p("address"));
+		o.setTel(p("tel"));
+		o.setType(AdminHelper.toDict(p("type")));
+		//新增时f
+		if(o.getId() == 0){
+			o.setParent(parentId.equals("0") ? 
+					organizationService.getRoot() : organizationService.get(parentId));
+		}
 	}
 	
-	protected JSONObject toJsonObject(Organization department) throws ParseException{
+	protected JSONObject toJsonObject(Organization e) throws ParseException{
 		AdminHelper record = new AdminHelper();
-		record.put("id", department.getId());
-		record.put("name", department.getName());
-		record.put("code",department.getCode());
-		record.put("shortName", department.getShortName());
-		record.put("fullName", department.getFullName());
-		record.put("address", department.getAddress());
-		record.put("tel", department.getTel());
-		record.put("type", department.getType());
+		record.put("id", e.getId());
+		record.put("name", e.getName());
+		record.put("code",e.getCode());
+		record.put("shortName", e.getShortName());
+		record.put("text", e.getShortName());
+		record.put("fullName", e.getFullName());
+		record.put("address", e.getAddress());
+		record.put("tel", e.getTel());
+		record.put("type", e.getType());
+		record.put("iconCls", "department");
 		return record.getJsonObject();
 	}
 
-	public JSONArray walkTree(Organization department){
+	public JSONArray walkTree(Organization department) throws Exception{
 		JSONArray ja = new JSONArray();
 		if(department != null){
 			List<Organization> ds = department.getChildren();		
 			for(Organization d : ds){
-				JSONObject jo = new JSONObject();
-				jo.put("id", d.getId());
-				jo.put("text", d.getShortName());
-				jo.put("iconCls", "department");
-				if(d.getChildren().isEmpty()){				
+				JSONObject jo = toJsonObject(d);
+				if(d.isLeaf()){				
 					jo.put("leaf", true);
 				}else{
 					//异步load

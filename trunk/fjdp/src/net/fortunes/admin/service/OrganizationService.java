@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.fortunes.admin.helper.AdminHelper;
 import net.fortunes.admin.model.Employee;
+import net.fortunes.admin.model.Menu;
 import net.fortunes.admin.model.Organization;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
@@ -12,6 +13,23 @@ import net.fortunes.core.service.GenericService;
 public class OrganizationService extends GenericService<Organization> {
 	
 	private EmployeeService employeeService;
+	
+	
+	@Override
+	public Organization add(Organization entity) {
+		super.add(entity);
+		if(entity.getParent() != null)
+			entity.getParent().setLeaf(false);
+		return entity;
+	}
+	
+	@Override
+	public void del(Organization entity) throws Exception {
+		Organization parent = entity.getParent();
+		super.del(entity);
+		if(parent != null && parent.getChildren().size() <= 0)
+			parent.setLeaf(true);
+	}
 	
 	public void addEmployee(String organizationId,String employeeId){
 		Organization organization = this.get(organizationId);

@@ -28,6 +28,7 @@ public class Menu extends Model {
 	private String url;
 	private String icon;
 	private boolean display;
+	private boolean leaf = true;
 	
 	@Enumerated(EnumType.STRING)
 	private MenuType type;
@@ -122,6 +123,14 @@ public class Menu extends Model {
 
 	public MenuType getType() {
 		return type;
+	}
+
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+
+	public boolean isLeaf() {
+		return leaf;
 	}
 
 }

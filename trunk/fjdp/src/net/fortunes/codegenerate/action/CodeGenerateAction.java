@@ -23,15 +23,11 @@ import net.fortunes.core.action.BaseAction;
 public class CodeGenerateAction extends BaseAction {
 	public static String PACKAGE_PREFIX_KEY  = "packagePrefix";
 	public static String MODEL_NAME_KEY  = "modelName";
-	public static String MODEL_NAME_LOWER_KEY  = "modelNameLower";
-	public static String ID_TYPE_KEY  = "idType";
-	public static String ID_TYPE_LOWER_KEY  = "idTypeLower";
 	public static String FIELDS_KEY  = "fields";
+	public static String CLASS_PATH = "/WEB-INF/classes";
+	public static String OUT_PATH = "d:/codeGenerate";
 	
 	private Configuration cfg;
-	public static String BUILD_PATH = "/WEB-INF/classes";
-	
-	public static String OUT_PATH = "d:/codeGenerate";
 	
 	private String modelName;
 	private String packagePrefix;
@@ -40,41 +36,62 @@ public class CodeGenerateAction extends BaseAction {
 	private String[] fieldTypes;
 	private String[] fieldNames;
 	private String[] fieldLabels;
-	private String[] fieldExtend; //kind,url,maxLength
+	private String[] fieldExtend; //kind,dateType,maxLength
 	private String[] fieldAllowBlank;
 	private int[] fieldLengths;
 	
+	public static void main(String[] args) throws Exception {
+		CodeGenerateAction action = new CodeGenerateAction();
+		action.init(new File("build/classes/net/fortunes/codegenerate/templates"));
+		
+		Map<String,Object> root = new HashMap<String, Object>();
+		action.packagePrefix = "com.fjdp";
+		action.modelName = "User";
+		root.put(PACKAGE_PREFIX_KEY, action.packagePrefix);
+		root.put(MODEL_NAME_KEY, action.modelName);
+		
+		List<Field> fields = new ArrayList<Field>();
+		fields.add(new Field("text","name","名称",false,null));
+		fields.add(new Field("dict","sex","性别",false,"sex"));
+		fields.add(new Field("date","birthday","生日",true,"date"));
+		fields.add(new Field("date","lastLogin","最后登陆时间",true,"dateTime"));
+		fields.add(new Field("textArea","addr","地址",true,null));
+		fields.add(new Field("number","rank","级别",true,"10"));
+		root.put(FIELDS_KEY, fields);
+		
+		//renerate
+		action.generate(root, "Service");
+		action.generate(root, "Action");
+		action.generate(root, "Model");
+		action.generate(root, "Spring-conf");
+		action.generate(root, "Widget");
+	}
+	
 	
 	public String generate() throws Exception{
-		init();
+		init(new File(
+				rootPath + CLASS_PATH + "/net/fortunes/codegenerate/templates"));
 		
 		Map<String,Object> root = new HashMap<String, Object>();
 		root.put(PACKAGE_PREFIX_KEY, packagePrefix);
 		root.put(MODEL_NAME_KEY, modelName);
-		root.put(MODEL_NAME_LOWER_KEY, getLower(modelName));
-		root.put(ID_TYPE_KEY, idType);
-		root.put(ID_TYPE_LOWER_KEY, getLower(idType));
 		root.put(FIELDS_KEY, processFields());
 		
 		//renerate
-		generate(root, "Dao");
-		generate(root, "Service");
-		generate(root, "Action");
+		//generate(root, "Service");
+		//generate(root, "Action");
 		generate(root, "Model");
-		generate(root, "Spring-conf");
+		//generate(root, "Spring-conf");
 		generate(root, "Widget");
 		
 		setJsonMessage(true, "代码成功生成");
 		return render(jo);
 	}
 	
-	private void init() throws Exception{
+	private void init(File temlDir) throws Exception{
 		cfg = new Configuration();
 		
-		String contextRealPath = request.getSession().getServletContext().getRealPath("/");
-		System.out.println(contextRealPath);
-		cfg.setDirectoryForTemplateLoading(new File(
-				contextRealPath + BUILD_PATH + "/net/fortunes/codegenerate/templates"));
+		cfg.setDirectoryForTemplateLoading(temlDir);
 		cfg.setObjectWrapper(new DefaultObjectWrapper());
 		File outPath = new File(OUT_PATH);
 		if(outPath.exists()){
@@ -86,13 +103,18 @@ public class CodeGenerateAction extends BaseAction {
 		List<Field> fields = new ArrayList<Field>();
 		for (int i = 0; i < fieldTypes.length; i++) {
 			Field field = new Field();
-			if(fieldTypes[i].equals(FieldType.text.name())){
-				field.setType(FieldType.text);
-				field.setName(fieldNames[i]);
-				field.setLabel(fieldLabels[i]);
-				if(fieldLengths[i] > 0)
-					field.setLength(fieldLengths[i]);
-			}
+			field.setType(fieldTypes[i]);
+			field.setName(getLower(fieldNames[i]));
+			field.setLabel(fieldLabels[i]);
+			field.setExtend(fieldExtend[i]);
+			field.setAllowEmpty(fieldAllowBlank[i].equals("yes"));
+			
+			//暂时没用
+			/*if(fieldTypes[i].equals(FieldType.text.name())){
+			}else if(fieldTypes[i].equals(FieldType.dict.name())){
+			}if(fieldTypes[i].equals(FieldType.textArea.name())){
+			}*/
+			
 			fields.add(field);
 		}
 		return fields;
@@ -101,16 +123,16 @@ public class CodeGenerateAction extends BaseAction {
 	private void generate(Map<String,Object> root,String fileType) throws Exception{
 		Template tpl = cfg.getTemplate(getLower(fileType)+".ftl");
 		String fileName = "";
-		if(fileType.equals("Dao") || fileType.equals("Action") || fileType.equals("Service")){
-			fileName = getOutPath() + "/src" + "/" + packagePrefix.replace('.', '/') + "/" +
+		if(fileType.equals("Action") || fileType.equals("Service")){
+			fileName = OUT_PATH + "/src" + "/" + packagePrefix.replace('.', '/') + "/" +
 				getLower(fileType) + "/" +modelName + fileType + ".java";
 		}else if(fileType.equals("Model")){
-			fileName = getOutPath() + "/src" + "/" + packagePrefix.replace('.', '/') +  "/" +
+			fileName = OUT_PATH + "/src" + "/" + packagePrefix.replace('.', '/') +  "/" +
 				getLower(fileType) + "/" +modelName + ".java";
 		}else if(fileType.equals("Spring-conf")){
-			fileName = getOutPath() + "/conf" + "/" + modelName + fileType + ".xml";
+			fileName = OUT_PATH + "/conf" + "/" + modelName + fileType + ".xml";
 		}else if(fileType.equals("Widget")){
-			fileName = getOutPath() + "/WebContent/widget/app/" + getLower(modelName) + ".js";
+			fileName = OUT_PATH + "/WebContent/widget/app/" + getLower(modelName) + ".js";
 		}
 		System.out.println(fileName);
 		File codeFile = new File(fileName);
@@ -118,12 +140,12 @@ public class CodeGenerateAction extends BaseAction {
 			codeFile.getParentFile().mkdirs();
 		}
 		Writer out = new FileWriter(codeFile);
+		
+		//输出到stdout
+		tpl.process(root, new OutputStreamWriter(System.out));
+		//输出到文件
 		tpl.process(root, out);
 		out.flush();
-	}
-	
-	private String getOutPath(){
-		return OUT_PATH;
 	}
 	
 	private String getLower(String s){

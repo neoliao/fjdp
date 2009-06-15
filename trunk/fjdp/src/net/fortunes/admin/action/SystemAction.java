@@ -147,7 +147,7 @@ public class SystemAction extends BaseAction {
 			jo.put("cls", "n-menu");
 			jo.put("menuIcon", menu.getParent().getIcon());
 		}
-		if(menu.getChildren().isEmpty()){
+		if(menu.isLeaf()){
 			jo.put("leaf", true);
 		}else{					
 			List<Menu> subMenus = menu.getChildren();

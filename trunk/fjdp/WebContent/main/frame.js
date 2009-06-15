@@ -100,7 +100,7 @@ App.Header = Ext.extend(Ext.Panel,{
 					handler: this.downloadManual,
 					menu: new Ext.menu.Menu({
 				        items: [
-				        	//{text: '打开为网页', iconCls: 'html',fileType : 'htm',handler: this.downloadManual},
+				        	{text: '打开为网页', iconCls: 'html',fileType : 'htm',handler: this.downloadManual},
 					        //{text: '下载为Word文档', iconCls: 'word',fileType : 'doc',handler: this.downloadManual},
 					        {text: '下载为Pdf文档', iconCls: 'pdf',fileType : 'pdf',handler: this.downloadManual}
 				        ]
