@@ -5,20 +5,29 @@ import net.fortunes.core.Model;
 public class Field extends Model{
 
 	public static enum FieldType {
-		text, textArea, number, date, dateTime, time, dict, select
+		text, textArea, number, date, dict
 	}
 	
-	private FieldType type;
-	private String name;
-	private String label;
-	private int length;
+	private String type;//类型
+	private String name;//变量名
+	private String label;//标签
+	private String extend;//kind(dict),(length)textArea,(dateType)date
+	private boolean allowEmpty;
 	
-	
-	public FieldType getType() {
-		return type;
+	public Field() {
+		// TODO Auto-generated constructor stub
 	}
-	public void setType(FieldType type) {
+	
+	public Field(String type, String name, String label,boolean allowEmpty, String extend) {
 		this.type = type;
+		this.name = name;
+		this.label = label;
+		this.allowEmpty = allowEmpty;
+		this.extend = extend;
+	}
+	
+	public void setType(FieldType type) {
+		this.type = type.name();
 	}
 	public String getName() {
 		return name;
@@ -32,11 +41,27 @@ public class Field extends Model{
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public int getLength() {
-		return length;
+	public String getType() {
+		return type;
 	}
-	public void setLength(int length) {
-		this.length = length;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setExtend(String extend) {
+		this.extend = extend;
+	}
+
+	public String getExtend() {
+		return extend;
+	}
+
+	public void setAllowEmpty(boolean allowEmpty) {
+		this.allowEmpty = allowEmpty;
+	}
+
+	public boolean isAllowEmpty() {
+		return allowEmpty;
 	}
 	
 }

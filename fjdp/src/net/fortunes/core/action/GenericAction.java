@@ -64,6 +64,7 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 		E entity = entityClass.newInstance();
 		setEntity(entity);
 		defService.add(entity);
+		jo.put(ENTITY_KEY, toJsonObject(entity));
 		setJsonMessage(true, entity.toString().equals("")?
 				"新增了一条记录!" : "新增了("+entity+")的记录");
 		return render(jo);
@@ -90,12 +91,13 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 		E entity = defService.get(id);
 		setEntity(entity);
 		defService.update(entity);
+		jo.put(ENTITY_KEY, toJsonObject(entity));
 		setJsonMessage(true, entity.toString().equals("")?
 				"更新了一条记录!" : "更新了("+entity+")的记录");
 		return render(jo);
 	}
 	
-	protected JSONArray walkTree(E entity) {
+	protected JSONArray walkTree(E entity)throws Exception {
 		return null;
 	}
 	

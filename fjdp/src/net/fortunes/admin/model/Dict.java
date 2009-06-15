@@ -14,8 +14,8 @@ public class Dict extends Model {
 	
 	@Id 
 	private String id;//aka key
-	
 	private String text;
+	private boolean leaf = true;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Dict parent;
@@ -82,6 +82,14 @@ public class Dict extends Model {
 
 	public String getId() {
 		return id;
+	}
+
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+
+	public boolean isLeaf() {
+		return leaf;
 	}
 
 

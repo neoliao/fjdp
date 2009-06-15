@@ -4,6 +4,7 @@ import java.io.Reader;
 import java.util.List;
 
 import net.fortunes.admin.model.Dict;
+import net.fortunes.admin.model.Organization;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
 
@@ -18,6 +19,22 @@ public class DictService extends GenericService<Dict> {
 	public static String KEY_ATTRIBUTE = "key";
 	public static String TEXT_ATTRIBUTE = "text";
 	public static String ROOT_DICT_KEY = "root";
+	
+	@Override
+	public Dict add(Dict entity) {
+		super.add(entity);
+		if(entity.getParent() != null)
+			entity.getParent().setLeaf(false);
+		return entity;
+	}
+	
+	@Override
+	public void del(Dict entity) throws Exception {
+		Dict parent = entity.getParent();
+		super.del(entity);
+		if(parent != null && parent.getChildren().size() <= 0)
+			parent.setLeaf(true);
+	}
 	
 	public void initToDb(Reader reader) throws DocumentException{
 		SAXReader xmlReader = new SAXReader(); 
@@ -45,7 +62,7 @@ public class DictService extends GenericService<Dict> {
 		else
 			dict.setId(parentDict.getId()+"_"+element.attributeValue(KEY_ATTRIBUTE));
 		dict.setParent(parentDict);
-		getDefDao().add(dict);
+		this.add(dict);
 		List<Element> subElements = element.elements();
 		for(Element e : subElements){
 			walkTree(e,dict);

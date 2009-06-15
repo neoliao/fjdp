@@ -18,18 +18,13 @@ public class Organization extends Model{
 	
 	@Id @GeneratedValue
 	private long id;
-	
 	private String name;
-	
 	private String code;
-	
 	private String tel;
-	
 	private String address;
-	
 	private String shortName;
-	
 	private String fullName;
+	private boolean leaf = true;
 	
 	@ManyToOne
 	private Dict type;
@@ -147,6 +142,14 @@ public class Organization extends Model{
 
 	public String getCode() {
 		return code;
+	}
+
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+
+	public boolean isLeaf() {
+		return leaf;
 	}
 
 

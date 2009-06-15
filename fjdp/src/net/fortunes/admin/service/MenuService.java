@@ -19,6 +19,22 @@ public class MenuService extends GenericService<Menu>{
 	
 	private PrivilegeService privilegeService;
 	
+	@Override
+	public Menu add(Menu entity) {
+		super.add(entity);
+		if(entity.getParent() != null)
+			entity.getParent().setLeaf(false);
+		return entity;
+	}
+	
+	@Override
+	public void del(Menu entity) throws Exception {
+		Menu parent = entity.getParent();
+		super.del(entity);
+		if(parent != null && parent.getChildren().size() <= 0)
+			parent.setLeaf(true);
+	}
+	
 	public void initToDb(Reader reader) throws DocumentException{
 		SAXReader xmlReader = new SAXReader(); 
 		Document doc = xmlReader.read(reader);
@@ -78,7 +94,7 @@ public class MenuService extends GenericService<Menu>{
 		}
 		menu.setType(funcType);
 		setMenu(menuElement, menu);
-		getDefDao().add(menu);
+		this.add(menu);
 	}
 	
 	private void setMenu(Element menuElement,Menu menu){

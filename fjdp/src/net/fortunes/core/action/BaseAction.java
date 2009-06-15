@@ -42,6 +42,7 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	public static final String MSG_KEY = "msg";
 	public static final String DATA_KEY = "data";
 	public static final String TOTAL_COUNT_KEY = "totalCount";
+	public static final String ENTITY_KEY = "entity";
 	
 	/**
 	 * request全局变量

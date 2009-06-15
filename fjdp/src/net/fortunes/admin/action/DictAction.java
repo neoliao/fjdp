@@ -18,8 +18,10 @@ public class DictAction extends GenericAction<Dict> {
 	private DictService dictService;
 	
 	protected void setEntity(Dict dict) throws ParseException{
-		dict.setParent(p("parentId").equals("0")?
-				dictService.getRoot() : AdminHelper.toDict(p("parentId")));
+		////新增时
+		if(dict.getId() == null){
+			dict.setParent(parentId.equals("0") ? dictService.getRoot() : dictService.get(parentId));
+		}
 		if(StringUtils.isEmpty(id))
 			dict.setId(Tools.uuid());
 		dict.setText(p("text"));
@@ -31,6 +33,7 @@ public class DictAction extends GenericAction<Dict> {
 		record.put("id", dict.getId());
 		record.put("text", dict.getText());
 		record.put("description", dict.getDescription());
+		record.put("iconCls", "dict");
 		return record.getJsonObject();
 	}
 
@@ -48,15 +51,12 @@ public class DictAction extends GenericAction<Dict> {
 	}
 	
 	@Override
-	protected JSONArray walkTree(Dict dict) {
+	protected JSONArray walkTree(Dict dict) throws Exception {
 		JSONArray ja = new JSONArray();
 		List<Dict> ds = dict.getChildren();
 		for(Dict d : ds){
-			JSONObject jo = new JSONObject();
-			jo.put("id", d.getId());
-			jo.put("text", d.getText());
-			jo.put("iconCls", "dict");
-			if(d.getChildren().isEmpty()){				
+			JSONObject jo = toJsonObject(d);
+			if(d.isLeaf()){				
 				jo.put("leaf", true);
 			}
 			ja.add(jo);

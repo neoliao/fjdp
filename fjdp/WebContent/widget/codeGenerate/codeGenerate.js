@@ -1,5 +1,5 @@
 CodeGenerateFieldGrid = Ext.extend(Ext.grid.EditorGridPanel,{
-    clicksToEdit:1,
+    //clicksToEdit:1,
     frame : true,
     title : '字段列表',
     style : 'padding : 20px;',
@@ -24,19 +24,18 @@ CodeGenerateFieldGrid = Ext.extend(Ext.grid.EditorGridPanel,{
 	        	id:'type',header: "字段类型",dataIndex: 'type',width: 150,
 	        	editor: new Ext.app.SelectField({
 	        		data : [['text','text'],['dict','dict'],['date','date'],
-	        				['time','time'],['dataTime','dataTime'],['textArea','textArea'],
-	        				['select','select'],['number','number'],['upload','upload']],
+	        				['textArea','textArea'],['number','number']],
 	           		allowBlank: false
 	           })
 	        },{
-	        	header: "扩展属性 kind/data/maxLength",dataIndex: 'extend',width: 200,
-	        	editor: new Ext.app.TextField()
+	        	header: "字段名",dataIndex: 'name',width: 150,
+	        	editor: new Ext.app.TextField({allowBlank: false})
 	        },{
 	        	header: "字段标签",dataIndex: 'label',width: 150,
 	        	editor: new Ext.app.TextField({allowBlank: false})
 	        },{
-	        	header: "字段名",dataIndex: 'name',width: 150,
-	        	editor: new Ext.app.TextField({allowBlank: false})
+	        	header: "扩展属性 kind/dateType/length",dataIndex: 'extend',width: 200,
+	        	editor: new Ext.app.TextField()
 	        },{
 	        	header: "能否为空",dataIndex: 'allowBlank',width: 150,
 	        	editor: new Ext.app.SelectField({
@@ -61,14 +60,23 @@ CodeGenerateFieldGrid = Ext.extend(Ext.grid.EditorGridPanel,{
 	add : function(){
         var item = new this.FieldItem({
         	type : 'text',
-        	name : 'name',
-        	label : '标签',
-        	extend : '20',
         	allowBlank : 'yes'
         });
         this.stopEditing();
-        this.store.insert(0, item);
-        //this.startEditing(0, 0);
+        var count = this.store.getCount();
+        this.store.insert(count, item);
+        this.startEditing(count, 0);
+    },
+    del : function(){
+    	this.stopEditing();
+    	var cell = this.getSelectionModel().getSelectedCell();
+    	if(cell){
+    		var rowIndex = this.getSelectionModel().getSelectedCell()[0];
+        	this.store.removeAt(rowIndex);
+    	}else{
+    		App.msg("没有可用的数据，请选中一行");
+    	}
+       
     }
 	
 });
@@ -82,15 +90,12 @@ CodeGenerate = Ext.extend(Ext.form.FormPanel,{
 		
 		Ext.apply(this,{
 			items: [
-				{xtype: 'f-text',fieldLabel: '包前缀',name: 'packagePrefix',value: 'com.fortunes',allowBlank: false},
+				{xtype: 'f-text',fieldLabel: '包前缀',name: 'packagePrefix',value: 'com.fortunes.fjdp',allowBlank: false},
 				{xtype: 'panel', border : false, bodyStyle :'padding:7 0 10 10;color:grey;',
 					html: '包前缀　：com.fortunes.+项目名+.子模块名    例如com.fortunes.levws.info 如果是小项目，可以不分子模块,如 com.fortunes.levws'},
 				{xtype: 'f-text',fieldLabel: '模型名',name: 'modelName',allowBlank: false},
 				{xtype: 'panel', border : false, bodyStyle :'padding:7 0 10 10;color:grey;',
 					html: '实体名称,对应数据库中的一个表，如Employee,User等'},
-				{xtype: 'f-select',data : [['Long','Long'],['String','String']],fieldLabel: '实体ID类型',hiddenName: 'idType',value:'Long',allowBlank: false},
-				{xtype: 'panel', border : false, bodyStyle :'padding:7 0 15 10;color:grey;',
-					html: '一个实体Id的类型,long对于数据库中的int型，String对于varchar'},
 				new CodeGenerateFieldGrid({id : 'CodeGenerateFieldGrid' })
 			],
 			buttonAlign : 'center',
@@ -108,6 +113,10 @@ CodeGenerate = Ext.extend(Ext.form.FormPanel,{
 	generate : function(){
 		var grid = Ext.getCmp('CodeGenerateFieldGrid');
 		grid.stopEditing();
+		if(grid.store.getCount() <= 0){
+			App.msg("未添加任何字段");
+			return;
+		}
 		grid.store.commitChanges();
 		var formParmas =  {
 			fieldTypes : [],
@@ -127,7 +136,6 @@ CodeGenerate = Ext.extend(Ext.form.FormPanel,{
 			url : ctx + '/codeGenerate/generate',
 			params : formParmas,
 			success: function(form,action){
-				//App.msg(action.result.msg);
 			}
 		})
 	}
