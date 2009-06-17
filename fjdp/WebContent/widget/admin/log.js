@@ -20,7 +20,7 @@ Log = Ext.extend(Ext.app.BaseFuncPanel,{
 				]
 			},
 			buttonConfig : [
-				'->','查询 :',{
+				'->',{
 					xtype : 'f-search',
 					emptyText : '请输入日期，用户名，操作类型等查询条件'						
 				}

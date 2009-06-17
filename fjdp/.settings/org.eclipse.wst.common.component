@@ -4,6 +4,7 @@
 <wb-resource deploy-path="/" source-path="/WebContent"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/conf"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/data"/>
 <property name="context-root" value="fjdp"/>
 <property name="java-output-path"/>
 </wb-module>

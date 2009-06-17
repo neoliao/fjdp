@@ -2,22 +2,18 @@ package net.fortunes.codegenerate.action;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import net.fortunes.codegenerate.model.Field;
-import net.fortunes.codegenerate.model.Field.FieldType;
 import net.fortunes.core.action.BaseAction;
 
 public class CodeGenerateAction extends BaseAction {
