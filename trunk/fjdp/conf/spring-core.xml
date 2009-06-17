@@ -33,6 +33,8 @@
     <aop:config>
     	<aop:advisor advice-ref="txAdvice" 
     		pointcut="execution(* *.fortunes..*Service.*(..)) or execution(* misc..execute(..))"/>
+    	<aop:advisor advice-ref="logAdvice" 
+    		pointcut="execution(* *.fortunes..*Service.*(..)) "/>
     </aop:config>
        
 	<bean id="genericDao" class="net.fortunes.core.dao.GenericDao">

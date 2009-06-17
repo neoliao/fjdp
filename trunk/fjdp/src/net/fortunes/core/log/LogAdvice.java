@@ -4,20 +4,28 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Date;
-
 import net.fortunes.admin.model.Log;
 import net.fortunes.admin.model.User;
+import net.fortunes.admin.service.LogService;
 import net.fortunes.core.Helper;
 import net.fortunes.core.Model;
+import net.fortunes.core.dao.GenericDao;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.log.annotation.LoggerMethod;
 import net.fortunes.util.Tools;
 
 import org.springframework.aop.AfterReturningAdvice;
 
+/**
+ * 日志切面通知,给特定的Service类中的方法记录日志
+ * Service类和方法及方法参数要满足于一些给定，详细内容见方法注释
+ * 
+ * @author Neo.Liao
+ *
+ */
 public class LogAdvice implements AfterReturningAdvice {
 	
-	//private LogDao logDao;
+	private GenericDao<Log> genericDao; 
 	
 	public void afterReturning(Object returnValue, Method method, Object[] methodArgs,
 			Object target) throws Throwable {
@@ -55,35 +63,45 @@ public class LogAdvice implements AfterReturningAdvice {
 	}
 	
 	private void doLog(Date createTime,User opUser,String opName,Model model) throws ParseException{
-		String contents = getContents(createTime,opUser,opName,model);
+		String opUserName = opUser == null ? "系统管理员" : opUser.getDisplayName();
+		String contents = getContents(createTime,opUserName,opName,model);
 		printLogMsg(contents);
-		saveToDb(createTime,opUser,opName,contents);
+		saveToDb(createTime,opUserName,opName,contents);
 	}
 	
-	private void saveToDb(Date createTime,User opUser,String opName,String contents){
+	private void saveToDb(Date createTime,String opUserName,String opName,String contents){
 		Log newLog = new Log();
 		newLog.setCreateTime(createTime);
-		newLog.setOpUser(opUser.getDisplayName());
+		newLog.setOpUser(opUserName);
 		newLog.setOpType(opName);
 		newLog.setContents(contents);
-		//logDao.add(newLog);
-		//logDao.getHibernateTemplate().flush();
+		//logService.add(newLog);
+		genericDao.add(newLog);
+		//genericDao.getHibernateTemplate().flush();
 		
 	}
 	
-	private String getContents(Date createTime,User opUser,
+	private String getContents(Date createTime,String opUserName,
 			String opName,Model model) throws ParseException{
 		return Helper.toDateString(createTime)+" : "
-			+"用户"+"<"+(opUser == null ? "系统管理员" : opUser.getDisplayName())+">"
+			+"用户"+"<"+opUserName+">"
 			+opName
 			+"了一条["
 			+model
 			+"]记录!";
 	}
 	
-	//打印到控制台，
+	//打印到控制台
 	private void printLogMsg(String contents){
 		Tools.println(contents);
+	}
+
+	public void setGenericDao(GenericDao<Log> genericDao) {
+		this.genericDao = genericDao;
+	}
+
+	public GenericDao<Log> getGenericDao() {
+		return genericDao;
 	}
 	
 }

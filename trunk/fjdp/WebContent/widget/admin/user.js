@@ -86,7 +86,7 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 					}
 				]
 			},
-			buttonConfig : ['all',{
+			buttonConfig : ['all','-',{
 				text:'锁定',
 				iconCls:'lock',
 				id:'lockUserBt',

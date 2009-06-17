@@ -40,6 +40,10 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 			winConfig : {
 				height: 330
 			},
+			buttonConfig : ['all','-','->',{
+				xtype : 'f-search',
+				emptyText : '请输入姓名或者工号'
+			}],
 			formConfig:{
 				items: [
 					{xtype: 'f-text',fieldLabel: '姓名',name: 'name',emptyText: '请输入员工姓名',allowBlank: false}, 

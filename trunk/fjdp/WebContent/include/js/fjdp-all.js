@@ -161,7 +161,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		if(this.buttonConfig){
 			for(var i=0;i < this.buttonConfig.length;i++){
 				if(typeof(this.buttonConfig[i]) == 'string' && this.buttonConfig[i] == 'all'){
-					customBt = [ this.addBt,this.delBt,this.editBt,'-' ]
+					customBt = [ this.addBt,this.delBt,this.editBt ]
 				}else if(typeof(this.buttonConfig[i]) == 'string' && this.buttonConfig[i] == 'add'){
 					customBt.push(this.addBt);
 				}else if(typeof(this.buttonConfig[i]) == 'string' && this.buttonConfig[i] == 'del'){
@@ -171,6 +171,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 				}else if(typeof(this.buttonConfig[i]) == 'string' ){
 					customBt.push(this.buttonConfig[i]);
 				}else if(typeof(this.buttonConfig[i]) == 'object' && this.buttonConfig[i].xtype == 'f-search'){
+					customBt.push('查询：');
 					this.buttonConfig[i].store = this.store;
 					this.buttonConfig[i].pageParams = {start: 0,limit: this.itemSize} ;
 					customBt.push(this.buttonConfig[i]);
@@ -182,7 +183,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 			}
 			
 		}else{
-			customBt = [ this.addBt,this.delBt,this.editBt,'-' ]
+			customBt = [ this.addBt,this.delBt,this.editBt ]
 		}
 		delete this.buttonConfig;
 		return customBt;
