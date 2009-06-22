@@ -12,10 +12,12 @@ import net.fortunes.core.service.GenericService;
 
 public class LogService extends GenericService<Log> {
 	
-	protected DetachedCriteria getConditions(String query,Map<String, String> map){
-		return DetachedCriteria.forClass(Log.class)
-			.add(Restrictions.ilike("contents", query,MatchMode.ANYWHERE))
-			.addOrder(getOrder());
+	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap){
+		DetachedCriteria criteria = super.getConditions(query, queryMap);
+		if(query !=  null){
+			criteria.add(Restrictions.ilike("contents", query,MatchMode.ANYWHERE));
+		}
+		return criteria;
 	}
 	
 	protected Order getOrder(){

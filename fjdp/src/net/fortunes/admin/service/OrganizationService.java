@@ -17,6 +17,7 @@ public class OrganizationService extends GenericService<Organization> {
 	
 	@Override
 	public Organization add(Organization entity) {
+		
 		super.add(entity);
 		if(entity.getParent() != null)
 			entity.getParent().setLeaf(false);
@@ -33,12 +34,31 @@ public class OrganizationService extends GenericService<Organization> {
 	
 	public void addEmployee(String organizationId,String employeeId){
 		Organization organization = this.get(organizationId);
-		organization.getEmployees().add(AdminHelper.toEmployee(employeeId));
+		Employee employee = employeeService.get(employeeId);
+		//在组织中加入员工
+		organization.getEmployees().add(employee);
+		//将最新关联(添加)的组织设为缺省组织
+		employee.setDefaultOrganization(organization);
+		
 	}
 	
 	public void removeEmployee(String organizationId,String employeeId){
 		Organization organization = this.get(organizationId);
-		organization.getEmployees().remove(AdminHelper.toEmployee(employeeId));
+		Employee employee = employeeService.get(employeeId);
+		//在组织中移除员工
+		organization.getEmployees().remove(employee);
+		
+		//将要移除的级织为缺省组织时，更改缺省组织为另一个或者设为null
+		if(employee.getDefaultOrganization().getId() == organization.getId()){
+			List<Organization> organizations = employee.getOrganizations();
+			if(organizations != null && organizations.size() > 0){
+				employee.setDefaultOrganization(organizations.get(0));
+			}else{
+				employee.setDefaultOrganization(null);
+			}
+		}
+		
+			
 	}
 
 	public List<Employee> getUnassignEmployeesByOrganizationId(String organizationId) {

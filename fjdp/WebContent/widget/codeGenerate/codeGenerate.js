@@ -91,12 +91,14 @@ CodeGenerate = Ext.extend(Ext.form.FormPanel,{
 		Ext.apply(this,{
 			items: [
 				{xtype: 'f-text',fieldLabel: '包前缀',name: 'packagePrefix',value: 'com.fortunes.fjdp',allowBlank: false},
-				{xtype: 'panel', border : false, bodyStyle :'padding:7 0 10 10;color:grey;',
+				{xtype: 'panel', border : false, cls : 'commentBox',
 					html: '包前缀　：com.fortunes.+项目名+.子模块名    例如com.fortunes.levws.info 如果是小项目，可以不分子模块,如 com.fortunes.levws'},
 				{xtype: 'f-text',fieldLabel: '模型名',name: 'modelName',allowBlank: false},
-				{xtype: 'panel', border : false, bodyStyle :'padding:7 0 10 10;color:grey;',
+				{xtype: 'panel', border : false, cls : 'commentBox',
 					html: '实体名称,对应数据库中的一个表，如Employee,User等'},
-				new CodeGenerateFieldGrid({id : 'CodeGenerateFieldGrid' })
+				new CodeGenerateFieldGrid({id : 'CodeGenerateFieldGrid',width : 800}),
+				{xtype: 'panel', border : false, cls : 'commentBox',
+					html: '字段名,字段标签不能为空<br/>当字段类型为text时，扩展属性不用填写<br/>为textArea时，扩展属性length为数据库字段的长度<br/>为dict时，扩展属性kind为字典类型<br/>为date时，扩展属性dateType为[date,time,dateTime]其中一个,默认不填时为date'}
 			],
 			buttonAlign : 'center',
 			buttons : [{
