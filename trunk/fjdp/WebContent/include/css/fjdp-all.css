@@ -489,4 +489,8 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     color: #777;
 }
 
+.commentBox{
+	padding:7 0 10 10;
+	color:gray;
+}
 

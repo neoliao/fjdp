@@ -2,6 +2,11 @@ package net.fortunes.admin.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.admin.model.Role;
@@ -12,6 +17,17 @@ import net.fortunes.util.Tools;
 
 @LoggerClass
 public class UserService extends GenericService<User>{
+	
+	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap) {
+		DetachedCriteria criteria = super.getConditions(query, queryMap);
+		if(query !=  null){
+			criteria.add(Restrictions.or(
+					Restrictions.ilike("name", query, MatchMode.ANYWHERE), 
+					Restrictions.ilike("displayName", query, MatchMode.ANYWHERE)
+			));
+		}
+		return criteria;
+	}
 	
 	public boolean lockOrUnlockUser(String userId){
 		User user = get(userId);

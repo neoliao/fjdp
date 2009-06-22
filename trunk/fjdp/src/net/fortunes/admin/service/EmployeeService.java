@@ -16,11 +16,13 @@ public class EmployeeService extends GenericService<Employee> {
 	
 	@Override
 	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Employee.class);
-		criteria.add(Restrictions.or(
-				Restrictions.ilike("name", query, MatchMode.ANYWHERE), 
-				Restrictions.ilike("code", query, MatchMode.START)
-		));
+		DetachedCriteria criteria = super.getConditions(query, queryMap);
+		if(query !=  null){
+			criteria.add(Restrictions.or(
+					Restrictions.ilike("name", query, MatchMode.ANYWHERE), 
+					Restrictions.ilike("code", query, MatchMode.START)
+			));
+		}
 		return criteria;
 	}
 

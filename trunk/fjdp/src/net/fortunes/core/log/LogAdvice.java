@@ -75,7 +75,6 @@ public class LogAdvice implements AfterReturningAdvice {
 		newLog.setOpUser(opUserName);
 		newLog.setOpType(opName);
 		newLog.setContents(contents);
-		//logService.add(newLog);
 		genericDao.add(newLog);
 		//genericDao.getHibernateTemplate().flush();
 		

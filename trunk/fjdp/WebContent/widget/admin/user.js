@@ -101,6 +101,9 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 				scope:this,
 				handler:this.lockUser,
 				hidden:true
+			},'->',{
+				xtype : 'f-search',
+				emptyText : '请输入用户名或者用户显示名'
 			}]
 		});
 		User.superclass.initComponent.call(this);

@@ -48,6 +48,8 @@ public class Employee extends Model{
 	@OneToOne(mappedBy = "employee")
 	private User user;
 	
+	private Organization defaultOrganization;
+	
 	@ManyToMany(mappedBy = "employees")
 	private List<Organization> organizations = new ArrayList<Organization>();
 	
@@ -171,6 +173,14 @@ public class Employee extends Model{
 
 	public List<Organization> getOrganizations() {
 		return organizations;
+	}
+
+	public void setDefaultOrganization(Organization defaultOrganization) {
+		this.defaultOrganization = defaultOrganization;
+	}
+
+	public Organization getDefaultOrganization() {
+		return defaultOrganization;
 	}
 
 }
