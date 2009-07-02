@@ -54,7 +54,7 @@ Ext.onReady(function(){
              },
              failure:function(form, action) {
                  if(action.failureType == action.SERVER_INVALID)
-             		Ext.MessageBox.alert('信息', '登陆错误,请检查你的用户名和密码是否正确以及用户是否被锁定!');
+             		Ext.MessageBox.alert('信息', action.result.msg);
              }
          });
 	}

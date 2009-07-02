@@ -11,7 +11,7 @@ OrganizationList = Ext.extend(Ext.app.GridSelect,{
 			storeMapping:[
 				'text', 'code','checked'
 			],
-			url:ctx+'/department/getDepartments'
+			url:ctx+'/organization/getOrganizations'
 		});
 		OrganizationList.superclass.initComponent.call(this);
 		

@@ -96,6 +96,20 @@ Ext.onReady(function(){
 		Ext.getCmp('header-bar').clearStatus();
 	}, this);
 	
+	//当用户关闭窗口时注销session
+	Ext.EventManager.on(window,'beforeunload',function(e){
+		if(Ext.isIE){
+			//判断是关闭而不是刷新，可以判断是点击关闭和alt+f4
+			if((e.browserEvent.clientX>(document.body.clientWidth-22)&&e.browserEvent.clientY<0)||e.browserEvent.altKey){
+				Ext.Ajax.request({
+					url : ctx+'/system/logout'
+				})
+				alert('您已经退出系统');
+			}
+		}
+	},this);
+	
+
 	setTimeout(function(){
         Ext.get('loading').remove();
         Ext.get('loading-mask').fadeOut({remove:true});

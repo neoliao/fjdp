@@ -42,6 +42,9 @@ public class UserAction extends GenericAction<User> {
 		record.put("password2", user.getPassword());
 		record.put("employee", user.getEmployee());
 		record.put("locked", user.isLocked());
+		record.put("lastLoginTime", user.getLoginSession().getLastLoginTime());
+		record.put("logined", user.getLoginSession().isLogined());
+		
 		
 		JSONArray ja = new JSONArray();
 		for(Role role : user.getRoles()){

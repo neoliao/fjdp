@@ -81,6 +81,11 @@
 	font-weight: bold;
 }
 
+.msg-body .body-table tr{
+	line-height: 20px;
+	font-size: 12px;
+}
+
 .msg-body .even{
 	background-color: #F2F2F2;
 }

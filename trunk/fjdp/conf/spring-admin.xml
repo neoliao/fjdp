@@ -43,7 +43,7 @@
 	</bean>
 	
 	<!-- User -->
-	<bean id="userService" class="net.fortunes.admin.service.UserService" parent="genericService">
+	<bean id="userService" class="net.fortunes.admin.service.UserService" parent="genericService" init-method="initLoginSession">
 	</bean>
 	<bean id="userAction" class="net.fortunes.admin.action.UserAction" scope="prototype">
 		<property name="defService" ref="userService"/>

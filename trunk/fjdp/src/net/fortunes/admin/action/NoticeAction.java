@@ -19,17 +19,17 @@ import net.fortunes.admin.service.NoticeService;
 public class NoticeAction extends GenericAction<Notice> {
 	
 	private NoticeService noticeService;
-	private OrganizationService departmentService;
+	private OrganizationService organizationService;
 	
 	private String[] organizations;
 	
 	@Override
-	public String add() throws Exception {
+	public String create() throws Exception {
 		Notice notice = new Notice();
 		setEntity(notice);
 		List<User> users = new ArrayList<User>();
 		for(String id : organizations){
-			Organization d = departmentService.get(id);
+			Organization d = organizationService.get(id);
 			for(Employee e : d.getEmployees()){
 				if(e.getUser() != null){
 					users.add(e.getUser());
@@ -85,12 +85,12 @@ public class NoticeAction extends GenericAction<Notice> {
 		return noticeService;
 	}
 
-	public OrganizationService getDepartmentService() {
-		return departmentService;
+	public void setOrganizationService(OrganizationService organizationService) {
+		this.organizationService = organizationService;
 	}
 
-	public void setDepartmentService(OrganizationService departmentService) {
-		this.departmentService = departmentService;
+	public OrganizationService getOrganizationService() {
+		return organizationService;
 	}
 
 }

@@ -19,7 +19,6 @@ import org.springframework.aop.AfterReturningAdvice;
 /**
  * 日志切面通知,给特定的Service类中的方法记录日志
  * Service类和方法及方法参数要满足于一些给定，详细内容见方法注释
- * 
  * @author Neo.Liao
  *
  */

@@ -2,8 +2,10 @@ package misc;
 
 import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Employee;
+import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;
+import net.fortunes.admin.service.UserService;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,20 +22,29 @@ public class Test{
 	
 	private EmployeeService employeeService;
 	private DictService dictService;
+	private UserService userService;
+	
 	
 	public void execute() throws Exception {
 		Employee e = new Employee();
-		e.setCode("110");
+		e.setCode("11042");
 		employeeService.add(e);
-		dictService.add(new Dict("1"));
+		
+		User u = new User();
+		u.setName("a32");
+		userService.add(u);
+		//u.setEmployee(e);
+		e.setUser(u);
+		
+
 	}
 	
 	public static void main(String[] args) throws Exception {
-		/*ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
 		Test t = (Test)context.getBean("test");
 		t.setUp();
 		t.execute();
-		t.tearDown();*/
+		t.tearDown();
 		
 		System.out.println(Long.parseLong("0122220"));
 	}
@@ -78,6 +89,14 @@ public class Test{
 
 	public DictService getDictService() {
 		return dictService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public UserService getUserService() {
+		return userService;
 	}
 }
 

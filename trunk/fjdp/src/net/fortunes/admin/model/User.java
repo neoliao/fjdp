@@ -3,6 +3,7 @@ package net.fortunes.admin.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,6 +31,9 @@ public class User extends Model{
 	
 	@OneToOne
 	private Employee employee;
+	
+	@Embedded
+	private LoginSession loginSession = new LoginSession();
 
     public User() {
     }
@@ -38,7 +42,7 @@ public class User extends Model{
     	this.id = id;
     }
 
-    public User( String name,String password) {
+    public User(String name,String password) {
         this.name = name;
         this.password = password;
     }
@@ -107,6 +111,14 @@ public class User extends Model{
 	
 	public String toString() {
 		return "用户:"+name;
+	}
+
+	public void setLoginSession(LoginSession loginSession) {
+		this.loginSession = loginSession;
+	}
+
+	public LoginSession getLoginSession() {
+		return loginSession;
 	}
 
 }

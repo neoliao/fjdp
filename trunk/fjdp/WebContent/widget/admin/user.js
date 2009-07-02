@@ -44,12 +44,13 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 					new Ext.grid.RowNumberer(),
 					{header: '用户名',dataIndex:'userName',sortable:true},
 					{header: '用户显示名',dataIndex:'userDisplayName',sortable:true},
-					{header: '员工姓名',dataIndex:'employee',renderer : dictRenderer},
-					{header: '锁定',dataIndex:'locked',renderer:lockedRender},
-					{header: '所属角色',dataIndex:'roles',renderer:rolesRender,width:400}
+					{header: '对应员工',dataIndex:'employee',renderer : dictRenderer},
+					{header: '最后登陆时间',dataIndex:'lastLoginTime',width:150},
+					{header: '所属角色',dataIndex:'roles',renderer:rolesRender,width:200},
+					{header: '锁定',dataIndex:'locked',renderer:lockedRender}
 				]),	
 				storeMapping:[
-					'id','userName','userDisplayName','employee','roles','locked'
+					'id','userName','userDisplayName','employee','lastLoginTime','roles','locked'
 				]
 			},
 			winConfig : {

@@ -8,6 +8,7 @@ import net.fortunes.exception.DeleteForeignConstrainException;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
@@ -17,6 +18,8 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
  * @author Neo
  */
 public class GenericDao<E> extends BaseDao {
+	
+	private TransactionTemplate transactionTemplate;
 	
 	/**
 	 * DetachedCriteria条件查询方法
@@ -108,6 +111,14 @@ public class GenericDao<E> extends BaseDao {
 	
 	public int queryUpdate(String queryHql,Object...objects){
 		return getHibernateTemplate().bulkUpdate(queryHql, objects);
+	}
+
+	public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+		this.transactionTemplate = transactionTemplate;
+	}
+
+	public TransactionTemplate getTransactionTemplate() {
+		return transactionTemplate;
 	}
 
 }

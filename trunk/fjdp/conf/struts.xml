@@ -16,6 +16,7 @@
     	</interceptors>
 
     	<global-results>
+    		<result name="login" type="redirect">/</result>
 		    <result name="viewport">/main/viewport.jsp</result>
 		    <result name="exception">/common/exception.jsp</result>
 		</global-results>
