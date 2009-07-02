@@ -121,7 +121,7 @@ App.Header = Ext.extend(Ext.Panel,{
 					handler: function(){
 					    Ext.MessageBox.confirm('注销确认', '你确定要注销此用户吗?',function(btn){
 							if(btn == 'yes'){
-								window.location = ctx;
+								window.location = ctx+'/system/logout';
 							}
 						});
 					}

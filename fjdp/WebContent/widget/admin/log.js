@@ -7,8 +7,8 @@ Log = Ext.extend(Ext.app.BaseFuncPanel,{
 				sm:new Ext.grid.RowSelectionModel({singleSelect:true}),
 				cm:new Ext.grid.ColumnModel([
 					new Ext.grid.RowNumberer(),
-					{header: '操作时间',dataIndex:'createTime'},
-					{header: '用户',dataIndex:'opUser',renderer:dictRenderer},
+					{header: '操作时间',dataIndex:'createTime',width:150},
+					{header: '用户',dataIndex:'opUser'},
 					{header: '操作类型',dataIndex:'opType'},
 					{header: '内容',dataIndex:'contents',width:400}
 				]),	

@@ -20,5 +20,13 @@ public class NoticeService extends GenericService<Notice> {
 			noticeMessageService.add(message);
 		}
 	}
+
+	public void setNoticeMessageService(NoticeMessageService noticeMessageService) {
+		this.noticeMessageService = noticeMessageService;
+	}
+
+	public NoticeMessageService getNoticeMessageService() {
+		return noticeMessageService;
+	}
 	
 }

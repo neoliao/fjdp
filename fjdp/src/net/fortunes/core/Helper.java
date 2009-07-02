@@ -20,6 +20,7 @@ public class Helper {
 	protected JSONObject jsonObject;
 	
 	public static boolean DEBUG = true;
+	public static final String LOGIN_LISTENER = "loginListener";
 	public static final String AUTHED_USER = "authedUser";//User
 	public static final String PRIVILEGES = "privileges";//(String)Object []
 	public static final String PRIVILEGES_STRING = "privilegesString";//"['role'],['role_view']"

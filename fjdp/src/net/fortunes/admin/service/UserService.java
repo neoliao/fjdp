@@ -1,12 +1,16 @@
 package net.fortunes.admin.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.admin.model.Role;
@@ -35,10 +39,37 @@ public class UserService extends GenericService<User>{
 		return true;
 	}
 	
+	public List<User> getOnlineUsers(){
+		return getDefDao().findByQueryString("from User as u where u.loginSession.logined = true");
+	}
+	
 	public boolean resetPassword(String userId,String password){		
 		User user = get(userId);
 		user.setPassword(password);
 		return true;
+	}
+	
+	public void updateLoginSession(User user, boolean logined){
+		user.getLoginSession().setLastLoginTime(new Date());
+		user.getLoginSession().setLogined(logined);
+		update(user);
+	}
+	
+	/**
+	 * 当程序启动时，初始化登陆状态（设置所有用户为未登陆)
+	 * 不能使用声明式事务，原因未知
+	 */
+	public void initLoginSession(){
+		getDefDao().getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
+				getDefDao().queryUpdate("update User as u set u.loginSession.logined = false");
+			}
+		});
+	}
+	
+	public void updateAllSessions(){
+		
 	}
 	
 	/** 验证用户
@@ -46,7 +77,9 @@ public class UserService extends GenericService<User>{
 	 * @return
 	 */
 	public User authUser(User user){
-		List<User> userList = getDefDao().findByExample(user);
+		List<User> userList = getDefDao().findByQueryString(
+				"from User as u where u.name = ? and u.password = ? and locked = ?", 
+				user.getName(),user.getPassword(),false);
 		if(userList.size() == 1){
 			return userList.get(0);
 		}else{

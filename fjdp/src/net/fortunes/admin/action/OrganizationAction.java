@@ -49,14 +49,14 @@ public class OrganizationAction extends GenericAction<Organization> {
 		record.put("address", e.getAddress());
 		record.put("tel", e.getTel());
 		record.put("type", e.getType());
-		record.put("iconCls", "department");
+		record.put("iconCls", "organization");
 		return record.getJsonObject();
 	}
 
-	public JSONArray walkTree(Organization department) throws Exception{
+	public JSONArray walkTree(Organization organization) throws Exception{
 		JSONArray ja = new JSONArray();
-		if(department != null){
-			List<Organization> ds = department.getChildren();		
+		if(organization != null){
+			List<Organization> ds = organization.getChildren();		
 			for(Organization d : ds){
 				JSONObject jo = toJsonObject(d);
 				if(d.isLeaf()){				
@@ -72,16 +72,16 @@ public class OrganizationAction extends GenericAction<Organization> {
 	}	
 	
 	//所有部门（用于下拉菜单）
-	public String getDepartments() throws Exception{  
-		List<Organization> departmentList = getOrganizationService().getListData().getList();
+	public String getOrganizations() throws Exception{  
+		List<Organization> organizationList = getOrganizationService().getListData().getList();
 		JSONArray ja = new JSONArray();
 		JSONObject record = null;
-		for(Organization department:departmentList){
-			if(department.getParent() != null ){
+		for(Organization organization:organizationList){
+			if(organization.getParent() != null ){
 				record = new JSONObject();
-				record.put("id", department.getId());
-				record.put("text", department.getName());
-				record.put("code", department.getCode());
+				record.put("id", organization.getId());
+				record.put("text", organization.getName());
+				record.put("code", organization.getCode());
 				ja.add(record);
 			}
 		}

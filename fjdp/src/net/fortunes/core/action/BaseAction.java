@@ -36,7 +36,7 @@ import com.opensymphony.xwork2.interceptor.annotations.BeforeResult;
 public class BaseAction extends ActionSupport implements ServletRequestAware,ServletResponseAware,SessionAware{
 	
 	public static final String TEMPLATE = "template";
-	public static final String VIEWPORT =  "viewport";
+	public static final String VIEWPORT = "viewport";
 	
 	public static final String SUCCESS_KEY = "success";
 	public static final String MSG_KEY = "msg";

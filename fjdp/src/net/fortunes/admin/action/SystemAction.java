@@ -18,6 +18,7 @@ import net.fortunes.admin.service.MenuService;
 import net.fortunes.admin.service.PrivilegeService;
 import net.fortunes.admin.service.UserService;
 import net.fortunes.core.Helper;
+import net.fortunes.core.LoginSessionBindingListener;
 import net.fortunes.core.action.BaseAction;
 import net.fortunes.util.Tools;
 import net.sf.json.JSONArray;
@@ -30,6 +31,7 @@ import net.sf.json.JSONObject;
  */
 public class SystemAction extends BaseAction {
 	
+	private static final boolean NOT_ALLOW_REPEAT_LOGIN = true;
 	private PrivilegeService privilegeService;
 	private MenuService menuService;
 	private UserService userService;
@@ -38,24 +40,36 @@ public class SystemAction extends BaseAction {
 		User loginUser = new User();
 		loginUser.setName(p("userName"));
 		loginUser.setPassword(Tools.encodePassword(p("password")));
-		loginUser.setLocked(false);
 		User authedUser = userService.authUser(loginUser);
 		if(authedUser == null){
-			jo.put("success", false);
+			setJsonMessage(false,"登陆错误,请检查你的用户名和密码是否正确以及用户是否被锁定!");
+			return render(jo);
 		}else{
+			if(NOT_ALLOW_REPEAT_LOGIN){
+				if(authedUser.getLoginSession().isLogined()){
+					setJsonMessage(false, "该用户已经登陆,不可重复登陆");
+					return render(jo);
+				}
+			}
 			getSessionMap().clear();
+			getSessionMap().put(Helper.LOGIN_LISTENER, new LoginSessionBindingListener(authedUser));
 			getSessionMap().put(Helper.AUTHED_USER, authedUser);
 			getSessionMap().put(Helper.PRIVILEGES, getPrivilegesArray(authedUser).toArray());
 			getSessionMap().put(Helper.PRIVILEGES_STRING, getPrivilegesArray(authedUser).toString());
 			getSessionMap().put(Helper.WIDGET_URLS,getWidgetUrlsList());
 			getSessionMap().put(Helper.ROLES_STRING, getRolesArray(authedUser).toString());
-			jo.put("success", true);
+			jo.put(SUCCESS_KEY, true);
+			return render(jo);
 		}
-		return render(jo);
+	}
+	
+	public String logout() throws Exception {
+		getSessionMap().clear();
+		return LOGIN;
 	}
 	
 	public String viewport(){
-		return "viewport";
+		return VIEWPORT;
 	}
 	
 	public String getMenuTree() throws Exception{
@@ -88,12 +102,11 @@ public class SystemAction extends BaseAction {
 	}
 	
 	private void walkMenu(Menu menu,List<String> list)throws Exception{
-		
-		if(menu.getChildren().isEmpty()){
+		if(menu.isLeaf()){
 			String privilegeCode = menu.getName()+"_view";
 			if(AdminHelper.userHasPrivilege(privilegeCode)){
 				list.add(menu.getUrl());
-			}	
+			}
 		}else{					
 			List<Menu> subMenus = menu.getChildren();
 			for(Menu submenu : subMenus){
@@ -189,7 +202,5 @@ public class SystemAction extends BaseAction {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
-
 	
 }

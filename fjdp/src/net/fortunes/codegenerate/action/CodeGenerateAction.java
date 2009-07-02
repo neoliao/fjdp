@@ -74,10 +74,10 @@ public class CodeGenerateAction extends BaseAction {
 		root.put(FIELDS_KEY, processFields());
 		
 		//renerate
-		//generate(root, "Service");
-		//generate(root, "Action");
+		generate(root, "Service");
+		generate(root, "Action");
 		generate(root, "Model");
-		//generate(root, "Spring-conf");
+		generate(root, "Spring-conf");
 		generate(root, "Widget");
 		
 		setJsonMessage(true, "代码成功生成");

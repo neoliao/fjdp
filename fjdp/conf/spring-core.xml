@@ -19,6 +19,10 @@
     	<property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+    	<property name="transactionManager" ref="txManager"/>
+	</bean>
+    
     <tx:advice id="txAdvice" transaction-manager="txManager" >
     	<tx:attributes>
     		<tx:method name="has*" read-only="true"/>

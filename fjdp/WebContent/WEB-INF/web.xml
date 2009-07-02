@@ -37,12 +37,18 @@
 		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
 	
+	
+	
 	<jsp-config>
 		<taglib>
 			<taglib-uri>/birt.tld</taglib-uri>
 			<taglib-location>/WEB-INF/tld/birt.tld</taglib-location>
 		</taglib>
 	</jsp-config>
+	
+	<session-config>
+		<session-timeout>15</session-timeout>
+	</session-config>
 	
 </web-app>
 
