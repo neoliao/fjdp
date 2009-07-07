@@ -38,7 +38,9 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 				]
 			},
 			winConfig : {
-				height: 330
+				height: 395,
+				desc : '新增，修改员工的的信息',
+				bigIconClass : 'employeeIcon'
 			},
 			buttonConfig : ['all','-','->',{
 				xtype : 'f-search',

@@ -8,7 +8,7 @@ RoleList = Ext.extend(Ext.app.BaseFuncPanel,{
 				sm:new Ext.grid.RowSelectionModel({singleSelect:true}),
 				cm:new Ext.grid.ColumnModel([
 					new Ext.grid.RowNumberer(),
-					{header: '角色名',dataIndex:'nameCn',sortable:true},
+					{header: '角色名称',dataIndex:'nameCn',sortable:true},
 					{header: '描述',dataIndex:'description',hidden:true}
 				]),	
 				storeMapping:[
@@ -16,11 +16,13 @@ RoleList = Ext.extend(Ext.app.BaseFuncPanel,{
 				]
 			},
 			winConfig : {
-				height: 180
+				height: 245,
+				desc : '新增，修改角色信息，并为角色分配权限',
+				bigIconClass : 'roleIcon'
 			},
 			formConfig:{
 				items: [
-					{xtype:'f-text',fieldLabel:'角色名',name: 'nameCn',emptyText:'请输入角色名',allowBlank:false},
+					{xtype:'f-text',fieldLabel:'角色名称',name: 'nameCn',emptyText:'请输入角色名称',allowBlank:false},
 					{xtype:'f-textarea',fieldLabel:'描述',name: 'description'}
 				]
 			},

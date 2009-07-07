@@ -36,7 +36,9 @@ Notice = Ext.extend(Ext.app.BaseFuncPanel,{
 
 			},
 			winConfig : {
-				height: 340,width: 700
+				height: 410, width: 700,
+				bigIconClass : 'noticeIcon',
+				desc : '编辑一条消息，并发往指定的机构'
 			},
 			formConfig:{
 				items: [{
@@ -50,7 +52,7 @@ Notice = Ext.extend(Ext.app.BaseFuncPanel,{
 					},{
 						columnWidth:.5,layout: 'anchor',border: false,height : 250,
 						items : [
-							{xtype : 'panel',border : false , height : 20,html : '<p style="color:grey;">请选择公告要发往的单位</p>'},
+							{xtype : 'panel',border : false , height : 20,html : '<p style="color:grey;">请选择公告要发往的机构</p>'},
 							{xtype : 'organizationList',id : 'organizationList',anchor: '0 -20'}
 						]
 					}]

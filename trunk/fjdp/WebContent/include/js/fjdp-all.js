@@ -191,7 +191,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 	createWin : function(){
 		var winConf = Ext.apply({},this.winConfig||{},{
 			iconCls : this.iconCls,
-			title : this.title+' - 明细'	,
+			title : this.title,
 			buttons : this.getWinButtons(this.winConfig.buttons),
 			keys: [{
 	            key: Ext.EventObject.ENTER,
@@ -473,7 +473,7 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 	createWin : function(){		
 		var winConf = Ext.apply({},this.winConfig||{},{
 			iconCls : this.iconCls,
-			title : this.title+' - 明细'	,
+			title : this.title,
 			buttons : this.getWinButtons(this.winConfig.buttons),
 			keys: [{
 	            key: Ext.EventObject.ENTER,
@@ -896,17 +896,19 @@ Ext.reg('f-date', Ext.app.DateField);
  * 
  */
 Ext.app.FormWindow = Ext.extend(Ext.Window,{
+	
 	initComponent : function(){
 		Ext.apply(this,this.winConfig||{},{
-			layout:'fit',
+			layout:'anchor',
 			maximizable:true,
 			buttonAlign:'center',
-			resizable:false,
+			resizable:true,
+			desc : '',
 			modal:true,
 			constrainHeader : true,
 			maxOnShow:false,
 			height : 200,
-			width : 370
+			width : 380
 		});
 		
 		var formConf = Ext.apply({},this.formConfig||{},{
@@ -914,12 +916,21 @@ Ext.app.FormWindow = Ext.extend(Ext.Window,{
 		    labelWidth: 75,
 			border : false,
 			layout : 'form',
-		   	bodyStyle: 'padding:10px 10px 0 15px',
+		   	bodyStyle: 'padding:14px 10px 0 15px',
+		   	anchor : '0 -60',
 		   	defaults : { hideMode:'offsets'},
 			waitMsgTarget: true
 		});
 		this.formPanel = new Ext.form.FormPanel(formConf);
-		this.items = this.formPanel; 
+		this.items = [
+			new Ext.Panel({
+				height : 60,
+				border : false,
+				baseCls : 'fjdp-win-title',
+				html : '<div class="fjdp-win-title-content '+(this.bigIconClass?this.bigIconClass:'defaultBigIcon')+'"><h3>'+this.winConfig.title+'</h3><p>'+this.desc+'</p></div>'
+			}),
+			this.formPanel
+		]; 
 		
         Ext.app.FormWindow.superclass.initComponent.call(this);
         
