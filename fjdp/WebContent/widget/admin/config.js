@@ -1,10 +1,9 @@
 
 
-Config = Ext.extend(Ext.form.FormPanel,{
+ConfigForm = Ext.extend(Ext.form.FormPanel,{
 	bodyStyle : 'padding: 20px;',
 	closable : true,
-	border : true,
-	frame:true,
+	border : false,
 	initComponent : function(){
 		
 		Ext.apply(this,{
@@ -19,7 +18,7 @@ Config = Ext.extend(Ext.form.FormPanel,{
 				handler : this.updateConfig
 			}]
 		});
-		Config.superclass.initComponent.call(this);
+		ConfigForm.superclass.initComponent.call(this);
 	},
 	loadData : function(){
 		this.getForm().load({
@@ -35,4 +34,26 @@ Config = Ext.extend(Ext.form.FormPanel,{
 		})
 	}
 	
+});
+
+Config = Ext.extend(Ext.Panel,{
+	layout : 'anchor',
+	border : true,
+	closable : true,
+	initComponent : function(){
+		this.items = [
+			{	xtype: 'panel',
+				height : 60,
+				border : false,
+				baseCls : 'fjdp-win-title',
+				html : '<div class="fjdp-win-title-content confIcon"><h3>系统参数设置</h3><p>设置系统的各项参数</p></div>'
+			},
+			new ConfigForm({id : 'configForm',anchor : '0 -60'})
+			
+		]
+		Config.superclass.initComponent.call(this);
+	},
+	loadData : function(){
+		Ext.getCmp('configForm').loadData();
+	}
 });

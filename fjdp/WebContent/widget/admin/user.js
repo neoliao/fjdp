@@ -54,7 +54,9 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 				]
 			},
 			winConfig : {
-				height: 370, width : 390
+				height: 430, width : 390,
+				desc : '为员工分配用户名，设置密码，并分配角色',
+				bigIconClass : 'userIcon'
 			},
 			formConfig:{
 				items: [

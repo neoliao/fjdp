@@ -3,7 +3,9 @@ Dict = Ext.extend(Ext.app.BaseFuncTree,{
 	initComponent : function(){
 		Ext.apply(this,{
 			winConfig : {
-				height: 230
+				height: 240,
+				desc : '维护数据字典信息',
+				bigIconClass : 'dictIcon'
 			},
 			formConfig:{
 				items: [

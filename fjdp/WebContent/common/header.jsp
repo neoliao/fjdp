@@ -5,7 +5,6 @@
 
 <!-- include extJs lib -->
 <s:component template="extlib.ftl">
-	<s:param name="extTheme">xtheme-gray</s:param>
 </s:component>
 
 <link rel="stylesheet" type="text/css" href="<s:url value="/include/css/fjdp-all.css"/>" />

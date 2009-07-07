@@ -45,7 +45,10 @@ ConfigWin = Ext.extend(Ext.app.FormWindow,{
 	title : '个人设置',
 	iconCls: 'conf',
 	winConfig　: {
-		height : 300, width : 390
+		title : '个人设置',
+		height : 300, width : 390,
+		desc : '设置用户密码等个人信息',
+		bigIconClass : 'personalConfIcon'
 	},
 	formConfig :{
 		items : [

@@ -39,7 +39,10 @@ EmployeeSelect = Ext.extend(Ext.app.AutoSelect,{
 
 OrganizationTree = Ext.extend(Ext.app.BaseFuncTree,{
 	winConfig : {
-		height: 250, width : 390
+		height: 310, width : 390,
+		desc : '新增，修改机构的信息，添加员工到机构',
+		bigIconClass : 'organizationIcon'
+		
 	},
 	formConfig:{
 		items: [

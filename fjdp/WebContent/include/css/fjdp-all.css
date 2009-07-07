@@ -39,7 +39,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
  * icons
  */
  
- .html {
+.html {
     background-image:url( ../image/icon/web.gif ) !important;
 } 
 .pdf {
@@ -488,6 +488,53 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     z-index: 3;
     color: #777;
 }
+
+.fjdp-win-title{
+	background-image: url(../image/dialog_bg.jpg);
+	background-repeat: no-repeat;
+	background-color: #E8EDE7;
+	background-position: right;
+}
+.fjdp-win-title-content{
+	height:100%;
+	padding: 12px 0px 10px 60px;
+	background-repeat: no-repeat;
+}
+
+.fjdp-win-title-body p{
+	padding-top: 5px;
+}
+
+.defaultBigIcon{
+	background-image:url( ../image/bigIcon/default.gif ) !important;
+}
+
+.employeeIcon{
+	background-image:url( ../image/bigIcon/employee.gif ) !important;
+}
+
+.noticeIcon{
+	background-image:url( ../image/bigIcon/notice.gif ) !important;
+}
+.organizationIcon{
+	background-image:url( ../image/bigIcon/organization.gif ) !important;
+}
+.userIcon{
+	background-image:url( ../image/bigIcon/user.gif ) !important;
+}
+.roleIcon{
+	background-image:url( ../image/bigIcon/role.gif ) !important;
+}
+.dictIcon{
+	background-image:url( ../image/bigIcon/dict.gif ) !important;
+}
+.confIcon{
+	background-image:url( ../image/bigIcon/conf.gif ) !important;
+}
+.personalConfIcon{
+	background-image:url( ../image/bigIcon/personalConf.gif ) !important;
+}
+
 
 .commentBox{
 	padding:7 0 10 10;
