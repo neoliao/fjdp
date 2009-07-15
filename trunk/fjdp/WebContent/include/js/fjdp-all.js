@@ -1167,62 +1167,6 @@ Ext.app.noPagingToolbar = Ext.extend(Ext.Toolbar, {
     }
 });
 
-Ext.app.IpField = Ext.extend(Ext.ux.form.FieldPanel, {
-	border: false,
-	baseCls: null,
-	layout: 'table',
-	token: '.',
-	value: '192.168.0.1',
-	layoutConfig: {
-		columns: 7
-	},
-	width: 230,
-	// private
-	defaults:{
-		maskRe: /[0-9]/,
-		maxLength: 3,
-		maxValue:255,
-		minValue:0,
-		listeners: {
-			'focus': function(f){
-				f.selectText();
-			}
-		}
-	},
-	initComponent: function()
-	{
-		this.items = [{
-			xtype:'numberfield',
-			width:45,
-			name: this.name + '1'
-		}, {
-			html: '.',
-			border: false
-		}, {
-			xtype:'numberfield',
-			width:45,
-			name: this.name + '2'
-		}, {
-			html: '.',
-			border: false
-		}, {
-			xtype:'numberfield',
-			width:45,
-			name: this.name + '3'
-		}, {
-			html: '.',
-			border: false
-		}, {
-			xtype:'numberfield',
-			width:45,
-			name: this.name + '4'
-		}]
-		Ext.app.IpField.superclass.initComponent.call(this);
-	}
-});
-Ext.reg('f-ipfield', Ext.app.IpField);
-
-
 Ext.app.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
 	initComponent : function(){
         Ext.app.RadioGroup.superclass.initComponent.call(this);                                            

@@ -9,21 +9,6 @@ Ext.QuickTips.init();
 Ext.form.Field.prototype.msgTarget = 'side';
 
 Ext.ns('App');
-/**
- * bugs patch
- * 
- */
-Ext.form.TriggerField.override({
-    afterRender : function(){
-        Ext.form.TriggerField.superclass.afterRender.call(this);
-        var y;
-        if(Ext.isIE && !this.hideTrigger && this.el.getY() != (y = this.trigger.getY())){
-            this.el.position();
-            this.el.setY(y);
-        }
-    }
-});
-
 
 /**
  * override tree
@@ -101,7 +86,8 @@ Ext.apply(Ext.form.VTypes, {
  * 
  */
 Ext.apply(Ext.layout.FormLayout.prototype, {
-    renderItem:function(D,A,C){
+	//和extJs 3.0 不兼容
+   /* renderItem:function(D,A,C){
         if(D&&!D.rendered&&D.isFormField&&D.inputType!="hidden"){
             if(D.allowBlank==false){
                 D.fieldLabel = "<span style=\"color:red;\" ext:qtip=\"该字段不能为空\"> * </span>"+D.fieldLabel;
@@ -119,13 +105,13 @@ Ext.apply(Ext.layout.FormLayout.prototype, {
             if(A){
                 this.fieldTpl.insertBefore(A,B)
             }else{
-            this.fieldTpl.append(C,B)
+            	this.fieldTpl.append(C,B)
             }
             D.render("x-form-el-"+D.id)
         }else{
             Ext.layout.FormLayout.superclass.renderItem.apply(this,arguments)
         }
-    }
+    }*/
 }); 
 
 var dictRenderer = function(v){

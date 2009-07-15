@@ -117,7 +117,7 @@ public abstract class GenericService<E> extends BaseService{
 	 */
 	public ListData<E> getListData(int start,int limit){
 		List<E> list = defDao.findByCriteria(getConditions(null,null),start, limit);
-		int total = defDao.findByCriteria(getConditions(null,null)).size();
+		int total = getTotal();
 		return new ListData<E>(list,total);
 	}
 	
@@ -216,9 +216,14 @@ public abstract class GenericService<E> extends BaseService{
 		return defDao.queryUpdate("delete from "+entityClass.getSimpleName());
 	}
 	
+	public int getTotal() {
+		return ((Long) defDao.getHibernateTemplate().iterate(
+				"select count(*) from " + entityClass.getSimpleName()).next()).intValue();
+	}
+	
 	
 	/**
-	 * 转换为主键的值
+	 * 转换为主键的值，这种实现会有问题
 	 * @param id
 	 * @return 实体List
 	 */

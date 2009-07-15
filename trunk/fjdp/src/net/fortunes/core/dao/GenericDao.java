@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import net.fortunes.exception.DeleteForeignConstrainException;
+import net.fortunes.util.GenericsUtil;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -111,6 +112,11 @@ public class GenericDao<E> extends BaseDao {
 	
 	public int queryUpdate(String queryHql,Object...objects){
 		return getHibernateTemplate().bulkUpdate(queryHql, objects);
+	}
+	
+	public int getTotal() {
+		String entityName = GenericsUtil.getGenericClass(getClass()).getSimpleName();
+		return ((Long) getHibernateTemplate().iterate("select count(*) from " + entityName).next()).intValue();
 	}
 
 	public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
