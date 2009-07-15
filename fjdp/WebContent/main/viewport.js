@@ -76,11 +76,11 @@ Ext.onReady(function(){
 
 	Ext.Ajax.on('requestcomplete', function (conn,response){
 		Ext.getCmp('header-bar').clearStatus();
-		var hasMsg = response.getResponseHeader["hasMsg"];
+		var hasMsg = response.getResponseHeader('hasMsg');
 		if(hasMsg){
 			var jo = Ext.decode(response.responseText);
 			if(jo.msg){
-				App.msg(jo.msg);
+				setTimeout('App.msg("'+jo.msg+'")', 500);
 			}
 		}
 	}, this);

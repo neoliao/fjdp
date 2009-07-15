@@ -26,8 +26,8 @@
   <img src="<s:url value="/include/image/large-loading.gif"/>" style="margin-right:8px;" align="middle"/>正在加载...</div>
 </div>
 <div id="logo-banner">
-	<img src="<s:url value="/include/image/theme/barner-logo.png"/>" style="float:left;margin-left:1px;width:350px;height:40px;margin-top:1px;"/>
-	<img src="<s:url value="/include/image/theme/barner-img.png"/>" style="float:right;margin-right:1px;width:234px;height:40px;margin-top:1px;"/>
+	<img src="<s:url value="/include/image/theme/barner-logo.png"/>" style="float:left;margin-left:1px;width:350px;height:38px;margin-top:1px;"/>
+	<img src="<s:url value="/include/image/theme/barner-img.png"/>" style="float:right;margin-right:1px;width:234px;height:38px;margin-top:1px;"/>
 </div>
 </body>
 </html>
