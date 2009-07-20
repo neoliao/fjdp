@@ -10,9 +10,7 @@
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
 		default-autowire="byName">
 	
-	<!-- Myhome -->
-	<bean id="myhomeAction" class="com.fortunes.action.MyhomeAction" scope="prototype">
-	</bean>
+	
 	
     
     

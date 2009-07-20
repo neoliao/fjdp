@@ -86,32 +86,25 @@ Ext.apply(Ext.form.VTypes, {
  * 
  */
 Ext.apply(Ext.layout.FormLayout.prototype, {
-	//和extJs 3.0 不兼容
-   /* renderItem:function(D,A,C){
-        if(D&&!D.rendered&&D.isFormField&&D.inputType!="hidden"){
-            if(D.allowBlank==false){
-                D.fieldLabel = "<span style=\"color:red;\" ext:qtip=\"该字段不能为空\"> * </span>"+D.fieldLabel;
+	 renderItem : function(c, position, target){
+        if(c && !c.rendered && (c.isFormField || c.fieldLabel) && c.inputType != 'hidden'){
+        	if(c.allowBlank==false){
+                c.fieldLabel = "<span style=\"color:red;font-weight:bold;\" ext:qtip=\"该字段不能为空\"> * </span>"+c.fieldLabel;
             }
-            var B=[
-                D.id,D.fieldLabel,
-                D.labelStyle||this.labelStyle||"",
-                this.elementStyle||"",
-                typeof D.labelSeparator=="undefined"?this.labelSeparator:D.labelSeparator,
-                (D.itemCls||this.container.itemCls||"")+(D.hideLabel?" x-hide-label":""),
-                D.clearCls||"x-form-clear-left"];
-            if(typeof A=="number"){
-                A=C.dom.childNodes[A]||null
+            var args = this.getTemplateArgs(c);
+            if(typeof position == 'number'){
+                position = target.dom.childNodes[position] || null;
             }
-            if(A){
-                this.fieldTpl.insertBefore(A,B)
+            if(position){
+                this.fieldTpl.insertBefore(position, args);
             }else{
-            	this.fieldTpl.append(C,B)
+                this.fieldTpl.append(target, args);
             }
-            D.render("x-form-el-"+D.id)
-        }else{
-            Ext.layout.FormLayout.superclass.renderItem.apply(this,arguments)
+            c.render('x-form-el-'+c.id);
+        }else {
+            Ext.layout.FormLayout.superclass.renderItem.apply(this, arguments);
         }
-    }*/
+    }
 }); 
 
 var dictRenderer = function(v){

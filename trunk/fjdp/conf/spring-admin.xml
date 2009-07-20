@@ -79,5 +79,9 @@
 	<bean id="logAction" class="net.fortunes.admin.action.LogAction" scope="prototype">
 		<property name="defService" ref="logService"/>
 	</bean>
+	
+	<!-- Myhome -->
+	<bean id="myhomeAction" class="net.fortunes.myhome.action.MyhomeAction" scope="prototype">
+	</bean>
     
 </beans>

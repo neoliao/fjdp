@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 import net.fortunes.admin.helper.AdminHelper;
 import net.fortunes.core.action.GenericAction;
 import ${packagePrefix}.model.${modelName};
+import ${packagePrefix}.service.${modelName}Service;
 
 public class ${modelName}Action extends GenericAction<${modelName}> {
 	
@@ -29,9 +30,8 @@ public class ${modelName}Action extends GenericAction<${modelName}> {
 	protected JSONObject toJsonObject(${modelName} e) throws ParseException{
 		AdminHelper record = new AdminHelper();
 		record.put("id", e.getId());
-		record.put("code", e.getCode());
 <#list fields as field>
-	record.put("${field.name}", e.get${field.name?cap_first}());
+		record.put("${field.name}", e.get${field.name?cap_first}());
 </#list> 		
 		return record.getJsonObject();
 	}

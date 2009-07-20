@@ -1,4 +1,4 @@
-package com.fortunes.action;
+package net.fortunes.myhome.action;
 
 import java.util.List;
 import net.fortunes.admin.model.NoticeMessage;

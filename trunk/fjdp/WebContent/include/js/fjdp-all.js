@@ -609,7 +609,7 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 	updateNode : function(nodeJson){
 		var node = this.getSelectionModel().getSelectedNode();
 		node.setText(nodeJson.text);
-		Ext.get(node.getUI().getTextEl()).highlight();
+		//Ext.get(node.getUI().getTextEl()).highlight();
 	},
 	prepareDel : function(){
 		this.ajaxParams = {};
@@ -913,7 +913,7 @@ Ext.app.FormWindow = Ext.extend(Ext.Window,{
 		
 		var formConf = Ext.apply({},this.formConfig||{},{
 			labelAlign: 'right',
-		    labelWidth: 75,
+		    labelWidth: 80,
 			border : false,
 			layout : 'form',
 		   	bodyStyle: 'padding:14px 10px 0 15px',
