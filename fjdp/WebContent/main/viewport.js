@@ -81,6 +81,7 @@ Ext.onReady(function(){
 			var jo = Ext.decode(response.responseText);
 			if(jo.msg){
 				setTimeout('App.msg("'+jo.msg+'")', 500);
+				//App.msg(jo.msg);
 			}
 		}
 	}, this);
@@ -102,7 +103,7 @@ Ext.onReady(function(){
 			//判断是关闭而不是刷新，可以判断是点击关闭和alt+f4关闭
 			if((e.browserEvent.clientX>(document.body.clientWidth-22)&&e.browserEvent.clientY<0)||e.browserEvent.altKey){
 				Ext.Ajax.request({
-					url : ctx+'/system/logout'
+					url : ctx+'/system/logout' 
 				})
 				alert('您已经退出系统');
 			}

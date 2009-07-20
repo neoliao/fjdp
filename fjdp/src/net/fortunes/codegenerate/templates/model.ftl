@@ -55,12 +55,21 @@ public class ${modelName} extends Model{
 	}
     
     /*=============== setter and getter =================*/
+    
+    public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getId() {
+		return id;
+	}
+	
 <#list fields as field>
-	public void set${field.name?cap_first}(<#if field.type == "text" || field.type == "textArea">Stirng<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> ${field.name}) {
+	public void set${field.name?cap_first}(<#if field.type == "text" || field.type == "textArea">String<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> ${field.name}) {
 		this.${field.name} = ${field.name};
 	}
 
-	public <#if field.type == "text" || field.type == "textArea">Stirng<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> get${field.name?cap_first}() {
+	public <#if field.type == "text" || field.type == "textArea">String<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> get${field.name?cap_first}() {
 		return ${field.name};
 	}
 </#list>

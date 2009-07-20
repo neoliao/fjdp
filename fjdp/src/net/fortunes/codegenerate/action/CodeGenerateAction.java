@@ -1,6 +1,8 @@
 package net.fortunes.codegenerate.action;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -88,6 +90,7 @@ public class CodeGenerateAction extends BaseAction {
 		cfg = new Configuration();
 		
 		cfg.setDirectoryForTemplateLoading(temlDir);
+		cfg.setOutputEncoding("UTF-8");
 		cfg.setObjectWrapper(new DefaultObjectWrapper());
 		File outPath = new File(OUT_PATH);
 		if(outPath.exists()){
@@ -117,7 +120,7 @@ public class CodeGenerateAction extends BaseAction {
 	}
 	
 	private void generate(Map<String,Object> root,String fileType) throws Exception{
-		Template tpl = cfg.getTemplate(getLower(fileType)+".ftl");
+		Template tpl = cfg.getTemplate(getLower(fileType)+".ftl","UTF-8");
 		String fileName = "";
 		if(fileType.equals("Action") || fileType.equals("Service")){
 			fileName = OUT_PATH + "/src" + "/" + packagePrefix.replace('.', '/') + "/" +
@@ -135,10 +138,11 @@ public class CodeGenerateAction extends BaseAction {
 		if(!codeFile.getParentFile().exists()){
 			codeFile.getParentFile().mkdirs();
 		}
-		Writer out = new FileWriter(codeFile);
+		Writer out = new BufferedWriter(
+				new OutputStreamWriter(new FileOutputStream(codeFile),"UTF-8"));
 		
 		//输出到stdout
-		tpl.process(root, new OutputStreamWriter(System.out));
+		//tpl.process(root, new OutputStreamWriter(System.out));
 		//输出到文件
 		tpl.process(root, out);
 		out.flush();
