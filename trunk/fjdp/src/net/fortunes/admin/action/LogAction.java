@@ -2,7 +2,7 @@ package net.fortunes.admin.action;
 
 import java.text.ParseException;
 
-import net.fortunes.admin.helper.AdminHelper;
+import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Log;
 import net.fortunes.admin.service.LogService;
 import net.fortunes.core.action.GenericAction;

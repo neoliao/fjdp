@@ -3,7 +3,7 @@ package net.fortunes.admin.action;
 import java.text.ParseException;
 import java.util.List;
 
-import net.fortunes.admin.helper.AdminHelper;
+import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;

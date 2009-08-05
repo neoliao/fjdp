@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.fortunes.Constants;
 
-import net.fortunes.admin.helper.AdminHelper;
+import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Menu;
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.admin.model.Role;

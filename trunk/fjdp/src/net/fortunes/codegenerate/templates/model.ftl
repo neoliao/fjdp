@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import net.fortunes.admin.model.Dict;
 import net.fortunes.core.Model;
 
 @Entity
@@ -28,8 +29,11 @@ public class ${modelName} extends Model{
 	@Column(length = ${field.extend!"500"})
 	private String ${field.name};
 	
-<#elseif field.type == "number">
+<#elseif field.type == "int">
 	private int ${field.name};
+	
+<#elseif field.type == "double">
+	private double ${field.name};
 	
 <#elseif field.type == "dict">
 	@ManyToOne
@@ -65,11 +69,11 @@ public class ${modelName} extends Model{
 	}
 	
 <#list fields as field>
-	public void set${field.name?cap_first}(<#if field.type == "text" || field.type == "textArea">String<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> ${field.name}) {
+	public void set${field.name?cap_first}(<#if field.type == "text" || field.type == "textArea">String<#elseif field.type == "dict">Dict<#elseif field.type == "int">int<#elseif field.type == "double">double<#else>Date</#if> ${field.name}) {
 		this.${field.name} = ${field.name};
 	}
 
-	public <#if field.type == "text" || field.type == "textArea">String<#elseif field.type == "dict">Dict<#elseif field.type == "number">int<#else>Date</#if> get${field.name?cap_first}() {
+	public <#if field.type == "text" || field.type == "textArea">String<#elseif field.type == "dict">Dict<#elseif field.type == "int">int<#elseif field.type == "double">double<#else>Date</#if> get${field.name?cap_first}() {
 		return ${field.name};
 	}
 </#list>
