@@ -1,4 +1,4 @@
-package net.fortunes.admin.helper;
+package net.fortunes.admin;
 
 import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Dict;

@@ -54,7 +54,7 @@ public class CodeGenerateAction extends BaseAction {
 		fields.add(new Field("date","birthday","生日",true,"date"));
 		fields.add(new Field("date","lastLogin","最后登陆时间",true,"dateTime"));
 		fields.add(new Field("textArea","addr","地址",true,null));
-		fields.add(new Field("number","rank","级别",true,"10"));
+		fields.add(new Field("intNumber","rank","级别",true,"10"));
 		root.put(FIELDS_KEY, fields);
 		
 		//renerate

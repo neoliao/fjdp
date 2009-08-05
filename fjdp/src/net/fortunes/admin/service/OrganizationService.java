@@ -2,7 +2,7 @@ package net.fortunes.admin.service;
 
 import java.util.List;
 
-import net.fortunes.admin.helper.AdminHelper;
+import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.model.Menu;
 import net.fortunes.admin.model.Organization;

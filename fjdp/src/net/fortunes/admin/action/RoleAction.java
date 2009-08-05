@@ -2,7 +2,7 @@ package net.fortunes.admin.action;
 
 import java.util.List;
 
-import net.fortunes.admin.helper.AdminHelper;
+import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;

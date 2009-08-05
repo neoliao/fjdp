@@ -4,10 +4,6 @@ import net.fortunes.core.Model;
 
 public class Field extends Model{
 
-	public static enum FieldType {
-		text, textArea, number, date, dict
-	}
-	
 	private String type;//类型
 	private String name;//变量名
 	private String label;//标签
@@ -26,9 +22,6 @@ public class Field extends Model{
 		this.extend = extend;
 	}
 	
-	public void setType(FieldType type) {
-		this.type = type.name();
-	}
 	public String getName() {
 		return name;
 	}

@@ -20,7 +20,7 @@
 	<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 	<property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/fjdp</property>
 	<property name="hibernate.connection.username">root</property>
-	<property name="hibernate.connection.password">admin</property>
+	<property name="hibernate.connection.password">fortunes</property>
 	<!-- -->
 
 	<!-- SQLServerDriver 

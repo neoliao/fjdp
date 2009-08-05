@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.fortunes.admin.helper.AdminHelper;
+import com.fortunes.AppHelper;
 import net.fortunes.core.action.GenericAction;
 import ${packagePrefix}.model.${modelName};
 import ${packagePrefix}.service.${modelName}Service;
@@ -17,8 +17,10 @@ public class ${modelName}Action extends GenericAction<${modelName}> {
 <#list fields as field>
 	<#if field.type == "text" || field.type == "textArea">
 		e.set${field.name?cap_first}(p("${field.name}"));
-	<#elseif field.type == "number">
-		e.set${field.name?cap_first}(Integer.paserInt(p("${field.name}")));
+	<#elseif field.type == "int">
+		e.set${field.name?cap_first}(Integer.parseInt(p("${field.name}")));
+	<#elseif field.type == "double">
+		e.set${field.name?cap_first}(Double.parseDouble(p("${field.name}")));
 	<#elseif field.type == "dict">
 		e.set${field.name?cap_first}(AppHelper.toDict(p("${field.name}")));
 	<#elseif field.type == "date">
