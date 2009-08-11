@@ -22,15 +22,12 @@ import net.fortunes.util.Tools;
 @LoggerClass
 public class UserService extends GenericService<User>{
 	
-	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap) {
-		DetachedCriteria criteria = super.getConditions(query, queryMap);
-		if(query !=  null){
-			criteria.add(Restrictions.or(
-					Restrictions.ilike("name", query, MatchMode.ANYWHERE), 
-					Restrictions.ilike("displayName", query, MatchMode.ANYWHERE)
-			));
-		}
-		return criteria;
+	
+	@Override
+	protected void setFilter(String query, Map<String, String> queryMap) {
+		getDefDao().getHibernateTemplate().enableFilter("user_queryFilter")
+			.setParameter("name", "%"+query+"%")
+			.setParameter("displayName", "%"+query+"%");
 	}
 	
 	public boolean lockOrUnlockUser(String userId){
@@ -66,10 +63,6 @@ public class UserService extends GenericService<User>{
 				getDefDao().queryUpdate("update User as u set u.loginSession.logined = false");
 			}
 		});
-	}
-	
-	public void updateAllSessions(){
-		
 	}
 	
 	/** 验证用户

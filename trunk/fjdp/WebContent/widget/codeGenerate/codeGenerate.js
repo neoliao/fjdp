@@ -21,14 +21,14 @@ CodeGenerateFieldGrid = Ext.extend(Ext.grid.EditorGridPanel,{
 		        data : {root : []}
 			}),
     		cm: new Ext.grid.ColumnModel([{
-	        	id:'type',header: "字段类型",dataIndex: 'type',width: 150,
+	        	id:'type',header: "字段类型",dataIndex: 'type',width: 100,
 	        	editor: new Ext.app.SelectField({
 	        		data : [['text','text'],['dict','dict'],['date','date'],
 	        				['textArea','textArea'],['int','int'],['double','double']],
 	           		allowBlank: false
 	           })
 	        },{
-	        	header: "字段名",dataIndex: 'name',width: 150,
+	        	header: "字段名",dataIndex: 'name',width: 100,
 	        	editor: new Ext.app.TextField({allowBlank: false})
 	        },{
 	        	header: "字段标签",dataIndex: 'label',width: 150,
@@ -37,7 +37,7 @@ CodeGenerateFieldGrid = Ext.extend(Ext.grid.EditorGridPanel,{
 	        	header: "扩展属性 kind/dateType/length",dataIndex: 'extend',width: 200,
 	        	editor: new Ext.app.TextField()
 	        },{
-	        	header: "能否为空",dataIndex: 'allowBlank',width: 150,
+	        	header: "能否为空",dataIndex: 'allowBlank',width: 100,
 	        	editor: new Ext.app.SelectField({
 	        		data : [['yes','可以为空'],['no','不能为空']],allowBlank: false
 	           })

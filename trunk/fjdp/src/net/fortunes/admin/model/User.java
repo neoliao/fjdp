@@ -10,9 +10,22 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 import net.fortunes.core.Model;
 
 @Entity
+@FilterDef(name="user_queryFilter", parameters = {
+		@ParamDef(name="name", type="string"),
+		@ParamDef(name="displayName", type="string")
+	}
+)
+@Filters({
+	@Filter(name="user_queryFilter", condition="name like :name or displayName like :displayName")
+})
 public class User extends Model{
 	
 	@Id @GeneratedValue

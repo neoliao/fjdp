@@ -6,14 +6,22 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import net.fortunes.core.Model;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 
 @Entity
+@FilterDef(name="contentsFilter", parameters = @ParamDef(name="contents", type="string"))
+@Filters({
+	@Filter(name="contentsFilter", condition="contents like :contents")
+})
 public class Log extends Model{
 	
 	@Id @GeneratedValue

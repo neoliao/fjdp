@@ -4,6 +4,7 @@
 	<dict key="sex" text="性别">
 		<dict key="01" text="男"/>
 		<dict key="02" text="女"/>
+		<dict key="03" text="2女"/>
 	</dict>
 	
 	<dict key="organizationType" text="组织类型">

@@ -62,7 +62,7 @@ public class AdminHelper extends Helper{
 		return (id == null || id.equals("")) ? null : new Employee(Long.parseLong(id));
 	}
 	
-	public static Organization toDepartment(String id){
+	public static Organization toOrganization(String id){
 		return (id == null || id.equals("")) ? null : new Organization(Long.parseLong(id));
 	}
 	
