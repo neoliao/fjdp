@@ -1,14 +1,16 @@
 package misc;
 
-import net.fortunes.admin.model.Dict;
-import net.fortunes.admin.model.Employee;
-import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;
 import net.fortunes.admin.service.UserService;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jbpm.api.ExecutionService;
+import org.jbpm.api.NewDeployment;
+import org.jbpm.api.ProcessEngine;
+import org.jbpm.api.ProcessInstance;
+import org.jbpm.api.RepositoryService;
+import org.jbpm.pvm.internal.cfg.JbpmConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
@@ -18,25 +20,27 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 public class Test{
 	
 	public SessionFactory sessionFactory;
-	public Session session; 
+	public Session session;
 	
 	private EmployeeService employeeService;
 	private DictService dictService;
 	private UserService userService;
 	
+	private JbpmConfiguration jbpmConfiguration;
+	private ProcessEngine processEngine;
+	private RepositoryService repositoryService;
+	private ExecutionService executionService;
+	
 	
 	public void execute() throws Exception {
-		Employee e = new Employee();
-		e.setCode("11042");
-		employeeService.add(e);
+		String deploymentDbid = repositoryService.createDeployment()
+    		.addResourceFromClasspath("process/design.jpdl.xml").deploy();
 		
-		User u = new User();
-		u.setName("a32");
-		userService.add(u);
-		//u.setEmployee(e);
-		e.setUser(u);
+		ProcessInstance processInstance = 
+			executionService.startProcessInstanceByKey("design", "order001");
 		
-
+		
+		//repositoryService.deleteDeployment(deploymentDbid);
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -46,7 +50,6 @@ public class Test{
 		t.execute();
 		t.tearDown();
 		
-		System.out.println(Long.parseLong("0122220"));
 	}
 	
 	protected void setUp(){
@@ -97,6 +100,38 @@ public class Test{
 
 	public UserService getUserService() {
 		return userService;
+	}
+
+	public ProcessEngine getProcessEngine() {
+		return processEngine;
+	}
+
+	public void setProcessEngine(ProcessEngine processEngine) {
+		this.processEngine = processEngine;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public ExecutionService getExecutionService() {
+		return executionService;
+	}
+
+	public void setExecutionService(ExecutionService executionService) {
+		this.executionService = executionService;
+	}
+
+	public void setJbpmConfiguration(JbpmConfiguration jbpmConfiguration) {
+		this.jbpmConfiguration = jbpmConfiguration;
+	}
+
+	public JbpmConfiguration getJbpmConfiguration() {
+		return jbpmConfiguration;
 	}
 }
 

@@ -11,10 +11,6 @@ import net.sf.json.JSONObject;
 public class LogAction extends GenericAction<Log> {
 	
 	private LogService logService;
-	private String opType;
-	private String opUser;
-	private String createTime;
-	private String contents;
 	
 	protected void setEntity(Log log) throws ParseException{
 
@@ -38,35 +34,4 @@ public class LogAction extends GenericAction<Log> {
 		this.logService = logService;
 	}
 	
-	public String getOpType() {
-		return opType;
-	}
-
-	public void setOpType(String opType) {
-		this.opType = opType;
-	}
-
-	public String getOpUser() {
-		return opUser;
-	}
-
-	public void setOpUser(String opUser) {
-		this.opUser = opUser;
-	}
-
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getContents() {
-		return contents;
-	}
-
-	public void setContents(String contents) {
-		this.contents = contents;
-	}
 }

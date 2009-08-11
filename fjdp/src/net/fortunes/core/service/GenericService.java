@@ -52,61 +52,42 @@ public abstract class GenericService<E> extends BaseService{
 	}
 	
 	public List<E> getAll(){
-		return defDao.findByCriteria(getConditions(null,null));
+		return defDao.findByCriteria(DetachedCriteria.forClass(this.entityClass));
 	}
 	
 	public ListData<E> getListData(String query,Map<String,String> queryMap,int start,int limit){
 		ListData<E> listData;
-		//有单个查询条件存在
-		if(query != null && !query.equals("")){
-			//不分页
-			if(limit == 0){
-				listData = getListData(query);
-			//分页
-			}else{
-				listData = getListData(query,start,limit);
-			}	
-		//有多个查询条件	
-		}else if(queryMap != null && !queryMap.isEmpty()){
-			//不分页
-			if(limit == 0){
-				listData = getListData(queryMap);
-			//分页
-			}else{
-				listData = getListData(queryMap,start,limit);
-			}	
-		//无查询条件
+		//不分页
+		if(limit == 0){
+			if(StringUtils.isNotEmpty(query) || (queryMap != null && !queryMap.isEmpty())){
+				setFilter(query,queryMap);
+			}
+			listData = getListData();
+		//分页
 		}else{
-			//不分页
-			if(limit == 0){
-				listData = getListData();
-			//分页
-			}else{
-				listData = getListData(start,limit);
-			}	
+			if(StringUtils.isNotEmpty(query) || (queryMap != null && !queryMap.isEmpty())){
+				setFilter(query,queryMap);
+			}
+			listData = getListData(start,limit);
 		}
+		
 		return listData;
 	}
 	
 	/**
-	 * 需要子类override
-	 * @param query 条件表达式
-	 * @return 实体List
+	 * override设置filter用来过滤数据
+	 * @param query 查询关键字
+	 * @param queryMap 查询关键字map
 	 */
-	protected DetachedCriteria getConditions(String query,Map<String,String> queryMap){
-		DetachedCriteria condition = DetachedCriteria.forClass(getEntityClass());
-		if(getOrder() != null){
-			condition.addOrder(getOrder());
-		}
-		return condition;
+	protected void setFilter(String query, Map<String, String> queryMap) {
+		
 	}
 	
-	
 	/**
-	 * 需要子类override
-	 * @return Order 一个排序类
+	 * override以改变数据集的默认排序方式
+	 * @return
 	 */
-	protected Order getOrder() {
+	protected Order getOrder(){
 		return Order.desc("id");
 	}
 	
@@ -116,7 +97,7 @@ public abstract class GenericService<E> extends BaseService{
 	 * @param limit 数据集容量
 	 */
 	public ListData<E> getListData(int start,int limit){
-		List<E> list = defDao.findByCriteria(getConditions(null,null),start, limit);
+		List<E> list = defDao.findByCriteria(getDefaultCriteria(),start, limit);
 		int total = getTotal();
 		return new ListData<E>(list,total);
 	}
@@ -125,50 +106,13 @@ public abstract class GenericService<E> extends BaseService{
 	 * 实体的所有数据
 	 */
 	public ListData<E> getListData(){
-		List<E> list = defDao.findByCriteria(getConditions(null,null));
+		List<E> list = getAll();
 		int total = list.size();
 		return new ListData<E>(list,total);
 	}
 	
-	/**
-	 * query String条件+分页查询方法
-	 * @param query 查询关键字的值
-	 * @param start 数据集起始位置
-	 * @param limit 数据集容量
-	 */
-	public ListData<E> getListData(String query,int start,int limit){
-		List<E> list = defDao.findByCriteria(getConditions(query,null), start, limit);
-		int total = defDao.findByCriteria(getConditions(query,null)).size();
-		return new ListData<E>(list,total);
-	}
-	
-	/**
-	 * 根据query String条件查询所有对象
-	 * @param query 查询关键字的值
-	 * @return
-	 */
-	public ListData<E> getListData(String query){
-		List<E> list = defDao.findByCriteria(getConditions(query,null));
-		int total = list.size();
-		return new ListData<E>(list,total);
-	}
-	
-	/**
-	 * query Map条件+分页查询方法
-	 * @param queryMap 条件表达式Map
-	 * @param start 数据集起始位置
-	 * @param limit 数据集容量
-	 */
-	public ListData<E> getListData(Map<String,String> queryMap,int start,int limit){
-		List<E> list = defDao.findByCriteria(getConditions(null,queryMap), start, limit);
-		int total = defDao.findByCriteria(getConditions(null,queryMap)).size();
-		return new ListData<E>(list,total);
-	}
-	
-	public ListData<E> getListData(Map<String,String> queryMap){
-		List<E> list = defDao.findByCriteria(getConditions(null,queryMap));
-		int total = list.size();
-		return new ListData<E>(list,total);
+	private DetachedCriteria getDefaultCriteria(){
+		return DetachedCriteria.forClass(this.entityClass).addOrder(getOrder());
 	}
 	
 	/**
@@ -218,7 +162,7 @@ public abstract class GenericService<E> extends BaseService{
 	
 	public int getTotal() {
 		return ((Long) defDao.getHibernateTemplate().iterate(
-				"select count(*) from " + entityClass.getSimpleName()).next()).intValue();
+				"select count(id) from " + entityClass.getSimpleName()).next()).intValue();
 	}
 	
 	

@@ -13,9 +13,22 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 import net.fortunes.core.Model;
 
 @Entity
+@FilterDef(name="employee_queryFilter", parameters = {
+		@ParamDef(name="code", type="string"),
+		@ParamDef(name="name", type="string")
+	}
+)
+@Filters({
+	@Filter(name="employee_queryFilter", condition="code like :code or name like :name")
+})
 public class Employee extends Model{
 	
 	@Id @GeneratedValue
