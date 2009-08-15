@@ -2,7 +2,13 @@ package net.fortunes.admin.action;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import net.fortunes.admin.AdminHelper;
+import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;
@@ -10,15 +16,18 @@ import net.fortunes.admin.service.PrivilegeService;
 import net.fortunes.admin.service.RoleService;
 import net.fortunes.admin.service.UserService;
 import net.fortunes.core.action.GenericAction;
+import net.fortunes.core.service.GenericService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONFunction;
 import net.sf.json.JSONObject;
 
+@Component @Scope("prototype")
 public class RoleAction extends GenericAction<Role> {
 	
-	private RoleService roleService;
-	private UserService userService;
-	private PrivilegeService privilegeService;
+	@Resource private RoleService roleService;
+	@Resource private UserService userService;
+	@Resource private PrivilegeService privilegeService;
+	
 	private String[] checkedId;
 	
 	
@@ -30,7 +39,7 @@ public class RoleAction extends GenericAction<Role> {
 	protected JSONObject toJsonObject(Role role){
 		AdminHelper record = new AdminHelper();
 		record.put("id", role.getId());
-		record.put("nameCn", role.getName());		
+		record.put("nameCn", role.getName());
 		record.put("description", role.getDescription());
 		return record.getJsonObject();
 	}
@@ -53,7 +62,7 @@ public class RoleAction extends GenericAction<Role> {
 	public String listPrivileges() throws Exception {
 		Privilege rootPrivilege = privilegeService.getRoot();
 		Role role = roleService.get(id);
-		JSONArray ja = walkPrivilegeTree(rootPrivilege,role);	
+		JSONArray ja = walkPrivilegeTree(rootPrivilege,role);
 		return render(ja);
 	}
 	
@@ -71,7 +80,7 @@ public class RoleAction extends GenericAction<Role> {
 			jo.put("checked", role.getPrivileges().contains(p));
 			jo.put("text", p.getText());
 			
-			if (p.getChildren().isEmpty()) {
+			if (p.isLeaf()) {
 				jo.put("leaf", true);
 				if(p.getCode().endsWith("view")){
 					jo.put("qtip", "当有其它权限被选中时,浏览权限必须是选中状态");
@@ -101,6 +110,13 @@ public class RoleAction extends GenericAction<Role> {
 		}
 		return ja;
 	}
+	
+	//================== setter and getter ===================
+	
+	@Override
+	public GenericService<Role> getDefService() {
+		return roleService;
+	};
 	
 	public String[] getCheckedId() {
 		return checkedId;

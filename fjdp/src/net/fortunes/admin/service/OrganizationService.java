@@ -2,6 +2,10 @@ package net.fortunes.admin.service;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
 import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.model.Menu;
@@ -9,10 +13,11 @@ import net.fortunes.admin.model.Organization;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
 
+@Component
 @LoggerClass
 public class OrganizationService extends GenericService<Organization> {
 	
-	private EmployeeService employeeService;
+	@Resource private EmployeeService employeeService;
 	
 	
 	@Override

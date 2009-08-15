@@ -2,6 +2,9 @@ package net.fortunes.admin.service;
 
 import java.io.Reader;
 import java.util.List;
+
+import javax.annotation.Resource;
+
 import net.fortunes.admin.model.Menu;
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.core.service.GenericService;
@@ -10,13 +13,16 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MenuService extends GenericService<Menu>{
 	
 	public static final String FUNC_ELEMENT = "func";
 	public static final String PRIVILEGE_ELEMENT = "privilege";
 	public static final String WIDGET_JS_ROOT = "/widget";
 	
+	@Resource
 	private PrivilegeService privilegeService;
 	
 	@Override
@@ -123,6 +129,7 @@ public class MenuService extends GenericService<Menu>{
 		p.setCode(funcElement.attributeValue("name")+"_"+privilegeElement.attributeValue("name"));
 		p.setText(privilegeElement.attributeValue("text"));
 		p.setDescription(privilegeElement.attributeValue("text")+funcElement.attributeValue("text"));
+		p.setLeaf(true);
 		privilegeService.add(p);
 	}
 	

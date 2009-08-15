@@ -3,23 +3,30 @@ package net.fortunes.admin.action;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import net.fortunes.admin.AdminHelper;
+import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.service.OrganizationService;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;
 import net.fortunes.core.action.GenericAction;
+import net.fortunes.core.service.GenericService;
 import net.fortunes.util.PinYin;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
+@Component @Scope("prototype")
 public class OrganizationAction extends GenericAction<Organization> {
 	
-	private EmployeeService employeeService;
-	private OrganizationService organizationService;
-	private DictService dictService;
+	@Resource private EmployeeService employeeService;
+	@Resource private OrganizationService organizationService;
+	@Resource private DictService dictService;
 
 	private int[] checkedId;
 
@@ -140,9 +147,13 @@ public class OrganizationAction extends GenericAction<Organization> {
 		return render(jo);
 	}
 	
-	//========================================== setter and getter ============================================
+	//================== setter and getter ===================
 	
-
+	@Override
+	public GenericService<Organization> getDefService() {
+		return organizationService;
+	};
+	
 	public DictService getDictService() {
 		return dictService;
 	}

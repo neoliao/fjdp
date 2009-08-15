@@ -22,6 +22,8 @@ public class Privilege  extends Model {
 	
 	private String text;
 	
+	private boolean leaf;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Privilege parent;
 	
@@ -83,6 +85,14 @@ public class Privilege  extends Model {
 
 	public List<Privilege> getChildren() {
 		return children;
+	}
+
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+
+	public boolean isLeaf() {
+		return leaf;
 	}
 
 

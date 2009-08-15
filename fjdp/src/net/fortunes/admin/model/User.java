@@ -26,7 +26,7 @@ import net.fortunes.core.Model;
 @Filters({
 	@Filter(name="user_queryFilter", condition="name like :name or displayName like :displayName")
 })
-public class User extends Model{
+public class User extends Model implements org.jbpm.api.identity.User{
 	
 	@Id @GeneratedValue
 	private long id;
@@ -65,7 +65,31 @@ public class User extends Model{
         this.password = password;
         this.displayName = displayName;
     }
+    
+    //================= jbpm4 Group impl ====================
+    
+	@Override
+	public String getId() {
+		return String.valueOf(this.id);
+	}
+    
+    @Override
+	public String getBusinessEmail() {
+		return this.getEmployee().getEmail();
+	}
 
+	@Override
+	public String getFamilyName() {
+		return this.displayName;
+	}
+
+	@Override
+	public String getGivenName() {
+		return this.displayName;
+	}
+	
+	//================= setter and getter ====================
+	
 	public String getName() {
 		return name;
 	}
@@ -100,10 +124,6 @@ public class User extends Model{
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public long getId() {
-		return id;
 	}
 
 	public void setDisplayName(String displayName) {

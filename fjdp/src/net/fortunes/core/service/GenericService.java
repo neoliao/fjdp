@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import net.fortunes.core.ListData;
 import net.fortunes.core.dao.GenericDao;
 import net.fortunes.core.log.annotation.LoggerMethod;
@@ -12,6 +14,7 @@ import net.fortunes.util.GenericsUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -21,6 +24,7 @@ import org.hibernate.criterion.Order;
  */
 public abstract class GenericService<E> extends BaseService{
 	
+	@Resource
 	private GenericDao<E> defDao;
 	
 	private Class<E> entityClass;

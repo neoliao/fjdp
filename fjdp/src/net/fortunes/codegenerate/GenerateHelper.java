@@ -1,4 +1,4 @@
-package net.fortunes.codegenerate.helper;
+package net.fortunes.codegenerate;
 
 import net.fortunes.admin.AdminHelper;
 

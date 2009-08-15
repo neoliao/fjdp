@@ -4,15 +4,21 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import net.fortunes.admin.model.Config;
 import net.fortunes.admin.model.Config.ConfigKey;
 import net.fortunes.admin.service.ConfigService;
 import net.fortunes.core.action.BaseAction;
 import net.sf.json.JSONObject;
 
+@Component @Scope("prototype")
 public class ConfigAction extends BaseAction {
 	
-	private ConfigService configService; 
+	@Resource private ConfigService configService; 
 		
 	public String updateConfig() throws Exception{
 		Map<ConfigKey, String> maps = new EnumMap<ConfigKey, String>(ConfigKey.class);
@@ -39,6 +45,8 @@ public class ConfigAction extends BaseAction {
 			data.put(joKey, config.getConfigValue());
 		}
 	}
+
+	//================== setter and getter ===================
 	
 	public void setConfigService(ConfigService configService) {
 		this.configService = configService;
