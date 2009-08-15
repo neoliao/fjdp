@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -19,9 +22,9 @@ import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
 import net.fortunes.util.Tools;
 
+@Component
 @LoggerClass
 public class UserService extends GenericService<User>{
-	
 	
 	@Override
 	protected void setFilter(String query, Map<String, String> queryMap) {
@@ -56,6 +59,7 @@ public class UserService extends GenericService<User>{
 	 * 当程序启动时，初始化登陆状态（设置所有用户为未登陆)
 	 * 不能使用声明式事务，原因未知
 	 */
+	@PostConstruct 
 	public void initLoginSession(){
 		getDefDao().getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
 			@Override

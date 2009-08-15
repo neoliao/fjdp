@@ -3,19 +3,25 @@ package net.fortunes.admin.action;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.core.action.GenericAction;
+import net.fortunes.core.service.GenericService;
 import net.fortunes.util.Tools;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+@Component @Scope("prototype")
 public class DictAction extends GenericAction<Dict> {
 	
-	private DictService dictService;
+	@Resource private DictService dictService;
 	
 	protected void setEntity(Dict dict) throws ParseException{
 		////新增时
@@ -64,6 +70,12 @@ public class DictAction extends GenericAction<Dict> {
 		return ja;
 	}
 	
+	//================== setter and getter ===================
+	
+	@Override
+	public GenericService<Dict> getDefService() {
+		return dictService;
+	};
 
 	public DictService getDictService() {
 		return dictService;

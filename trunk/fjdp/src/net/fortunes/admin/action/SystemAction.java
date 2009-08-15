@@ -4,7 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.fortunes.Constants;
 
@@ -29,12 +33,14 @@ import net.sf.json.JSONObject;
  * @author Neo.Liao
  *
  */
+@Component @Scope("prototype")
 public class SystemAction extends BaseAction {
 	
 	private static final boolean NOT_ALLOW_REPEAT_LOGIN = true;
-	private PrivilegeService privilegeService;
-	private MenuService menuService;
-	private UserService userService;
+	
+	@Resource private PrivilegeService privilegeService;
+	@Resource private MenuService menuService;
+	@Resource private UserService userService;
 	
 	public String login() throws Exception {
 		User loginUser = new User();

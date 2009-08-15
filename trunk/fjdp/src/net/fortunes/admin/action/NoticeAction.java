@@ -5,11 +5,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.OrganizationService;
 import net.fortunes.core.action.GenericAction;
+import net.fortunes.core.service.GenericService;
 import net.sf.json.JSONObject;
 
 import com.fortunes.AppHelper;
@@ -17,10 +24,11 @@ import com.fortunes.AppHelper;
 import net.fortunes.admin.model.Notice;
 import net.fortunes.admin.service.NoticeService;
 
+@Component @Scope("prototype")
 public class NoticeAction extends GenericAction<Notice> {
 	
-	private NoticeService noticeService;
-	private OrganizationService organizationService;
+	@Resource private NoticeService noticeService;
+	@Resource private OrganizationService organizationService;
 	
 	private String[] organizations;
 	
@@ -69,6 +77,13 @@ public class NoticeAction extends GenericAction<Notice> {
 		record.put("level", e.getLevel());
 		return record.getJsonObject();
 	}
+	
+	//================== setter and getter ===================
+	
+	@Override
+	public GenericService<Notice> getDefService() {
+		return noticeService;
+	};
 
 	public void setOrganizations(String[] organizations) {
 		this.organizations = organizations;

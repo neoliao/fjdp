@@ -4,7 +4,6 @@
 
   <import resource="jbpm.spring.default.cfg.xml" />
   <import resource="jbpm.jpdl.cfg.xml" />
-  <import resource="jbpm.identity.cfg.xml" />
 
   <process-engine-context>
   
@@ -17,6 +16,7 @@
   </process-engine-context>
 
   <transaction-context>
+  	<object class="net.fortunes.fjdp.IdentitySessionImpl" />
     <hibernate-session current="true"/>
   </transaction-context>
 

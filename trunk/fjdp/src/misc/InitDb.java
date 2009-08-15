@@ -64,11 +64,11 @@ public class InitDb {
 		List<Privilege> pList = privilegeService.getListData().getList();	
 		
 		//新建角色
-		Role admin = new Role("系统管理员");
-		Role typeMan = new Role("人行数据录入");
-		Role feedReader = new Role("人行反馈审阅人员");
-		Role bankMan = new Role("银行用户");
-		Role companyMan = new Role("评估公司用户");
+		Role admin = new Role("系统管理员",Role.SYSTEM_ROLE);
+		Role typeMan = new Role("人行数据录入",Role.SYSTEM_ROLE);
+		Role feedReader = new Role("人行反馈审阅人员",Role.SYSTEM_ROLE);
+		Role bankMan = new Role("银行用户",Role.SYSTEM_ROLE);
+		Role companyMan = new Role("评估公司用户",Role.SYSTEM_ROLE);
 		roleService.add(admin);
 		roleService.add(typeMan);
 		roleService.add(feedReader);

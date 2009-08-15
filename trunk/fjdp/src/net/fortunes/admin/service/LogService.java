@@ -6,7 +6,9 @@ import net.fortunes.admin.model.Log;
 import net.fortunes.core.service.GenericService;
 
 import org.hibernate.criterion.Order;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LogService extends GenericService<Log> {
 	
 	protected Order getOrder(){

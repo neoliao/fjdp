@@ -10,13 +10,19 @@ import javax.persistence.ManyToMany;
 
 import net.fortunes.core.Model;
 
+import org.jbpm.api.identity.Group;
+
 @Entity
-public class Role extends Model {
+public class Role extends Model implements Group{
+	
+	public static final String SYSTEM_ROLE = "system";
 
 	@Id @GeneratedValue
 	private long id;
 	
 	private String name;
+	
+	private String roleType;
 	
 	@ManyToMany(mappedBy = "roles")
 	private List<User> users = new ArrayList<User>();
@@ -33,27 +39,37 @@ public class Role extends Model {
     	this.id = id;
     }
     
-    public Role(String name) {
+    public Role(String name,String roleType) {
     	this.name = name;
-    }
+    	this.roleType = roleType;
+    }  
     
     @Override
     public String toString() {
     	return "角色:"+name;
     }
-
-	public long getId() {
-		return id;
+    
+    //================= jbpm4 Group impl ====================
+    @Override
+	public String getId() {
+		return String.valueOf(this.id);
 	}
 
-	public void setId(long id) {
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public String getType() {
+		return this.getRoleType();
+	}
+	
+	//================= setter and getter ====================
+	public void setId(long id){
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
-	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -80,6 +96,14 @@ public class Role extends Model {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setRoleType(String roleType) {
+		this.roleType = roleType;
+	}
+
+	public String getRoleType() {
+		return roleType;
 	}
 
 }

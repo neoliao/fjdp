@@ -2,20 +2,27 @@ package net.fortunes.admin.action;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import net.fortunes.admin.AdminHelper;
+import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.UserService;
 import net.fortunes.core.action.GenericAction;
+import net.fortunes.core.service.GenericService;
 import net.fortunes.util.Tools;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component @Scope("prototype")
 public class UserAction extends GenericAction<User> {
 	
-	private UserService userService;
+	@Resource private UserService userService;
 	
 	protected void setEntity(User user){
 		user.setName(p("userName"));
@@ -78,6 +85,12 @@ public class UserAction extends GenericAction<User> {
 		jo.put("success", flag);
 		return render(jo);
 	}
+	//================== setter and getter ===================
+	
+	@Override
+	public GenericService<User> getDefService() {
+		return userService;
+	};
 	
 	public UserService getUserService() {
 		return userService;

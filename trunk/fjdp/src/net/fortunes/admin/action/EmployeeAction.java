@@ -3,21 +3,24 @@ package net.fortunes.admin.action;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Employee;
-import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;
-import net.fortunes.admin.service.UserService;
 import net.fortunes.core.action.GenericAction;
+import net.fortunes.core.service.GenericService;
 import net.fortunes.util.PinYin;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component @Scope("prototype")
 public class EmployeeAction extends GenericAction<Employee> {
 	
-	private DictService dictService;
-	private EmployeeService employeeService;
-	private UserService userService;
+	@Resource private EmployeeService employeeService;
 	
 	protected void setEntity(Employee employee) throws ParseException{
 		employee.setCode(p("code"));
@@ -88,14 +91,12 @@ public class EmployeeAction extends GenericAction<Employee> {
 		return render(jo);
 	}
 	
+	
 	//================== setter and getter ===================
 	
-	public DictService getDictService() {
-		return dictService;
-	}
-
-	public void setDictService(DictService dictService) {
-		this.dictService = dictService;
+	@Override
+	public GenericService<Employee> getDefService() {
+		return this.employeeService;
 	}
 
 	public void setEmployeeService(EmployeeService employeeService) {
@@ -104,14 +105,6 @@ public class EmployeeAction extends GenericAction<Employee> {
 
 	public EmployeeService getEmployeeService() {
 		return employeeService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	public UserService getUserService() {
-		return userService;
 	}
 
 }

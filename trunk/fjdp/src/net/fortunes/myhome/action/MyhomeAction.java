@@ -1,6 +1,12 @@
 package net.fortunes.myhome.action;
 
 import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import net.fortunes.admin.model.NoticeMessage;
 import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.NoticeMessageService;
@@ -8,11 +14,12 @@ import net.fortunes.admin.service.NoticeService;
 import net.fortunes.admin.service.UserService;
 import net.fortunes.core.action.BaseAction;
 
+@Component @Scope("prototype")
 public class MyhomeAction extends BaseAction{
 	
-	private NoticeService noticeService;
-	private NoticeMessageService noticeMessageService;
-	private UserService userService;
+	@Resource private NoticeService noticeService;
+	@Resource private NoticeMessageService noticeMessageService;
+	@Resource private UserService userService;
 	
 	private List<NoticeMessage> noticeMessages;
 	private List<User> onlineUsers;

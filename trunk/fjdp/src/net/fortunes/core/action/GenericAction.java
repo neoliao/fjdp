@@ -2,6 +2,10 @@ package net.fortunes.core.action;
 
 import java.text.ParseException;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
 import net.fortunes.core.ListData;
 import net.fortunes.core.Model;
 import net.fortunes.core.service.GenericService;
@@ -18,14 +22,9 @@ import net.sf.json.JSONObject;
 public abstract class GenericAction<E extends Model> extends BaseAction {
 	
 	private Class<E> entityClass;
-	private GenericService<E> defService;
 	
-	/**
-	 * ioc
-	 */
-	public void setDefService(GenericService<E> defService){
-		this.defService = defService;
-		entityClass = GenericsUtil.getGenericClass(getClass());
+	public GenericAction() {
+		this.entityClass = GenericsUtil.getGenericClass(getClass());
 	}
 	
 	/**
@@ -38,7 +37,7 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	 * @throws ParseException
 	 */
 	public String list() throws Exception{
-		ListData<E> listData = defService.getListData(query, queryMap, start, limit);
+		ListData<E> listData = getDefService().getListData(query, queryMap, start, limit);
 		JSONArray ja = new JSONArray();
 		for(E entity:listData.getList()){
 			ja.add(toJsonObject(entity));
@@ -50,7 +49,7 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	
 	public String listTree() throws Exception{
 		E root = getNode().equals("0") ? 
-				defService.getRoot():defService.get(getNode());
+				getDefService().getRoot():getDefService().get(getNode());
 		JSONArray ja = walkTree(root);								
 		return render(ja);
 	}
@@ -61,9 +60,9 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	}
 	
 	public String create() throws Exception{
-		E entity = entityClass.newInstance();
+		E entity = getEntityClass().newInstance();
 		setEntity(entity);
-		defService.add(entity);
+		getDefService().add(entity);
 		jo.put(ENTITY_KEY, toJsonObject(entity));
 		setJsonMessage(true, entity.toString().equals("")?
 				"新增了一条记录!" : "新增了("+entity+")的记录");
@@ -71,9 +70,9 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	}
 	
 	public String del() throws Exception{
-		E entity = defService.get(id);
+		E entity = getDefService().get(id);
 		try {
-			defService.del(entity);
+			getDefService().del(entity);
 			setJsonMessage(true,"记录成功删除!");
 		} catch (DeleteForeignConstrainException e) {
 			return renderWarning("该项被其它数据所引用，不能删除！");
@@ -82,15 +81,15 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	}
 	
 	public String edit() throws Exception{
-		E entity = defService.get(id);
+		E entity = getDefService().get(id);
 		setJsonMessage(true, toJsonObject(entity));
 		return render(jo);
 	}
 	
 	public String update() throws Exception{
-		E entity = defService.get(id);
+		E entity = getDefService().get(id);
 		setEntity(entity);
-		defService.update(entity);
+		getDefService().update(entity);
 		jo.put(ENTITY_KEY, toJsonObject(entity));
 		setJsonMessage(true, entity.toString().equals("")?
 				"更新了一条记录!" : "更新了("+entity+")的记录");
@@ -108,9 +107,15 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	public Class<E> getEntityClass() {
 		return entityClass;
 	}
-	
-	public GenericService<E> getDefService(){
-		return defService;
+
+
+	public GenericService<E> getDefService() {
+		return null;
 	}
+
+	public void setEntityClass(Class<E> entityClass) {
+		this.entityClass = entityClass;
+	}
+	
 
 }

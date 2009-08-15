@@ -1,5 +1,8 @@
 package misc;
 
+import javax.annotation.Resource;
+
+import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;
 import net.fortunes.admin.service.UserService;
@@ -19,9 +22,12 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public class Test{
 	
+	@Resource
 	public SessionFactory sessionFactory;
+	
 	public Session session;
 	
+	@Resource
 	private EmployeeService employeeService;
 	private DictService dictService;
 	private UserService userService;
@@ -33,18 +39,25 @@ public class Test{
 	
 	
 	public void execute() throws Exception {
-		String deploymentDbid = repositoryService.createDeployment()
+		/*String deploymentDbid = repositoryService.createDeployment()
     		.addResourceFromClasspath("process/design.jpdl.xml").deploy();
 		
 		ProcessInstance processInstance = 
-			executionService.startProcessInstanceByKey("design", "order001");
+			executionService.startProcessInstanceByKey("design", "order001");*/
+		
+		Employee employee = new Employee("01","sex");
+		employeeService.add(employee);
+		
+		System.out.println(employeeService.get(String.valueOf(employee.getId())));
+		
+		employeeService.del(employee);
 		
 		
 		//repositoryService.deleteDeployment(deploymentDbid);
 	}
 	
 	public static void main(String[] args) throws Exception {
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-core.xml");
 		Test t = (Test)context.getBean("test");
 		t.setUp();
 		t.execute();

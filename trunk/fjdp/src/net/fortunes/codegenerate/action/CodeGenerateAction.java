@@ -12,12 +12,16 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import net.fortunes.codegenerate.model.Field;
 import net.fortunes.core.action.BaseAction;
 
+@Component @Scope("prototype")
 public class CodeGenerateAction extends BaseAction {
 	public static String PACKAGE_PREFIX_KEY  = "packagePrefix";
 	public static String MODEL_NAME_KEY  = "modelName";

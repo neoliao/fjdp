@@ -6,11 +6,13 @@ import java.util.Map;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Component;
 
 import net.fortunes.admin.model.Employee;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
 
+@Component
 @LoggerClass
 public class EmployeeService extends GenericService<Employee> {
 	
