@@ -75,7 +75,7 @@ public class DictAction extends GenericAction<Dict> {
 	@Override
 	public GenericService<Dict> getDefService() {
 		return dictService;
-	};
+	}
 
 	public DictService getDictService() {
 		return dictService;

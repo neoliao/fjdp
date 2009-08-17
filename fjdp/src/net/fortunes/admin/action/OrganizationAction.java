@@ -152,7 +152,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	@Override
 	public GenericService<Organization> getDefService() {
 		return organizationService;
-	};
+	}
 	
 	public DictService getDictService() {
 		return dictService;

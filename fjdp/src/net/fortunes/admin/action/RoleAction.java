@@ -116,7 +116,7 @@ public class RoleAction extends GenericAction<Role> {
 	@Override
 	public GenericService<Role> getDefService() {
 		return roleService;
-	};
+	}
 	
 	public String[] getCheckedId() {
 		return checkedId;
