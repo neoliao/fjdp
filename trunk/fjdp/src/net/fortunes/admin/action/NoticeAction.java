@@ -83,7 +83,7 @@ public class NoticeAction extends GenericAction<Notice> {
 	@Override
 	public GenericService<Notice> getDefService() {
 		return noticeService;
-	};
+	}
 
 	public void setOrganizations(String[] organizations) {
 		this.organizations = organizations;

@@ -90,7 +90,7 @@ public class UserAction extends GenericAction<User> {
 	@Override
 	public GenericService<User> getDefService() {
 		return userService;
-	};
+	}
 	
 	public UserService getUserService() {
 		return userService;

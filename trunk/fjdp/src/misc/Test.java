@@ -8,6 +8,7 @@ import net.fortunes.admin.service.EmployeeService;
 import net.fortunes.admin.service.UserService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jbpm.api.Execution;
 import org.jbpm.api.ExecutionService;
 import org.jbpm.api.NewDeployment;
 import org.jbpm.api.ProcessEngine;
@@ -39,25 +40,19 @@ public class Test{
 	
 	
 	public void execute() throws Exception {
-		/*String deploymentDbid = repositoryService.createDeployment()
-    		.addResourceFromClasspath("process/design.jpdl.xml").deploy();
+		String deploymentDbid = repositoryService.createDeployment().addResourceFromClasspath("process/hello.jpdl.xml").deploy();
 		
-		ProcessInstance processInstance = 
-			executionService.startProcessInstanceByKey("design", "order001");*/
+		ProcessInstance processInstance = executionService.startProcessInstanceByKey("hello");
 		
-		Employee employee = new Employee("01","sex");
-		employeeService.add(employee);
-		
-		System.out.println(employeeService.get(String.valueOf(employee.getId())));
-		
-		employeeService.del(employee);
+		String pid = processInstance.getId();
+		processInstance = executionService.signalExecutionById(pid);
 		
 		
 		//repositoryService.deleteDeployment(deploymentDbid);
 	}
 	
 	public static void main(String[] args) throws Exception {
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-core.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
 		Test t = (Test)context.getBean("test");
 		t.setUp();
 		t.execute();

@@ -39,7 +39,8 @@ public class LogAction extends GenericAction<Log> {
 	@Override
 	public GenericService<Log> getDefService() {
 		return logService;
-	};
+	}
+	
 	public LogService getLogService() {
 		return logService;
 	}

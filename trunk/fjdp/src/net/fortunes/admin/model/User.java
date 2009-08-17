@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -17,7 +18,7 @@ import org.hibernate.annotations.ParamDef;
 
 import net.fortunes.core.Model;
 
-@Entity
+@Entity @Table(name = "TUser")
 @FilterDef(name="user_queryFilter", parameters = {
 		@ParamDef(name="name", type="string"),
 		@ParamDef(name="displayName", type="string")

@@ -6,9 +6,11 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import com.fortunes.AppHelper;
 import net.fortunes.core.action.GenericAction;
+import org.springframework.stereotype.Component;
 import ${packagePrefix}.model.${modelName};
 import ${packagePrefix}.service.${modelName}Service;
 
+@Component @Scope("prototype")
 public class ${modelName}Action extends GenericAction<${modelName}> {
 	
 	private ${modelName}Service ${modelName?uncap_first}Service;
@@ -40,6 +42,11 @@ public class ${modelName}Action extends GenericAction<${modelName}> {
 	
 	
 	/*=============== setter and getter =================*/
+	
+	@Override
+	public GenericService<${modelName}> getDefService() {
+		return ${modelName?uncap_first}Service;
+	}
 	
 	public void set${modelName}Service(${modelName}Service ${modelName?uncap_first}Service) {
 		this.${modelName?uncap_first}Service = ${modelName?uncap_first}Service;
