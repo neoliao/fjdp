@@ -25,7 +25,7 @@
       	</global-exception-mappings>
 	</package>
 	
-    <package name="admin" extends="app-default">
+    <package name="all" extends="app-default">
   		<default-interceptor-ref name="appStack"/>
         <action name="*/*" class="{1}Action" method="{2}">
         	<result name="template">/templates/{1}/{2}.jsp</result>

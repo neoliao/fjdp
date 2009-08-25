@@ -83,7 +83,6 @@ public class CodeGenerateAction extends BaseAction {
 		generate(root, "Service");
 		generate(root, "Action");
 		generate(root, "Model");
-		generate(root, "Spring-conf");
 		generate(root, "Widget");
 		
 		setJsonMessage(true, "代码成功生成");
@@ -132,8 +131,6 @@ public class CodeGenerateAction extends BaseAction {
 		}else if(fileType.equals("Model")){
 			fileName = OUT_PATH + "/src" + "/" + packagePrefix.replace('.', '/') +  "/" +
 				getLower(fileType) + "/" +modelName + ".java";
-		}else if(fileType.equals("Spring-conf")){
-			fileName = OUT_PATH + "/conf" + "/" + modelName + fileType + ".xml";
 		}else if(fileType.equals("Widget")){
 			fileName = OUT_PATH + "/WebContent/widget/app/" + getLower(modelName) + ".js";
 		}

@@ -16,8 +16,6 @@
       <environment-interceptor />
       <spring-transaction-interceptor current="true"/>
       
-      <!--<spring-transaction-interceptor />-->
-    	
     </command-service>
     
     <deployer-manager>
@@ -57,8 +55,8 @@
     <history-session />
     <transaction />
     
-    <hibernate-session />
     <object class="net.fortunes.jbpm.IdentitySessionImpl" />
+    <hibernate-session />
     <hibernate-session current="true" />
     <identity-session />
   </transaction-context>
