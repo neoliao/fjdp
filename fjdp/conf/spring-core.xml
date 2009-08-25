@@ -49,6 +49,8 @@
     
     <bean id="initDb" class="misc.InitDb"/>
     <bean id="test" class="misc.Test"/>
+    <bean id="processContent" class="misc.ProcessContent"/>
+    <bean id="hello" class="misc.Hello"/>
     
     <context:annotation-config/>
     <context:component-scan base-package="net.fortunes,com.fortunes"/>

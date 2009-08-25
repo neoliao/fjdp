@@ -25,7 +25,7 @@
 				<privilege text="修改" name="edit"/>
 				<privilege text="导入" name="import"/>
 				<privilege text="关联机构" name="relative"/>
-			</func>
+			</func>			
 		</func>
 		
 		<func name="Admin" text="系统设置" icon="settings" type="category">
@@ -63,6 +63,9 @@
 			<func name="Config" text="系统参数" >
 				<privilege text="浏览" name="view"/>
 				<privilege text="修改" name="edit"/>
+			</func>
+			<func name="ProcessManager" text="流程管理">
+				<privilege text="浏览" name="view"/>
 			</func>
 			<func name="Log" text="用户操作日志" >
 				<privilege text="浏览" name="view"/>
