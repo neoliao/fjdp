@@ -143,6 +143,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
             tooltip:'删除选中的已有记录',
             iconCls:'remove',
 			privilegeCode:this.funcCode+'_del',
+			disabled : true,
 			scope:this,
 			handler:this.prepareDel
 		});

@@ -23,25 +23,25 @@ public class ${modelName} extends Model{
 	
 <#list fields as field>
 <#if field.type == "text">
-	private String ${field.name};
+	private String ${field.name};//${field.label}
 	
 <#elseif field.type == "textArea">
 	@Column(length = ${field.extend!"500"})
-	private String ${field.name};
+	private String ${field.name};//${field.label}
 	
 <#elseif field.type == "int">
-	private int ${field.name};
+	private int ${field.name};//${field.label}
 	
 <#elseif field.type == "double">
-	private double ${field.name};
+	private double ${field.name};//${field.label}
 	
 <#elseif field.type == "dict">
 	@ManyToOne
-	private Dict ${field.name};
+	private Dict ${field.name};//${field.label}
 	
 <#elseif field.type == "date">
 	@Temporal(TemporalType.<#if field.extend == "time">TIME<#elseif field.extend == "dateTime">TIMESTAMP<#else>DATE</#if>)
-	private Date ${field.name};
+	private Date ${field.name};//${field.label}
 	
 </#if>
 </#list> 

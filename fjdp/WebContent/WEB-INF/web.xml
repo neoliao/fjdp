@@ -37,8 +37,6 @@
 		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
 	
-	
-	
 	<jsp-config>
 		<taglib>
 			<taglib-uri>/birt.tld</taglib-uri>

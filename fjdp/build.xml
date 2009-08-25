@@ -23,7 +23,7 @@
 		classpathref="toolslib" />
 		
 	<target name="initDb">
-		<echo>执行数据库初始化任务！</echo>
+		<echo>Init DB schema!</echo>
 		<hibernatetool destdir="${class.dir}">
 			<annotationconfiguration 
 				configurationfile="${src.dir}/hibernate.cfg.xml"/>
@@ -41,10 +41,10 @@
 	</target>
 	
 	<target name="initDbData" depends="initDb">
-		<echo>执行数据初始化任务！</echo>
+		<echo>Init DB data!</echo>
 		<java classname="misc.InitDb"
 			classpathref="toolslib" />
-		<echo>所有任务执行完成！</echo>
+		<echo>All task complete succussful！</echo>
 	</target>
 	
 </project>
