@@ -2,7 +2,7 @@ var urlPostPrefix = '';
 Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 	closable: true,
 	border:true,
-	itemSize:30,
+	itemSize:5,	//30
 	paging:true,	
 	loadFromGrid:true,
 	itemStepButton : false,
@@ -73,10 +73,9 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 				//disable every button except other widget
 				//this.getTopToolbar().setDisabled(true);
 				this.getTopToolbar().items.each(function(item,index,length){
-					if(item.xtype == 'button'||item.type == 'button')
+					if((item.xtype == 'button'||item.type == 'button') && (item.enableOnEmpty != true))
 						item.disable();
 				});
-    			this.addBt.setDisabled(false);
 			}
 		},this); 
 		
@@ -133,6 +132,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 			text:'新增',
             tooltip:'新增一条新记录',
             iconCls:'add',
+            enableOnEmpty : true,
 			privilegeCode:this.funcCode+'_add',
 			scope:this,
 			handler:this.prepareAdd
