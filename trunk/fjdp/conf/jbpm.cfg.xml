@@ -55,10 +55,9 @@
     <history-session />
     <transaction />
     
-    <object class="net.fortunes.jbpm.IdentitySessionImpl" />
+    <env class="identitySession" />
     <hibernate-session />
     <hibernate-session current="true" />
-    <identity-session />
   </transaction-context>
 
 </jbpm-configuration>
