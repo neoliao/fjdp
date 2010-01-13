@@ -3,21 +3,20 @@ package net.fortunes.core.action;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import net.fortunes.admin.model.User;
 import net.fortunes.core.Helper;
 import net.fortunes.util.Tools;
 import net.sf.json.JSON;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.annotations.Before;
@@ -35,8 +34,12 @@ import com.opensymphony.xwork2.interceptor.annotations.BeforeResult;
  */
 public class BaseAction extends ActionSupport implements ServletRequestAware,ServletResponseAware,SessionAware{
 	
+	protected final Logger logger = LoggerFactory.getLogger("ROOT");
+	
 	public static final String TEMPLATE = "template";
 	public static final String VIEWPORT = "viewport";
+	public static final String EXCEPTION = "exception";
+	public static final String AUTH_FAILD = "authFaild";
 	
 	public static final String SUCCESS_KEY = "success";
 	public static final String MSG_KEY = "msg";
@@ -90,10 +93,10 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	protected String query;
 	
 	/**
-	 * 用于复杂查询,它的值不为空时,在dao层override一个
+	 * 用于复杂查询,它的值不为空时,在service层override一个
 	 * getCondition(Map<String,String> queryMap)的方法,可实现复杂条件的查询
 	 */
-	protected Map<String,String> queryMap;
+	protected Map<String,String> queryMap = new HashMap<String, String>();
 	
 	/**
 	 * 注入一个name为start的request parameter,用于翻页查询
@@ -107,9 +110,9 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	
 	
 	/**
-	 * rootPath 
+	 * matchPinyin 查询时是否支持拼音匹配 
 	 */
-	protected String rootPath;
+	private boolean matchPinyin = true;
 	
 	
 	/**
@@ -122,11 +125,11 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 		//绑定一个httpSession到本地线程,供其它层调用		
 		Helper.setHttpSessionInThread(request.getSession());
 		
-		rootPath = request.getSession().getServletContext().getRealPath("/");
-		
 		//身份验证
 		authedUser = (User)getSessionMap().get(Helper.AUTHED_USER);
- 		if(this.authedUser == null && !request.getServletPath().equals("/system/login")){
+ 		if(this.authedUser == null && !
+ 				(request.getServletPath().equals("/system/initDb")||
+ 				request.getServletPath().equals("/system/login"))){
 			return authFailed();
 		}
 		return null;
@@ -143,9 +146,9 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	
 	//验证失败时调用
 	private String authFailed() throws Exception {
-		Tools.println("验证失败");
+		logger.info("验证失败");
 		response.setStatus(403);
-		return isAjaxRequest()? render(jo) : VIEWPORT;
+		return isAjaxRequest()? AUTH_FAILD : VIEWPORT;
 	}
 	
 	/**
@@ -218,8 +221,10 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	 * @throws Exception
 	 */
 	protected String renderFile(byte[] bytes,String fileName)throws Exception{
+//		response.addHeader("Content-Disposition", 
+//				"attachment;filename="+new String(fileName.getBytes("utf-8"),"ISO8859-1"));
 		response.addHeader("Content-Disposition", 
-				"attachment;filename="+new String(fileName.getBytes("GBK"),"iso8859-1"));
+				"attachment;filename="+new String(fileName.getBytes("GB2312"),"ISO-8859-1"));
 		return render(bytes, "application/octet-stream");
 	}
 	
@@ -232,7 +237,8 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	 * @throws Exception
 	 */
 	protected String render(byte[] bytes,String contentType)throws Exception{
-		setResponse(contentType);
+		//不使用缓存,如果使用,https ie下不能下载
+		setResponse(contentType,false);
 		OutputStream out = new BufferedOutputStream(response.getOutputStream());
 		out.write(bytes);
 		out.flush();
@@ -300,11 +306,17 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 		return request.getParameter(paramName);
 	}
 	
-	private void setResponse(String contentType){
+	private void setResponse(String contentType,boolean noCache){
 		response.setCharacterEncoding("utf-8");
 		response.setContentType(contentType); 
-		response.setHeader("Cache-Control","no-cache");
-		response.setHeader("Pragma","no-cache");
+		if(noCache){
+			response.setHeader("Cache-Control","no-cache");
+			response.setHeader("Pragma","no-cache");
+		}
+	}
+	
+	private void setResponse(String contentType){
+		setResponse(contentType, true);
 	}
 	//setter and getter==================================================================
 	
@@ -382,6 +394,14 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 
 	public void setAuthedUser(User authedUser) {
 		this.authedUser = authedUser;
+	}
+
+	public void setMatchPinyin(boolean matchPinyin) {
+		this.matchPinyin = matchPinyin;
+	}
+
+	public boolean isMatchPinyin() {
+		return matchPinyin;
 	}
 	
 }

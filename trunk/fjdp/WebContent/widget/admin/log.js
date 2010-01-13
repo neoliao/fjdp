@@ -10,14 +10,15 @@ Log = Ext.extend(Ext.app.BaseFuncPanel,{
 					{header: '操作时间',dataIndex:'createTime',width:150},
 					{header: '用户',dataIndex:'opUser'},
 					{header: '操作类型',dataIndex:'opType'},
-					{header: '内容',dataIndex:'contents',width:400}
+					{header: '内容',dataIndex:'contents',width:800}
 				]),	
 				storeMapping:[
 					'createTime', 
 					'opUser',
 					'contents',
 					'opType'
-				]
+				],
+				viewConfig: {emptyText: '没有可显示日志'}
 			},
 			buttonConfig : [
 				'->',{

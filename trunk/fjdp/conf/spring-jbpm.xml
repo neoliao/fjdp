@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 这个文件用来配置jBPM4 -->
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:aop="http://www.springframework.org/schema/aop"
@@ -17,8 +19,10 @@
    	<bean id="processEngine" factory-bean="jbpmConfiguration" factory-method="buildProcessEngine" />
 	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
 	<bean id="executionService" factory-bean="processEngine" factory-method="getExecutionService" />
-	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" />
-   	
+   	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" /> 
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>  	
    	<bean id="identitySession" class="net.fortunes.jbpm.IdentitySessionImpl"/>
+    
     
 </beans>

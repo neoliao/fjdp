@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.model.User;

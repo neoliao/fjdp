@@ -56,8 +56,7 @@ public class EmployeeAction extends GenericAction<Employee> {
 		List<Employee> employeeList = getDefService().getListData().getList();
 		JSONArray ja = new JSONArray();
 		for(Employee employee:employeeList){
-			String namePy = PinYin.toPYString(employee.getName());
-			System.out.println(namePy);
+			String namePy = PinYin.toPinYinString(employee.getName());
 			if(namePy.startsWith(getQuery().toUpperCase())
 					|| employee.getName().startsWith(getQuery())){
 				JSONObject record = new JSONObject();

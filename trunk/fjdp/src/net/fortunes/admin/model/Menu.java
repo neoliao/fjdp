@@ -8,9 +8,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import net.fortunes.core.Model;
 
@@ -21,8 +23,7 @@ public class Menu extends Model {
 		ROOT,CATEGORY,NODE
 	}
 
-	@Id @GeneratedValue
-	private long id;
+	@Id 
 	private String name;
 	private String text;
 	private String url;
@@ -51,15 +52,6 @@ public class Menu extends Model {
     		this.type = MenuType.ROOT;
     	}
     }
-    
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

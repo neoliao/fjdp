@@ -7,8 +7,8 @@ import java.util.Date;
  * @author Neo.Liao
  *
  */
-public class Random {
-	private static java.util.Random r = new java.util.Random();
+public class Random extends java.util.Random{
+	public static java.util.Random R = new java.util.Random();
 	private static char[] letter = {
 		'a','b','c','d','e',
 		'f','g','h','i','j',
@@ -22,7 +22,7 @@ public class Random {
 	 * @return 一个随机的字母(大写)
 	 */
 	public static char nextCapitalLetter(){
-		return Character.toUpperCase(letter[r.nextInt(26)]);
+		return Character.toUpperCase(letter[R.nextInt(26)]);
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class Random {
 	 * @return 一个随机的字母(小写)
 	 */
 	public static char nextLowerLetter(){
-		return letter[r.nextInt(26)];
+		return letter[R.nextInt(26)];
 	}
 	
 	/**
@@ -38,8 +38,8 @@ public class Random {
 	 * @return 一个随机的字母
 	 */
 	public static char nextLetter(){
-		return r.nextBoolean()?
-				letter[r.nextInt(26)]:Character.toUpperCase(letter[r.nextInt(26)]);
+		return R.nextBoolean()?
+				letter[R.nextInt(26)]:Character.toUpperCase(letter[R.nextInt(26)]);
 	}
 	
 	/**
@@ -47,18 +47,9 @@ public class Random {
 	 * @return 数字0-9
 	 */
 	public static int nextNumber(){
-		return r.nextInt(10);
+		return R.nextInt(10);
 	}
 	
-	/**
-	 * 随机得到一个boolean
-	 * @return true or false
-	 */
-	public static boolean nextBoolean(){
-		int i = r.nextInt(10);
-		System.err.println(i);
-		return i > 4 ? true : false;
-	}
 	
 	/**
 	 * 随机得到一个数字
@@ -67,7 +58,7 @@ public class Random {
 	 * @return 数字
 	 */
 	public static int nextNumber(int min,int max){
-		int val = r.nextInt(max);
+		int val = R.nextInt(max);
 		if(val < min){
 			return val+min;
 		}else{
@@ -83,7 +74,7 @@ public class Random {
 	public static int nextNumber(String digit){
 		String numberString = "";
 		for(int i = 0;i < Integer.valueOf(digit);i++){
-			numberString +=	r.nextInt(10);		
+			numberString +=	R.nextInt(10);		
 		}
 		return Integer.parseInt(numberString);
 	}
@@ -96,7 +87,7 @@ public class Random {
 	public static String nextNumberString(String digit){
 		String numberString = "";
 		for(int i = 0;i < Integer.valueOf(digit);i++){
-			numberString +=	r.nextInt(10);		
+			numberString +=	R.nextInt(10);		
 		}
 		return numberString;
 	}
@@ -108,7 +99,7 @@ public class Random {
 	 * @return 字符串
 	 */
 	public static String nextString(String[] stringArray){
-		return stringArray[r.nextInt(stringArray.length)];
+		return stringArray[R.nextInt(stringArray.length)];
 	}
 	
 	/**
@@ -117,12 +108,12 @@ public class Random {
 	 */
 	public static Date nextTime(){
 		Calendar now = Calendar.getInstance();
-		now.add(Calendar.YEAR, r.nextBoolean() ? r.nextInt(3):-r.nextInt(3));
-		now.add(Calendar.MONTH, r.nextBoolean() ? r.nextInt(10):-r.nextInt(10));
-		now.add(Calendar.DATE, r.nextBoolean() ? r.nextInt(30):-r.nextInt(30));
-		now.add(Calendar.HOUR, r.nextBoolean() ? r.nextInt(8):-r.nextInt(8));
-		now.add(Calendar.MINUTE, r.nextBoolean() ? r.nextInt(50):-r.nextInt(50));
-		now.add(Calendar.SECOND, r.nextBoolean() ? r.nextInt(50):-r.nextInt(50));
+		now.add(Calendar.YEAR, R.nextBoolean() ? R.nextInt(3):-R.nextInt(3));
+		now.add(Calendar.MONTH, R.nextBoolean() ? R.nextInt(10):-R.nextInt(10));
+		now.add(Calendar.DATE, R.nextBoolean() ? R.nextInt(30):-R.nextInt(30));
+		now.add(Calendar.HOUR, R.nextBoolean() ? R.nextInt(8):-R.nextInt(8));
+		now.add(Calendar.MINUTE, R.nextBoolean() ? R.nextInt(50):-R.nextInt(50));
+		now.add(Calendar.SECOND, R.nextBoolean() ? R.nextInt(50):-R.nextInt(50));
 		return now.getTime();
 	}
 	

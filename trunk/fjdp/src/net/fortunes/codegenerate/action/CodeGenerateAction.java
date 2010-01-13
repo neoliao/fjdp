@@ -71,6 +71,7 @@ public class CodeGenerateAction extends BaseAction {
 	
 	
 	public String generate() throws Exception{
+		String rootPath = "";
 		init(new File(
 				rootPath + CLASS_PATH + "/net/fortunes/codegenerate/templates"));
 		

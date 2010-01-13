@@ -2,10 +2,11 @@ var urlPostPrefix = '';
 Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 	closable: true,
 	border:true,
-	itemSize:5,	//30
+	itemSize:30,
 	paging:true,	
 	loadFromGrid:true,
 	itemStepButton : false,
+	pagingBar : true,
 	
 	initComponent : function(){
 		this.recordConfig = Ext.data.Record.create(this.gridConfig.storeMapping);
@@ -33,9 +34,15 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 	        viewConfig: { forceFit : true ,emptyText : '没有可用的数据'},
 	        autoScroll:true,
 	        loadMask: true,
-	        tbar: this.getTopButtons(),
-	        bbar: this.paging == true ? this.pagingToolBar : this.noPagingToolBar
+	        tbar: this.getTopButtons()
 		});
+		
+		//是否显示分页工具栏
+		if(this.pagingBar){
+			Ext.apply(this, this.gridConfig || {}, {    
+		        bbar: this.paging == true ? this.pagingToolBar : this.noPagingToolBar
+			});
+		}
 		
 		if(this.itemStepButton){
 			this.includeItemStepButton();
@@ -48,7 +55,9 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 			'beforewinshow',
 			'winshow',
 			'beforedel',
-			'beforesave'
+			'beforesave',
+			'afteradd',
+			'afterupdate'
         );
 		
         //捕获事件		
@@ -154,6 +163,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
             iconCls:'pencil',
             privilegeCode:this.funcCode+'_edit',
 			scope:this,
+			disabled : true,
 			handler:this.edit
 		});
 		
@@ -193,7 +203,6 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		var winConf = Ext.apply({},this.winConfig||{},{
 			iconCls : this.iconCls,
 			title : this.title,
-			buttons : this.getWinButtons(this.winConfig.buttons),
 			keys: [{
 	            key: Ext.EventObject.ENTER,
 	            fn: this.saveItem,
@@ -202,6 +211,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		});
 		
 		var formConf = Ext.apply({},this.formConfig||{},{
+			buttons : this.getWinButtons(this.winConfig.buttons)
 		});
 		
 		this.win = new Ext.app.FormWindow({
@@ -215,6 +225,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
             tooltip:'保存修改的内容',
             minWidth:75,
             type : 'submit',
+            formBind: true,
 			scope:this,
 			handler:this.saveItem
 		});
@@ -266,6 +277,9 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		this.showWin();			
 	},
 	saveItem : function(){
+		if(!this.saveBt || this.saveBt.disabled){
+			return;
+		}
 		this.ajaxParams = {};
 		if(this.fireEvent('beforesave',this.win) !== false){
 			this.saveBt.disable();
@@ -279,6 +293,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 					success:function(form, action) {
 						this.closeWin();
 						this.loadData();
+						this.fireEvent('afteradd',form,action);
 		            },        	
 		            failure:function(form, action) {
 		            	this.saveBt.enable();
@@ -294,6 +309,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 					success:function(form, action) {
 						this.closeWin();
 						this.loadData();
+						this.fireEvent('afterupdate',form,action);
 		            },        	
 		            failure:function(form, action) {
 		            	this.saveBt.enable();
@@ -344,13 +360,13 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 			});	
 		}	
 	},
-	loadData : function(o){
+	loadData : function(o,callback,scope){
 		if(o)
 			Ext.apply(this.store.baseParams,o);
 		if(this.paging){
-			this.store.load({params: {start: 0,limit: this.itemSize}});
+			this.store.load({params: {start: 0,limit: this.itemSize},callback :callback,scope:scope});
 		}else{
-			this.store.load();
+			this.store.load({params: {},callback :callback,scope:scope});
 		}
 	}
 });
@@ -601,11 +617,16 @@ Ext.app.BaseFuncTree = Ext.extend(Ext.tree.TreePanel, {
 	},
 	appendChild : function(nodeJson){
 		var newNode = new Ext.tree.TreeNode(nodeJson);
-		var parentNode = this.getSelectionModel().getSelectedNode();
-		parentNode.appendChild(newNode);
-		var textEl = Ext.get(newNode.getUI().getTextEl());
-		if(textEl)
-			textEl.highlight();
+		var parentNode = this.getSelectionModel().getSelectedNode()||this.root;
+		if(parentNode.isLeaf()){
+			this.getLoader().load(parentNode);
+		}else{
+			parentNode.appendChild(newNode);
+			var textEl = Ext.get(newNode.getUI().getTextEl());
+			if(textEl)
+				textEl.highlight();
+		}
+		
 	},
 	updateNode : function(nodeJson){
 		var node = this.getSelectionModel().getSelectedNode();
@@ -724,12 +745,13 @@ Ext.app.SelectField = Ext.extend(Ext.form.ComboBox, {
 	forceSelection:true,
 	editable :false,
     typeAhead: true,
+    triggerAction: 'all',
+    width: 230,
+    hasRelative: false,
 	initComponent : function(){		
 		Ext.apply(this,{
 			valueField:'id',
-		    displayField:'text',			
-			triggerAction: 'all',
-			width: 230
+		    displayField:'text'	
 		});
 		if(this.data){
 			this.mode = 'local';
@@ -742,8 +764,17 @@ Ext.app.SelectField = Ext.extend(Ext.form.ComboBox, {
 			    url: ctx + (this.dataUrl || '') + urlPostPrefix,
 				root:'data',
 			    id: 'id',
-		        fields: this.storeFields || ['id','text']	
+		        fields: this.storeFields || ['id','text','code','pinyin','relative']
 			});
+		}
+		
+		//如果relative存在
+		if(this.hasRelative){
+			this.tpl = new Ext.XTemplate(
+			    '<tpl for="."><table class="x-combo-list-item" style="width:100%;"><tr>',
+			    '<td>{text}</td><td style="text-align:right;color:gray"><tpl for="relative">{text}</tpl></td>',
+			    '</tr></table></tpl>'
+			)
 		}
 		
         Ext.app.SelectField.superclass.initComponent.call(this);
@@ -751,18 +782,40 @@ Ext.app.SelectField = Ext.extend(Ext.form.ComboBox, {
         this.addEvents(
         	'initvalue'
         );
-
+		
+		if(this.relativeField && Ext.getCmp(this.relativeField)){
+			this.onlyListRelative = this.onlyListRelative || true;
+			if(this.onlyListRelative){
+				this.on('beforequery',function(){
+					if(Ext.getCmp(this.relativeField).getValue() == ''){
+						return false;
+					}
+				},this);
+			}
+			this.store.on('beforeload',function(store,options){
+	        	options.params.relativeId  = Ext.getCmp(this.relativeField).getValue();
+			},this);
+    	}
+		
+		
+        
 		this.on('render',function(field){
 			if(this.readOnly){
-	        	this.setReadOnly(this.readOnly);
+	        	this.setReadOnly();
 	        }
 		},this);
     },
-	setReadOnly : function(flag){
+	setReadOnly : function(){
 		this.readOnly = true;
 		this.trigger.setDisplayed(false);
 		this.el.dom.readOnly = true;
 		this.el.applyStyles('background-image: none; border: none;cursor:auto;');
+	},
+	doQuery : function(q, forceAll){
+		if(this.readOnly){
+			return;
+		}
+		Ext.app.SelectField.superclass.doQuery.call(this, q, forceAll);
 	},
 	onTriggerClick : function(){
         if(this.readOnly){
@@ -795,8 +848,24 @@ Ext.reg('f-select', Ext.app.SelectField);
 Ext.app.AutoSelect = Ext.extend(Ext.app.SelectField, {
 	hideTrigger : true,
 	minChars : 1 ,
-	editable : true 
+	queryDelay : 250,
+	typeAhead : false,
+	lastQuery : '',
+	forceSelection : true,
+	listEmptyText : '没有合适的记录,请更换关键字',
+	editable : true,
+	//storeFields : ['id','text','code','pinyin','relative']	,
+	initComponent : function(){
+		Ext.app.AutoSelect.superclass.initComponent.call(this);
+		this.store.on('load',function(store,records,options){
+			//重置上次查询关键字，阻止读本地缓存
+			this.lastQuery = '';
+		},this); 
+		
+	}
 });
+
+Ext.reg('f-autoselect', Ext.app.AutoSelect);
 
 /**
  * 文本框
@@ -815,7 +884,8 @@ Ext.app.NumberField = Ext.extend(Ext.form.NumberField, {
 	        }
 		},this);
     },
-	setReadOnly : function(readOnly){
+	setReadOnly : function(){
+		this.readOnly = true;
 		this.el.dom.readOnly = true;
 		this.el.applyStyles('background-image: none; border: none');
 	}
@@ -827,19 +897,26 @@ Ext.app.TextField = Ext.extend(Ext.form.TextField, {
 	width: 230,
 	
 	initComponent : function(){
-        Ext.app.TextField.superclass.initComponent.call(this);      
+        Ext.app.TextField.superclass.initComponent.call(this);  
+        
 		this.on('render',function(field){
 			if(this.readOnly){
 	        	this.setReadOnly(this.readOnly);
 	        }
 		},this);
     },
-	setReadOnly : function(readOnly){
+	setReadOnly : function(){
+		this.readOnly = true;
 		this.el.dom.readOnly = true;
 		this.el.applyStyles('background-image: none; border: none');
 	}
 });
 Ext.reg('f-text', Ext.app.TextField);
+
+Ext.app.DisplayField = Ext.extend(Ext.form.DisplayField, {
+	width: 230
+});
+Ext.reg('f-display', Ext.app.DisplayField);
 
 /**
  * 文本域
@@ -858,7 +935,8 @@ Ext.app.TextArea = Ext.extend(Ext.form.TextArea, {
 	        }
 		},this);
     },
-	setReadOnly : function(readOnly){
+	setReadOnly : function(){
+		this.readOnly = true;
 		this.el.dom.readOnly = true;
 		this.el.applyStyles('background-image: none; border: none');
 	}
@@ -870,11 +948,10 @@ Ext.reg('f-textarea', Ext.app.TextArea);
  * 
  */
 Ext.app.DateField = Ext.extend(Ext.form.DateField, {
-
 	value:new Date(),
 	format:'Y-m-d',
+	altFormats : 'Ymd|ymd',
 	width: 230,
-	
 	initComponent : function(){
         Ext.app.DateField.superclass.initComponent.call(this);
 
@@ -884,7 +961,8 @@ Ext.app.DateField = Ext.extend(Ext.form.DateField, {
 	        }
 		},this);
     },
-	setReadOnly : function(readOnly){
+	setReadOnly : function(){
+		this.readOnly = true;
 		this.trigger.setDisplayed(false);
 		this.el.dom.readOnly = true;
 		this.el.applyStyles('background-image: none; border: none');
@@ -897,10 +975,10 @@ Ext.reg('f-date', Ext.app.DateField);
  * 
  */
 Ext.app.FormWindow = Ext.extend(Ext.Window,{
-	
+	bannerPanel : true,
 	initComponent : function(){
 		Ext.apply(this,this.winConfig||{},{
-			layout:'anchor',
+			layout: this.bannerPanel ? 'anchor' : 'fit',
 			maximizable:true,
 			buttonAlign:'center',
 			resizable:true,
@@ -909,32 +987,36 @@ Ext.app.FormWindow = Ext.extend(Ext.Window,{
 			constrainHeader : true,
 			maxOnShow:false,
 			height : 200,
-			width : 380
+			width : 390
 		});
 		
 		var formConf = Ext.apply({},this.formConfig||{},{
 			labelAlign: 'right',
-		    labelWidth: 80,
+		    labelWidth: 90,
 			border : false,
+			monitorValid : true,
+			buttonAlign:'center',
 			layout : 'form',
 		   	bodyStyle: 'padding:14px 10px 0 15px',
-		   	anchor : '0 -60',
+		   	anchor : this.bannerPanel ? '0 -60' : '',
 		   	defaults : { hideMode:'offsets'},
 			waitMsgTarget: true
 		});
 		this.formPanel = new Ext.form.FormPanel(formConf);
 		this.items = [
-			new Ext.Panel({
+			this.formPanel
+		];
+		
+        Ext.app.FormWindow.superclass.initComponent.call(this);
+        
+		if(this.bannerPanel){
+			this.insert(0,new Ext.Panel({
 				height : 60,
 				border : false,
 				baseCls : 'fjdp-win-title',
 				html : '<div class="fjdp-win-title-content '+(this.bigIconClass?this.bigIconClass:'defaultBigIcon')+'"><h3>'+this.winConfig.title+'</h3><p>'+this.desc+'</p></div>'
-			}),
-			this.formPanel
-		]; 
-		
-        Ext.app.FormWindow.superclass.initComponent.call(this);
-        
+			}));
+		}
         this.on('show',function(window){
 			if(this.maxOnShow){
 	        	this.maximize();
@@ -1033,38 +1115,187 @@ Ext.app.MultiSelectField = Ext.extend(Ext.ux.LovCombo, {
 });
 Ext.reg('f-mselect', Ext.app.MultiSelectField);
 
-Ext.app.ThemeCombo = Ext.extend(Ext.form.ComboBox, {
-	cssPath:'../ext/resources/css/',
-	
-    initComponent:function() {
-        Ext.apply(this, {
-            store: new Ext.data.SimpleStore({
-                 fields: ['themeFile', 'themeName'],
-                data: [
-                    ['xtheme-purple.css', '缺省主题']
-                ]
-            })
-            ,valueField: 'themeFile'
-            ,displayField: 'themeName'
-            ,triggerAction:'all'
-            ,mode: 'local'
-            ,forceSelection:true
-            ,editable:false
-            ,fieldLabel: this.selectThemeText
-        }); 
-
-        // call parent
-        Ext.app.ThemeCombo.superclass.initComponent.apply(this, arguments);
+Ext.app.CompositeSelect = Ext.extend(Ext.app.AutoSelect,{
+	hideTrigger: false,
+	allQuery : '[allQuery]',
+	triggerClass:'x-form-search-trigger',
+	initComponent : function(){
+		
+		Ext.app.CompositeSelect.superclass.initComponent.call(this);
+		
+		this.addEvents(
+        	'showwin'
+        );
+        
+        this.on('showwin',function(){
+    		if(this.relativeField && Ext.getCmp(this.relativeField)){
+				this.onlyListRelative = this.onlyListRelative || true;
+				if(this.onlyListRelative){
+					if(Ext.getCmp(this.relativeField).getValue() == ''){
+						return false;
+					}
+				}
+				this.grid.store.on('beforeload',function(store,options){
+		        	options.params.relativeId  = Ext.getCmp(this.relativeField).getValue();
+				},this);
+	    	}
+        },this);
+		
+	},
+    onDestroy : function(){
+        if(this.win)
+			this.win.destroy();
+        Ext.app.AutoSelect.superclass.onDestroy.call(this);
     },
-    onSelect:function() {
-        Ext.app.ThemeCombo.superclass.onSelect.apply(this, arguments);
-        var theme = this.getValue();
-        Ext.util.CSS.swapStyleSheet('theme', this.cssPath + theme);
-        if(Ext.state.Manager.getProvider()) {
-            Ext.state.Manager.set('theme', theme);
+	onTriggerClick : function(){
+	    if(this.disabled){
+	        return;
+	    }
+	    if(this.isExpanded()){
+	        this.collapse();
+	        this.el.focus();
+	    }else {
+	        this.onFocus({});
+	        this.showWindow();
+	        this.el.focus();
+	    }
+	},
+	showWindow : function(){
+		this.createWindow();
+		if(this.fireEvent('showwin') !== false){
+			this.win.show();
+			this.grid.store.load({
+				callback :function(records,options){
+					if(this.getValue()){
+						var r = this.grid.store.getById(this.getValue());
+						this.grid.getSelectionModel().selectRecords([r],false);
+					}
+				},
+				scope : this
+			});
+		}
+		
+		
+	},
+	createWindow : function(){
+		this.descName = this.descName || this.initialConfig.fieldLabel;
+		this.form = new Ext.FormPanel({
+			border : false,
+			region : 'north',
+			labelAlign : 'top',
+			style : 'padding:10px 0px 0px 15px;background-color:white;',
+			height : 65,
+			keys: [{
+	            key: Ext.EventObject.ENTER,
+	            fn: this.remoteSearch,
+	            scope: this
+	        }],
+        	items: [{
+				xtype : 'f-text',
+				border : false,
+				width : 420,
+				height : 24,
+				id : 'search-input',
+				fieldLabel : '请输入查询关键字',
+				emptyText:'请输入'+this.descName+'名称',
+            	name: 'company'
+			}]
+		});
+		
+		var keywordRenderer = function(v){
+			var keyword = Ext.getCmp('search-input').getValue();
+			if(keyword){
+				return v.replace(keyword,'<span style="background-color:yellow;">'+keyword+'</span>');
+			}else{
+				return v;
+			}
+		}
+		
+		var greyRenderer = function(v){
+			return '<span style="color:grey;">'+v.text+'</span>';
+		}
+		
+		var gridTitle = this.descName+'列表';
+		if(this.relativeField && Ext.getCmp(this.relativeField)){
+			gridTitle = Ext.getCmp(this.relativeField).getRawValue()+" - "+gridTitle;
+		}
+		
+		var columns = this.storeColumns || [
+            {header: "名称",dataIndex: 'text',menuDisabled:true,renderer : keywordRenderer}
+        ]
+        if(this.hasRelative){
+        	columns.push({header: this.relativeHeader||"",dataIndex: 'relative',align:'left',menuDisabled:true,renderer : greyRenderer});
         }
-    } 
-}); 
+		
+		this.grid = new Ext.grid.GridPanel({
+			region : 'center',
+			border : false,
+			sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+			store: new Ext.data.JsonStore({
+			    url: ctx + this.dataUrl,
+			    baseParams : {matchPinyin:false},
+				root:'data',
+			    id: 'id',
+		        fields: this.storeFields || ['id','text','code','pinyin','relative']	
+			}),
+			viewConfig: { forceFit : true ,emptyText : '没有可用的数据'},
+	        columns: columns,
+	        title: gridTitle,
+	        stripeRows: true
+		});
+		
+		this.grid.on('rowdblclick',function(grid,rowIndex,e){
+			this.selectGridItem();
+		},this);
+		
+		this.win = new Ext.Window({
+			title : this.descName+'选择框',
+			height : 400,
+			width : 465,
+			minWidth : 465,
+			modal : true,
+			iconCls : 'search',
+			layout : 'border',
+			items : [this.form,this.grid],
+			buttonAlign : 'center',
+			buttons :[{
+				text : '确认',
+				handler :　this.selectGridItem,
+				scope : this
+			},{
+				text : '清除',
+				handler :　this.clearGridItem,
+				scope : this
+			}]
+		});
+		
+	},
+	remoteSearch : function(){
+		var keyword = Ext.getCmp('search-input').getValue();
+		if(keyword){
+			this.grid.store.load({params:{query : keyword}});
+		}
+	},
+	selectGridItem : function(){
+		var record = this.grid.getSelectionModel().getSelected();
+		if(record){
+			this.setValue({
+				id : record.id,
+				text : record.data.text
+			});
+			this.win.close();
+		}
+		
+		if(String(this.getValue()) !== String(this.startValue)) {
+			this.fireEvent('change', this, this.getValue(), this.startValue); 
+		}
+	},
+	clearGridItem : function(){
+		this.clearValue();
+		this.win.close();
+	}
+});
+Ext.reg('f-compositeSelect', Ext.app.CompositeSelect);
 
 
 Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
@@ -1174,27 +1405,14 @@ Ext.app.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
     },
     getName: function() {
 		return this.items.first().getName();
-	},
-    setValue : function(v){   
-        this.items.each(function(item){
-        	item.setValue(item.getRawValue() == v); 
-        })
-    },
-    getValue : function(){   
-		var v;
-		this.items.each(function(item) {
-			v = item.getRawValue();
-			return !item.getValue();
-    	});
-		return v;
-    }
+	}
 });
 Ext.reg('f-radiogroup', Ext.app.RadioGroup);
 
 Ext.app.uploadField = Ext.extend(Ext.form.FileUploadField,{
 	buttonText: '浏览...',
 	emptyText: '请选择一个文件',
-	width: '230',
+	width: 230,
 	initComponent: function(){
 	    Ext.app.uploadField.superclass.initComponent.call(this);
 	}
@@ -1202,7 +1420,7 @@ Ext.app.uploadField = Ext.extend(Ext.form.FileUploadField,{
 Ext.reg('f-upload', Ext.app.uploadField);
 
 Ext.app.DateTime = Ext.extend(Ext.ux.DateTime,{
-	width: '230',
+	width: 230,
 	allowBlank : true,
 	initComponent: function(){
 		Ext.apply(this,{
@@ -1240,18 +1458,6 @@ Ext.app.DictSelect = Ext.extend(Ext.app.SelectField, {
 });
 Ext.reg('f-dict', Ext.app.DictSelect);
 
-Ext.app.DictSelect = Ext.extend(Ext.app.SelectField, {
-	initComponent : function(){
-        Ext.app.DictSelect.superclass.initComponent.call(this);
-		this.store = new Ext.data.JsonStore({
-		    url: ctx+'/dict/getDictsByType' + urlPostPrefix,
-		    baseParams : { type : this.kind},
-			root:'data',
-		    fields: ['id', 'text']			
-		});
-    }
-});
-Ext.reg('f-dict', Ext.app.DictSelect);
 
 Ext.app.YearSelect = Ext.extend(Ext.form.ComboBox,{
 	width: '230',
@@ -1263,6 +1469,7 @@ Ext.app.YearSelect = Ext.extend(Ext.form.ComboBox,{
     mode : 'local',
     emptyText :'请输入或者选择年份',
     initComponent : function(){
+    	this.value = new Date().getFullYear();
     	var years = [];
     	var year = new Date().getFullYear()-this.increment;
     	for(var i = 0; i<this.increment*2; i++){
@@ -1274,6 +1481,50 @@ Ext.app.YearSelect = Ext.extend(Ext.form.ComboBox,{
     }
 });
 Ext.reg('f-year', Ext.app.YearSelect);
+
+Ext.app.QuarterSelect = Ext.extend(Ext.form.ComboBox,{
+	width: '200',
+	forceSelection : false,
+	triggerAction : 'all',
+	editable : true,
+    typeAhead: false,
+    mode : 'local',
+    emptyText :'请输入或者选择季度',
+    initComponent : function(){
+    	this.value = Math.floor(new Date().getMonth()/3)+1;
+    	var quarters = [];
+    	var quarter = 0;
+    	for(var i = 0; i < 4; i++){
+    		quarter++;
+    		quarters.push(quarter);
+    	}
+    	this.store = quarters;
+        Ext.app.QuarterSelect.superclass.initComponent.call(this);
+    }
+});
+Ext.reg('f-quarter', Ext.app.QuarterSelect);
+
+Ext.app.MonthSelect = Ext.extend(Ext.form.ComboBox,{
+	width: '200',
+	forceSelection : false,
+	triggerAction : 'all',
+	editable : true,
+    typeAhead: false,
+    mode : 'local',
+    emptyText :'请输入或者选择月份',
+    initComponent : function(){
+    	this.value = new Date().getMonth()+1;
+    	var months = [];
+    	var month = 0;
+    	for(var i = 0; i < 12; i++){
+    		month++;
+    		months.push(month);
+    	}
+    	this.store = months;
+        Ext.app.MonthSelect.superclass.initComponent.call(this);
+    }
+});
+Ext.reg('f-month', Ext.app.MonthSelect);
 
 Ext.app.Portal = Ext.extend(Ext.app.GroupPanel,{
 	autoScroll:true,
@@ -1293,3 +1544,83 @@ Ext.app.Portal = Ext.extend(Ext.app.GroupPanel,{
     	this.getUpdater().refresh();
     }
 });
+Ext.reg('f-protal', Ext.app.Portal);
+
+
+Ext.app.GridSelect = Ext.extend(Ext.grid.GridPanel, {
+	saveText : '确定',
+	buttonAlign : 'center',
+	autoScroll:true,
+	loadMask: true,
+	showSaveButton : true,
+	initComponent : function(){
+		this.store = new Ext.data.JsonStore({
+		    url: this.url,
+			root: 'data',
+	        totalProperty: 'totalCount',
+	        id: 'id',
+	        fields: Ext.data.Record.create(this.storeMapping)
+		});
+		
+		if(this.showSaveButton){
+			this.saveBt = new Ext.app.Button({
+				text : this.saveText,
+				minWidth:75,
+				disabled : true,
+				scope : this,
+				handler : this.saveData
+			});
+			this.buttons = [this.saveBt];
+		}
+		
+		Ext.applyIf(this, {    
+	        sm: new Ext.grid.CheckboxSelectionModel(),        
+	        viewConfig: { forceFit : true ,emptyText : '没有可用的数据'},
+	        store : this.store
+		});
+		
+		Ext.app.GridSelect.superclass.initComponent.call(this);
+		
+		//添加事件
+		this.addEvents(
+			'savedata'
+        );
+        
+		this.store.on('load',function(store,records,options){
+			var records = [];
+			this.store.each(function(record){
+				if(record.data.checked){
+					records.push(record);
+				}
+			});
+			this.getSelectionModel().selectRecords(records,false);
+			this.getSelectionModel().on('selectionchange',function(){
+				if(this.saveBt)
+					this.saveBt.enable();
+				var checkedIds = [];
+				var checkedRecords = this.getSelectionModel().getSelections();
+				for(var i = 0;i < checkedRecords.length; i++){
+					checkedIds.push(checkedRecords[i].id);
+				}
+				this.checkedData = checkedIds;
+			},this);
+		},this); 
+		
+    },
+	loadData : function(o){
+		if(o)
+			Ext.apply(this.store.baseParams,o);
+		this.store.load();
+	},
+	saveData : function(){
+		this.fireEvent('savedata', this);
+	}
+});
+
+function reportViewer(defineParam){
+	var ctx = '/report-viewer';
+	var pattern = 'frameset';
+	var sysParam = '__showtitle=false';
+	var url = encodeURI(ctx + '/' + pattern + '?' + sysParam + '&' + defineParam);
+	window.open(url);
+}

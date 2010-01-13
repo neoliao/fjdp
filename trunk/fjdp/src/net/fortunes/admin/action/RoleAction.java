@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import net.fortunes.admin.AdminHelper;
-import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Privilege;
 import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;
@@ -38,7 +37,7 @@ public class RoleAction extends GenericAction<Role> {
 	
 	protected JSONObject toJsonObject(Role role){
 		AdminHelper record = new AdminHelper();
-		record.put("id", role.getId());
+		record.put("id", role.getDbId());
 		record.put("nameCn", role.getName());
 		record.put("description", role.getDescription());
 		return record.getJsonObject();
@@ -50,7 +49,7 @@ public class RoleAction extends GenericAction<Role> {
 		JSONArray ja = new JSONArray();
 		for(Role role:roleList){
 			JSONObject record = new JSONObject();
-			record.put("id", role.getId());
+			record.put("id", role.getDbId());
 			record.put("text", role.getName());
 			record.put("checked",user == null?false : user.getRoles().contains(role));
 			ja.add(record);
@@ -76,7 +75,7 @@ public class RoleAction extends GenericAction<Role> {
 		List<Privilege> ps = privilege.getChildren();
 		for (Privilege p : ps) {
 			JSONObject jo = new JSONObject();
-			jo.put("id", p.getId());  
+			jo.put("id", p.getCode());  
 			jo.put("checked", role.getPrivileges().contains(p));
 			jo.put("text", p.getText());
 			

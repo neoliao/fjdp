@@ -8,6 +8,8 @@ Ext.QuickTips.init();
 // turn on validation errors beside the field globally
 Ext.form.Field.prototype.msgTarget = 'side';
 
+Ext.Updater.defaults.disableCaching = true;
+
 Ext.ns('App');
 
 /**
@@ -24,6 +26,34 @@ Ext.override(Ext.tree.TreePanel, {
 			Ext.apply(this.getLoader().baseParams,o);
 		this.getLoader().load(this.root);
 	}
+});
+
+Ext.override(Ext.form.FormPanel, {
+    bindHandler : function(){
+        var valid = true;
+        if(!this.getForm().isDirty())
+        	valid = false;
+        this.form.items.each(function(f){
+            if(!f.isValid(true)){
+                valid = false;
+                return false;
+            }
+        });
+        if(this.fbar){
+            var fitems = this.fbar.items.items;
+            for(var i = 0, len = fitems.length; i < len; i++){
+                var btn = fitems[i];
+                if(btn.formBind === true && btn.disabled === valid){
+                    btn.setDisabled(!valid);
+                }
+            }
+        }
+        this.fireEvent('clientvalidation', this, valid);
+    }
+});
+
+Ext.override(Ext.form.BasicForm, {
+    trackResetOnLoad : true
 });
 
 /**

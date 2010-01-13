@@ -52,7 +52,7 @@ public class DictAction extends GenericAction<Dict> {
 			temp.put("text", dictItem.getText());
 			ja.add(temp);
 		}
-		jo.put("data", ja);
+		jo.put(DATA_KEY, ja);
 		return render(jo);
 	}
 	

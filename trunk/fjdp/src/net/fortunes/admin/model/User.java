@@ -2,46 +2,34 @@ package net.fortunes.admin.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.ParamDef;
-
 import net.fortunes.core.Model;
 
 @Entity @Table(name = "TUser")
-@FilterDef(name="user_queryFilter", parameters = {
-		@ParamDef(name="name", type="string"),
-		@ParamDef(name="displayName", type="string")
-	}
-)
-@Filters({
-	@Filter(name="user_queryFilter", condition="name like :name or displayName like :displayName")
-})
 public class User extends Model implements org.jbpm.api.identity.User{
 	
-	@Id @GeneratedValue
+	@Id 
+	@GeneratedValue
 	private long id;
 	
 	private String name;
 	
-	private String displayName;
+	private String displayName; 
 	
 	private String password;
 	
-	private boolean locked;
+	private boolean locked; 
 	
 	@ManyToMany
-	private List<Role> roles = new ArrayList<Role>();
+	private List<Role> roles = new ArrayList<Role>(); 
 	
 	@OneToOne
 	private Employee employee;

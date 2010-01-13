@@ -26,7 +26,7 @@ public class MenuService extends GenericService<Menu>{
 	private PrivilegeService privilegeService;
 	
 	@Override
-	public Menu add(Menu entity) {
+	public Menu add(Menu entity) throws Exception {
 		super.add(entity);
 		if(entity.getParent() != null)
 			entity.getParent().setLeaf(false);
@@ -41,7 +41,7 @@ public class MenuService extends GenericService<Menu>{
 			parent.setLeaf(true);
 	}
 	
-	public void initToDb(Reader reader) throws DocumentException{
+	public void initToDb(Reader reader) throws Exception{
 		SAXReader xmlReader = new SAXReader(); 
 		Document doc = xmlReader.read(reader);
 		Element root = doc.getRootElement();
@@ -54,7 +54,8 @@ public class MenuService extends GenericService<Menu>{
 		walkPrivilegeTree(root.element(FUNC_ELEMENT),new Privilege());			
 	}
 	
-	private void walkMenuTree(Element menuElement,Menu menu) {
+	@SuppressWarnings("unchecked")
+	private void walkMenuTree(Element menuElement,Menu menu) throws Exception {
 		String funcType = menuElement.attributeValue("type") == null ? "node" : menuElement.attributeValue("type");
 		if(!funcType.equals("myhome")){
 			createMenu(menuElement,menu,funcType);
@@ -73,7 +74,8 @@ public class MenuService extends GenericService<Menu>{
 		}
 	}
 	
-	private void walkPrivilegeTree(Element menuElement,Privilege privilege) {
+	@SuppressWarnings("unchecked")
+	private void walkPrivilegeTree(Element menuElement,Privilege privilege) throws Exception {
 		createPrivilegeForFunc(menuElement,privilege);
 		
 		if (menuElement.hasContent()) {
@@ -94,7 +96,7 @@ public class MenuService extends GenericService<Menu>{
 		}
 	}
 	
-	private void createMenu(Element menuElement,Menu menu,String funcType){
+	private void createMenu(Element menuElement,Menu menu,String funcType) throws Exception{
 		if(funcType.equals("node")){
 			menu.setUrl(getUrl(menuElement));
 		}
@@ -119,13 +121,13 @@ public class MenuService extends GenericService<Menu>{
 			StringUtils.uncapitalize(menuElement.attributeValue("name"))+".js";
 	}
 	
-	private void createPrivilegeForFunc(Element funcElement,Privilege p){
+	private void createPrivilegeForFunc(Element funcElement,Privilege p) throws Exception{
 		p.setCode(funcElement.attributeValue("name"));
 		p.setText(funcElement.attributeValue("text"));
 		privilegeService.add(p);
 	}
 	
-	private void createPrivilege(Element funcElement,Element privilegeElement,Privilege p){
+	private void createPrivilege(Element funcElement,Element privilegeElement,Privilege p) throws Exception{
 		p.setCode(funcElement.attributeValue("name")+"_"+privilegeElement.attributeValue("name"));
 		p.setText(privilegeElement.attributeValue("text"));
 		p.setDescription(privilegeElement.attributeValue("text")+funcElement.attributeValue("text"));

@@ -29,7 +29,7 @@ Ext.onReady(function(){
 	            id:'loginUser',
 	            validateOnBlur:false,
 	            blankText:'用户名不能为空,请输入您的用户名',
-	            value:'01',
+	            value:'admin',
 	            allowBlank:false
 	        },{
 	            fieldLabel: '密码',
@@ -38,7 +38,7 @@ Ext.onReady(function(){
 	            validateOnBlur:false,
 	            blankText:'密码不能为空',
 	            allowBlank:false,
-	            value:'neo',
+	            value:'admin',
 	            inputType:'password'		
 	        }
 	    ]
@@ -53,7 +53,7 @@ Ext.onReady(function(){
                  document.location = ctx+'/system/viewport';
              },
              failure:function(form, action) {
-                 if(action.failureType == action.SERVER_INVALID)
+                 if(action.failureType == Ext.form.Action.SERVER_INVALID)
              		Ext.MessageBox.alert('信息', action.result.msg);
              }
          });

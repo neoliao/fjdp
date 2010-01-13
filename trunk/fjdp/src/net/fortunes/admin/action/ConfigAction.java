@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.hibernate.tool.hbm2x.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +23,13 @@ public class ConfigAction extends BaseAction {
 		
 	public String updateConfig() throws Exception{
 		Map<ConfigKey, String> maps = new EnumMap<ConfigKey, String>(ConfigKey.class);
-		maps.put(ConfigKey.ADMIN_EMAIL, p("adminEmail"));
+		for(ConfigKey configKey : ConfigKey.values()){
+			if(StringUtils.isNotEmpty(p(configKey.name()))){
+				maps.put(configKey, p(configKey.name()));
+			}
+		}
 		configService.updateConfigs(maps);
-		jo.put("success", true);
-		jo.put("msg", "系统参数成功更新!");
+		setJsonMessage(true, "系统参数成功更新!");
 		return render(jo);
 	}
 	
@@ -33,18 +37,20 @@ public class ConfigAction extends BaseAction {
 		List<Config> configs = configService.getAll();
 		JSONObject data = new JSONObject();
 		for(Config config : configs){
-			codecConfig(config, ConfigKey.ADMIN_EMAIL, "adminEmail", data);
+			data.put(config.getConfigKey().name(), config.getConfigValue());
 		}
-		jo.put("success", true);
-		jo.put("data", data);
+		setJsonMessage(true, data);
 		return render(jo);
 	}
 	
-	private void codecConfig(Config config,ConfigKey configkey,String joKey,JSONObject data){
-		if(config.getConfigKey().equals(configkey)){
-			data.put(joKey, config.getConfigValue());
-		}
+	public String restoreLastConfig(){
+		return null;
 	}
+	
+	public String restoreDefaultConfig() {
+		return null;
+	}
+	
 
 	//================== setter and getter ===================
 	

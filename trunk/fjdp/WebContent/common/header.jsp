@@ -2,6 +2,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="shortcut icon" href="<s:url value="/include/image/icon/favicon.ico"/>" type="image/x-icon" />
+<link rel="icon" href="<s:url value="/include/image/icon/favicon32.png"/>" sizes="32x32"/>
 
 <!-- include extJs lib -->
 <s:component template="extlib.ftl">
@@ -14,7 +15,7 @@
 <script>
 	ctx = '<%=request.getContextPath()%>';
 	loginUser = {
-		userName : '<s:property value="#session.authedUser.displayName"/>',
+		userName : '<s:property value="#session.authedUser.displayName" escape="false"/>',
 		privileges : <s:property value="#session.privilegesString" escape="false" default="[]"/>,
 		roles : <s:property value="#session.rolesString" escape="false" default="[]"/>,
 		ownRole : function(roleName){
@@ -29,4 +30,4 @@
 <script type="text/javascript" src="<s:url value="/include/js/ext-override.js"/>"></script>
 <script type="text/javascript" src="<s:url value="/include/js/ext-extends.js"/>"></script>
 <script type="text/javascript" src="<s:url value="/include/js/fjdp-all.js"/>"></script>
-<script type="text/javascript" src="<s:url value="/include/js/app-all.js"/>"></script>
+<script type="text/javascript" src="<s:url value="/widget/app-all.js"/>"></script>

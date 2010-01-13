@@ -3,23 +3,29 @@ package net.fortunes.admin.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 
 import net.fortunes.core.Model;
 
 import org.jbpm.api.identity.Group;
+
 
 @Entity
 public class Role extends Model implements Group{
 	
 	public static final String SYSTEM_ROLE = "system";
 
-	@Id @GeneratedValue
-	private long id;
+	@Id 
+	@GeneratedValue
+	private long dbId;
 	
+	@Column(nullable=false, unique=true)
 	private String name;
 	
 	private String roleType;
@@ -35,8 +41,8 @@ public class Role extends Model implements Group{
     public Role() {
     }
     
-    public Role(long id) {
-    	this.id = id;
+    public Role(long dbId) {
+    	this.dbId = dbId;
     }
     
     public Role(String name,String roleType) {
@@ -52,7 +58,7 @@ public class Role extends Model implements Group{
     //================= jbpm4 Group impl ====================
     @Override
 	public String getId() {
-		return String.valueOf(this.id);
+		return this.name;
 	}
 
 	@Override
@@ -65,11 +71,7 @@ public class Role extends Model implements Group{
 		return this.getRoleType();
 	}
 	
-	//================= setter and getter ====================
-	public void setId(long id){
-		this.id = id;
-	}
-	
+	//================= setter and getter ====================	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -106,4 +108,11 @@ public class Role extends Model implements Group{
 		return roleType;
 	}
 
+	public long getDbId() {
+		return dbId;
+	}
+
+	public void setDbId(long dbId) {
+		this.dbId = dbId;
+	}		
 }

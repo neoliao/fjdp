@@ -1,20 +1,11 @@
 package misc;
 
-import javax.annotation.Resource;
-
-import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.service.DictService;
 import net.fortunes.admin.service.EmployeeService;
 import net.fortunes.admin.service.UserService;
+import net.fortunes.util.Tools;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jbpm.api.Execution;
-import org.jbpm.api.ExecutionService;
-import org.jbpm.api.NewDeployment;
-import org.jbpm.api.ProcessEngine;
-import org.jbpm.api.ProcessInstance;
-import org.jbpm.api.RepositoryService;
-import org.jbpm.pvm.internal.cfg.JbpmConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
@@ -23,33 +14,16 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public class Test{
 	
-	@Resource
 	public SessionFactory sessionFactory;
+	public Session session; 
 	
-	public Session session;
-	
-	@Resource
 	private EmployeeService employeeService;
 	private DictService dictService;
 	private UserService userService;
 	
-	private JbpmConfiguration jbpmConfiguration;
-	private ProcessEngine processEngine;
-	private RepositoryService repositoryService;
-	private ExecutionService executionService;
-	
-	
 	public void execute() throws Exception {
-		String deploymentDbid = repositoryService.createDeployment().addResourceFromClasspath("process/hello.jpdl.xml").deploy();
-		
-		ProcessInstance processInstance = executionService.startProcessInstanceByKey("hello");
-		
-		String pid = processInstance.getId();
-		processInstance = executionService.signalExecutionById(pid);
-		
-		
-		//repositoryService.deleteDeployment(deploymentDbid);
 	}
+	
 	
 	public static void main(String[] args) throws Exception {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
@@ -57,6 +31,8 @@ public class Test{
 		t.setUp();
 		t.execute();
 		t.tearDown();
+		Tools.println("exit");
+		System.exit(0);
 		
 	}
 	
@@ -108,38 +84,6 @@ public class Test{
 
 	public UserService getUserService() {
 		return userService;
-	}
-
-	public ProcessEngine getProcessEngine() {
-		return processEngine;
-	}
-
-	public void setProcessEngine(ProcessEngine processEngine) {
-		this.processEngine = processEngine;
-	}
-
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
-	public ExecutionService getExecutionService() {
-		return executionService;
-	}
-
-	public void setExecutionService(ExecutionService executionService) {
-		this.executionService = executionService;
-	}
-
-	public void setJbpmConfiguration(JbpmConfiguration jbpmConfiguration) {
-		this.jbpmConfiguration = jbpmConfiguration;
-	}
-
-	public JbpmConfiguration getJbpmConfiguration() {
-		return jbpmConfiguration;
 	}
 }
 

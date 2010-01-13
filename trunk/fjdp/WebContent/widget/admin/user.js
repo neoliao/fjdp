@@ -54,7 +54,7 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 				]
 			},
 			winConfig : {
-				height: 435, width : 395,
+				height: 440, width : 405,
 				desc : '为员工分配用户名，设置密码，并分配角色',
 				bigIconClass : 'userIcon'
 			},
@@ -135,10 +135,12 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 	resetPassword : function(){
 		this.resetWin = new Ext.app.FormWindow({
 			iconCls : 'key',
-			title : '重设密码',
 			winConfig : {
-				height : 150,
-				width : 395
+				height : 210,
+				width : 395,
+				title : '重设密码',
+				desc : '将旧密码作废,重设用户的新密码',
+				bigIconClass : 'resetKeyIcon'
 			},
 			formConfig : {
 				items : [

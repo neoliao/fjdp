@@ -4,22 +4,15 @@
 html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{font-size:12px;}
 .x-btn button{font-size:12px;}
 .x-window-tl .x-window-header{font-size:12px;}
-.x-toolbar td,.x-toolbar span,.x-toolbar input,.x-toolbar div,.x-toolbar select,.x-toolbar label{font-size:12px;}
+.x-toolbar td,.x-toolbar span,.x-toolbar input,.x-toolbar div,.x-toolbar select,.x-toolbar label{font-size:11px;}
 .x-panel-header{font-size:12px;}
 .x-tab-strip span.x-tab-strip-text{font-size:12px;}
 .ext-el-mask{
 	background-color:#333
 }
-/* remove safari's blue / chrome's yellow input field outline */
-.ext-safari *:focus,.ext-chrome *:focus{outline:none;}
-/* safari / chrome combo grid editor height */
-.ext-safari .x-form-text{height:22px!important;padding-top:3px;font-size:100%;}
-.ext-safari .x-toolbar .x-form-text,.ext-chrome .x-toolbar .x-form-text{padding:2px;height:20px!important;font-size:100%;}
-
-/* ie patch */
-.ext-ie .x-menu-item-icon {left: -24px; top: 0px;}
-.ext-strict .x-menu-item-icon {left: 3px; top: 3px;}
-.ext-ie6 .x-menu-item-icon {left: -24px; top: 0px;}
+.x-list-body{
+	height: 96%;
+}
 /*
  * busyIcon
  */
@@ -38,7 +31,22 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 /*
  * icons
  */
- 
+
+.printer {
+	background-image:url(../image/icon/printer.gif) !important;
+}
+.wizard {
+	background-image:url(../image/icon/wand.gif) !important;
+}
+.application_view_columns {
+	background-image:url(../image/icon/application_view_columns.gif) !important;
+}
+.merge {
+    background-image:url( ../image/icon/merge.gif ) !important;
+}
+.house {
+	background-image:url( ../image/icon/house.gif ) !important;
+}
 .html {
     background-image:url( ../image/icon/web.gif ) !important;
 } 
@@ -64,7 +72,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     background-image:url( ../image/icon/calculator.gif ) !important;
 }
 .search {
-    background-image:url( ../image/icon/search.gif ) !important;
+    background-image:url( ../image/icon/magnifier.gif ) !important;
 }
 .serverStop {
     background-image:url( ../image/icon/monitor_delete.gif ) !important;
@@ -358,7 +366,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	left:0px;
 	width:100%;
 	text-align:center;
-	font-family:黑体;
+	font-family:simHei;
 	color:#3c4da6; 
 	background:white transparent;
 	padding:10px 0px;
@@ -505,8 +513,42 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	padding-top: 5px;
 }
 
+
+.fjdp-win-title-content p{
+	font-size: 14px;
+	line-height: 20px;
+}
+
 .defaultBigIcon{
 	background-image:url( ../image/bigIcon/default.gif ) !important;
+}
+
+.step_one_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_1.gif) !important;
+}
+
+.step_two_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_2.gif) !important;
+}
+
+.step_three_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_3.gif) !important;
+}
+
+.step_four_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_4.gif) !important;
+}
+
+.step_five_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_5.gif) !important;
+}
+
+.step_six_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_6.gif) !important;
+}
+
+.step_seven_BigIcon {
+	background-image:url(../image/bigIcon/game_shop_7.gif) !important;
 }
 
 .employeeIcon{
@@ -534,10 +576,31 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .personalConfIcon{
 	background-image:url( ../image/bigIcon/personalConf.gif ) !important;
 }
+.resetKeyIcon{
+	background-image:url( ../image/bigIcon/resetKey.gif ) !important;
+}
+.wand {
+	background-image:url(../image/bigIcon/big_wand.gif) !important;
+}
+.finish-icon {
+	background-image:url(../image/bigIcon/finish.gif) !important;
+}
 
 
 .commentBox{
 	padding:7 0 10 10;
 	color:gray;
 }
+
+#search-input{
+	background: transparent url(../image/icon/search.gif ) no-repeat scroll 1px 2px;
+	background-color:#FFFFFF;
+	font-size: 14px;
+	padding-left : 24px;
+	padding-top : 2px;
+}
+
+}
+
+
 

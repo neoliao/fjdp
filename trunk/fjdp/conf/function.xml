@@ -71,7 +71,7 @@
 				<privilege text="浏览" name="view"/>
 			</func>
 		</func>
-		<func name="CodeGenerate" text="代码生成" icon="pencil" type="category">
+		<func name="Extend" text="扩展功能" icon="pencil" type="category">
 			<func name="CodeGenerate" text="代码生成器" display="true">
 				<privilege text="浏览" name="view"/>
 			</func>

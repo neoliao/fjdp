@@ -5,7 +5,7 @@
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/conf"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/data"/>
-<property name="context-root" value="fjdp"/>
 <property name="java-output-path"/>
+        <property name="context-root" value="hmfms"/>
 </wb-module>
 </project-modules>

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import net.fortunes.admin.AdminHelper;
-import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Employee;
 import net.fortunes.admin.service.OrganizationService;
@@ -116,11 +115,15 @@ public class OrganizationAction extends GenericAction<Organization> {
 	
 	//列出某个部门未拥有的员工(根据关键字过滤)
 	public String ListEmployeesUnassign() throws Exception{
-		List<Employee> employeeList = getOrganizationService().getUnassignEmployeesByOrganizationId(p("organizationId"));
+		List<Employee> employeeList;
+		if(OrganizationService.SINGLE_ORGANIZATION){
+			employeeList = getOrganizationService().getUnassignEmployees();
+		}else{
+			employeeList = getOrganizationService().getUnassignEmployeesByOrganizationId(p("organizationId"));
+		}
 		JSONArray ja = new JSONArray();
 		for(Employee employee:employeeList){
-			String namePy = PinYin.toPYString(employee.getName());
-			System.out.println(namePy);
+			String namePy = PinYin.toPinYinString(employee.getName());
 			if(namePy.startsWith(getQuery().toUpperCase())
 					|| employee.getName().startsWith(getQuery())){
 				JSONObject record = new JSONObject();

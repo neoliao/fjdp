@@ -1,3 +1,21 @@
+
+/*big Icon*/
+.areaBigIcon{
+	background-image:url( ../image/bigIcon/area.gif ) !important;
+}
+
+.projectBigIcon{
+	background-image:url( ../image/bigIcon/project.gif ) !important;
+}
+
+.buildingBigIcon{
+	background-image:url( ../image/bigIcon/building.gif ) !important;
+}
+
+.companyBigIcon{
+	background-image:url( ../image/bigIcon/company.gif ) !important;
+}
+
 .msg-body{
 	line-height: 32px;
 }
@@ -51,7 +69,7 @@
 }
 
 .msg-body .feedback{
-	color: #FF8000;
+	color: blue;
 }
 
 .msg-body .feedback:HOVER{
@@ -111,3 +129,105 @@
 	font-size: 14px;
 	line-height: 24px;
 }
+
+.wizard-info{
+	margin: 30px;
+}
+
+.wizard-info-n{
+	margin: 15px 20px;
+}
+
+.wizard-info .step{
+	margin-right: 41px;
+	padding-left: 23px;
+	font-weight: bold;
+	color: #25497A;
+	font-family: SimSun;
+}
+
+.wizard-info p{
+	padding: 10px;
+	line-height: 20px;
+}
+
+.wizard-info .step1{
+	background: url(../image/step-1-select.gif) no-repeat;
+}
+.wizard-info .step2{
+	background: url(../image/step-2-select.gif) no-repeat;
+}
+.wizard-info .step3{
+	background: url(../image/step-3-select.gif) no-repeat;
+}
+.wizard-info .step4{
+	background: url(../image/step-4-select.gif) no-repeat;
+}
+
+.step-info{
+	background-color : #fff;
+	padding: 17px 0px 7px 25px;
+}
+
+.step-info .step{
+	margin-right: 18px;
+	padding-left: 20px;
+	font-family: SimSun;
+}
+
+.step-info .step1{
+	background: url(../image/step-1-select.gif) no-repeat;
+}
+.step-info .step2{
+	background: url(../image/step-2-select.gif) no-repeat;
+}
+.step-info .step3{
+	background: url(../image/step-3-select.gif) no-repeat;
+}
+.step-info .step4{
+	background: url(../image/step-4-select.gif) no-repeat;
+}
+
+.step-info .unstep1{
+	background: url(../image/step-1-unselect.gif) no-repeat;
+}
+.step-info .unstep2{
+	background: url(../image/step-2-unselect.gif) no-repeat;
+}
+.step-info .unstep3{
+	background: url(../image/step-3-unselect.gif) no-repeat;
+}
+.step-info .unstep4{
+	background: url(../image/step-4-unselect.gif) no-repeat;
+}
+
+.unstep1,.unstep2,.unstep3,.unstep4{
+	color: #A3A3A3;
+}
+
+.wizard-title H1{
+	padding-top : 7px;
+	font-size:20px;
+}
+
+
+.finish-text{
+	padding-top :10px;
+	color: #25497A;
+	font-size: 14px;
+}
+
+.tdRefundTitle {
+	width: 200; 
+	border: 1px solid gray; 
+	text-align: center; 
+	font-weight: bold; 
+	font-size: 15px
+}
+
+.tdRefundDetail {
+	border: 1px solid gray; 
+	text-align: center;
+	font-size: 15px
+}
+

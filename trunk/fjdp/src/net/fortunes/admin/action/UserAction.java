@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import net.fortunes.admin.AdminHelper;
-import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.UserService;

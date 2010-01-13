@@ -11,11 +11,11 @@ import net.fortunes.core.service.GenericService;
 @LoggerClass
 public class RoleService extends GenericService<Role> {
 	
-	public void updatePrivileges(String roleId,String[] privilegeIds){
+	public void updatePrivileges(String roleId,String[] privilegeCodes){
 		Role role = this.get(roleId);
 		role.getPrivileges().clear();
-		for(String privilegeId : privilegeIds){
-			role.getPrivileges().add(new Privilege(Long.parseLong(privilegeId)));
+		for(String privilegeCode : privilegeCodes){
+			role.getPrivileges().add(new Privilege(privilegeCode));
 		}
 	}
 }
