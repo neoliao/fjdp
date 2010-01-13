@@ -13,18 +13,12 @@ EmployeeSelect = Ext.extend(Ext.app.AutoSelect,{
 	initComponent : function(){
 		EmployeeSelect.superclass.initComponent.call(this);
 		this.store.on('beforeload',function(store,options){
-			options.params.organizationId  = 	Ext.getCmp('employeeList').organizationId;
-		},this); 
-		
-		this.store.on('load',function(store,records,options){
-			//重置上次查询关键字，阻止读本地缓存
-			this.lastQuery = '';
+			options.params.organizationId  = Ext.getCmp('employeeList').organizationId;
 		},this); 
 		
 		this.on('select',function(combo,record,index){
 			Ext.getCmp('employeeList').addEmployee(record.id);		
 			this.clearValue();
-			//this.store.reload();
 		},this); 
 	},
 	clearValue : function(){

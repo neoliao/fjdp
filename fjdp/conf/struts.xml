@@ -6,6 +6,7 @@
 <struts>
 	<constant name="struts.enable.SlashesInActionNames" value="true"/>
 	<constant name="struts.i18n.encoding" value="utf-8"/>
+	<constant name="struts.action.excludePattern" value="/webService*,/test*"/>
 	
 	<package name="app-default" abstract="true" extends="struts-default">
 		<interceptors>
@@ -18,7 +19,9 @@
     	<global-results>
     		<result name="login" type="redirect">/</result>
 		    <result name="viewport">/main/viewport.jsp</result>
+		    <result name="initDb">/initDb.jsp</result>
 		    <result name="exception">/common/exception.jsp</result>
+		    <result name="authFaild">/common/authFaild.jsp</result>
 		</global-results>
 		<global-exception-mappings>
 			<exception-mapping exception="java.lang.Exception" result="exception"/>

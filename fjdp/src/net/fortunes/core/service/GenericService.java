@@ -12,9 +12,10 @@ import net.fortunes.core.log.annotation.LoggerMethod;
 import net.fortunes.util.GenericsUtil;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Component;
+import org.hibernate.criterion.Projections;
 
 
 /**
@@ -32,12 +33,13 @@ public abstract class GenericService<E> extends BaseService{
 	/**
 	 * 子类初始时根据子类的泛型参数决定Entity的类型,这个构造函数不能直接调用
 	 */
+	@SuppressWarnings("unchecked")
 	protected GenericService(){
 		this.entityClass = GenericsUtil.getGenericClass(getClass());
 	}
 	
 	@LoggerMethod(operateName = "新增")
-	public E add(E entity){
+	public E add(E entity) throws Exception{
 		return defDao.add(entity);
 	}
 	
@@ -60,32 +62,35 @@ public abstract class GenericService<E> extends BaseService{
 	}
 	
 	public ListData<E> getListData(String query,Map<String,String> queryMap,int start,int limit){
-		ListData<E> listData;
+		ListData<E> listData = null;
 		//不分页
 		if(limit == 0){
-			if(StringUtils.isNotEmpty(query) || (queryMap != null && !queryMap.isEmpty())){
-				setFilter(query,queryMap);
-			}
-			listData = getListData();
+			listData = getListData(getConditions(query,queryMap));
 		//分页
 		}else{
-			if(StringUtils.isNotEmpty(query) || (queryMap != null && !queryMap.isEmpty())){
-				setFilter(query,queryMap);
-			}
-			listData = getListData(start,limit);
+			listData = getListData(getConditions(query,queryMap),start,limit);
 		}
-		
 		return listData;
 	}
 	
-	/**
-	 * override设置filter用来过滤数据
-	 * @param query 查询关键字
-	 * @param queryMap 查询关键字map
-	 */
-	protected void setFilter(String query, Map<String, String> queryMap) {
-		
+	public ListData<E> getListData(DetachedCriteria criteria,int start,int limit){
+		int total = getTotal(criteria);
+		criteria.setProjection(null);
+		criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+		List<E> list = defDao.findByCriteria(criteria,start, limit);
+		return new ListData<E>(list,total);
 	}
+	
+	public ListData<E> getListData(DetachedCriteria criteria){
+		List<E> list = defDao.findByCriteria(criteria);
+		int total = list.size();
+		return new ListData<E>(list,total);
+	}
+	
+	public ListData<E> getListData(){
+		return getListData(getConditions(null,null),0,0);
+	}
+	
 	
 	/**
 	 * override以改变数据集的默认排序方式
@@ -95,29 +100,24 @@ public abstract class GenericService<E> extends BaseService{
 		return Order.desc("id");
 	}
 	
-	/**
-	 * 分页查询方法
-	 * @param start 数据集起始位置
-	 * @param limit 数据集容量
-	 */
-	public ListData<E> getListData(int start,int limit){
-		List<E> list = defDao.findByCriteria(getDefaultCriteria(),start, limit);
-		int total = getTotal();
-		return new ListData<E>(list,total);
+	public int getTotal() {
+		return defDao.getTotal();
+	}
+	
+	private int getTotal(DetachedCriteria conditions) {
+		return (Integer)defDao.getHibernateTemplate().findByCriteria(
+				conditions.setProjection(Projections.rowCount())).iterator().next();
 	}
 	
 	/**
-	 * 实体的所有数据
+	 * @param query
+	 * @param queryMap
+	 * @return
 	 */
-	public ListData<E> getListData(){
-		List<E> list = getAll();
-		int total = list.size();
-		return new ListData<E>(list,total);
-	}
-	
-	private DetachedCriteria getDefaultCriteria(){
+	protected DetachedCriteria getConditions(String query,Map<String,String> queryMap){
 		return DetachedCriteria.forClass(this.entityClass).addOrder(getOrder());
 	}
+	
 	
 	/**
 	 * 属性条件查询 例如 age > 30,name = lisa
@@ -125,6 +125,7 @@ public abstract class GenericService<E> extends BaseService{
 	 * @param operator 操作符
 	 * @param value 属性值
 	 */
+	@SuppressWarnings("unchecked")
 	public List<E> findByProperty(String propertyName,String operator,Object value) {
 		String queryString = "from " + this.entityClass.getSimpleName()
 				+ " as e where e." + propertyName +" "+ operator +" ? ";
@@ -155,20 +156,15 @@ public abstract class GenericService<E> extends BaseService{
 			return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public E getRoot(){
 		return (E)defDao.findByQueryString(
 				"from "+entityClass.getSimpleName()+" as e where e.parent is null").get(0);
 	}
 	
 	public int delAll(){
-		return defDao.queryUpdate("delete from "+entityClass.getSimpleName());
+		return defDao.bulkUpdate("delete from "+entityClass.getSimpleName());
 	}
-	
-	public int getTotal() {
-		return ((Long) defDao.getHibernateTemplate().iterate(
-				"select count(id) from " + entityClass.getSimpleName()).next()).intValue();
-	}
-	
 	
 	/**
 	 * 转换为主键的值，这种实现会有问题

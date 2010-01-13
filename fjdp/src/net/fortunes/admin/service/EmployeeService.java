@@ -18,15 +18,21 @@ public class EmployeeService extends GenericService<Employee> {
 	
 	
 	@Override
-	protected void setFilter(String query, Map<String, String> queryMap) {
-		getDefDao().getHibernateTemplate().enableFilter("employee_queryFilter")
-			.setParameter("code", query+"%")
-			.setParameter("name", "%"+query+"%");
+	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap) {
+		DetachedCriteria criteria = super.getConditions(query, queryMap);
+		if(query !=  null){
+			criteria.add(Restrictions.or(
+					Restrictions.ilike("name", query, MatchMode.ANYWHERE), 
+					Restrictions.ilike("code", query, MatchMode.START)
+			));
+		}
+		return criteria;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Employee> getEmployeesUnAssign() {
 		return getDefDao().findByQueryString(
-				"from Employee as e where e.user is null");
+				"select e from Employee as e left join e.user as u where u.id is null");
 	}
 	
 }

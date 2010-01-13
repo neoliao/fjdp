@@ -7,38 +7,13 @@
 <hibernate-configuration>
 <session-factory>
 
-	<!-- HSQL
-		<property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
-		<property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
-		<property name="hibernate.connection.url">jdbc:hsqldb:mem:jbpm</property>
-		<property name="hibernate.connection.username">sa</property>
-		<property name="hibernate.connection.password"></property>
-	-->
-
 	<!-- MySQL  -->
 	<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
 	<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 	<property name="connection.url">jdbc:mysql://127.0.0.1:3306/fjdp</property>
 	<property name="connection.username">root</property>
 	<property name="connection.password">fortunes</property>
-	<!-- -->
-
-	<!-- SQLServerDriver 
-	<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
-	<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
-	<property name="connection.url">jdbc:jtds:sqlserver://127.0.0.1:1433/fjdp</property>
-	<property name="connection.username">sa</property>
-	<property name="connection.password">sa</property>
-	 -->
-	
-	<!-- Oracle9
-	<property name="dialect">org.hibernate.dialect.Oracle9Dialect</property>
-	<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-	<property name="connection.url">jdbc:oracle:thin:@218.10.10.228:1521:gdb</property>
-	<property name="connection.username">ala_admin</property>
-	<property name="connection.password">fortunes</property>
-	-->
-	
+	 
 	
 	<property name="show_sql">true</property>
 	
@@ -65,10 +40,6 @@
 	
 	
 	<!-- app -->
-	
-	
-	
-	
 	
 	
 </session-factory>

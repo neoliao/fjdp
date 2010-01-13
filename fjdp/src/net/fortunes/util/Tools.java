@@ -1,13 +1,20 @@
 package net.fortunes.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  * 一个工具类,用来处理日期等操作
@@ -90,7 +97,7 @@ public class Tools {
 	 * @return 汉字首字母字符
 	 */
 	public static String chinese2PinYinShort(String chinese){
-		return PinYin.toPYString(chinese);
+		return PinYin.toPinYinString(chinese);
 	}
 	
 	/**
@@ -126,14 +133,25 @@ public class Tools {
 		return UUID.randomUUID().toString();
 	}
 
+	public static byte[] decodeByBase64(String string) {
+		BASE64Decoder decoder = new BASE64Decoder();
+		try {
+			return decoder.decodeBuffer(string);
+		} catch (IOException e) {
+			return null;
+		}
+	}
 	
-	public static void main(String[] args) {
-//		Calendar  c =  Calendar.getInstance();
-//		Date date= new Date();
-//		System.out.println(date.getTime());
-//		System.out.println(date.getDay());
-//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-EE");
-//		System.out.println("====="+deleteAllFiles("E:\\pic\\1\\2008-11-17"));
+	public static String toPercentString(double number){
+		return new DecimalFormat("%").format(number);
+	}
 	
+	public static void main(String[] args) throws IOException {
+		byte[] bytes = FileUtils.readFileToByteArray(new File("D:/data.xls"));
+		String contents = new BASE64Encoder().encode(bytes);
+		
+		byte[] tobytes = new BASE64Decoder().decodeBuffer(contents);
+		FileUtils.writeByteArrayToFile(new File("d:/a.xls"), tobytes);
+		
 	}
 }

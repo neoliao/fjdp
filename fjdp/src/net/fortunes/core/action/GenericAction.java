@@ -2,10 +2,6 @@ package net.fortunes.core.action;
 
 import java.text.ParseException;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Component;
-
 import net.fortunes.core.ListData;
 import net.fortunes.core.Model;
 import net.fortunes.core.service.GenericService;
@@ -23,6 +19,7 @@ public abstract class GenericAction<E extends Model> extends BaseAction {
 	
 	private Class<E> entityClass;
 	
+	@SuppressWarnings("unchecked")
 	public GenericAction() {
 		this.entityClass = GenericsUtil.getGenericClass(getClass());
 	}

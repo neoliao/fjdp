@@ -1,8 +1,8 @@
 package net.fortunes.admin;
 
-import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Dict;
 import net.fortunes.admin.model.Employee;
+import net.fortunes.admin.model.Organization;
 import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;
 import net.fortunes.core.Helper;
@@ -50,7 +50,7 @@ public class AdminHelper extends Helper{
 	public JSONObject put(String key,Role role){
 		JSONObject jo = new JSONObject();
 		if(role != null){
-			jo.put("id", role.getId());
+			jo.put("id", role.getDbId());
 			jo.put("text", role.getName());
 			jsonObject.put(key, jo);
 		}

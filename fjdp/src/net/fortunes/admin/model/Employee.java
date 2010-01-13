@@ -6,32 +6,22 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.ParamDef;
 
 import net.fortunes.core.Model;
 
 @Entity
-@FilterDef(name="employee_queryFilter", parameters = {
-		@ParamDef(name="code", type="string"),
-		@ParamDef(name="name", type="string")
-	}
-)
-@Filters({
-	@Filter(name="employee_queryFilter", condition="code like :code or name like :name")
-})
 public class Employee extends Model{
 	
-	@Id @GeneratedValue
+	@Id 
+	@GeneratedValue
 	private long id;
 	
 	private String code;
@@ -61,6 +51,7 @@ public class Employee extends Model{
 	@OneToOne(mappedBy = "employee")
 	private User user;
 	
+	@ManyToOne
 	private Organization defaultOrganization;
 	
 	@ManyToMany(mappedBy = "employees")

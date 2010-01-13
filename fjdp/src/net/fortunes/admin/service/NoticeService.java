@@ -16,7 +16,7 @@ public class NoticeService extends GenericService<Notice> {
 	
 	@Resource private NoticeMessageService noticeMessageService;
 	
-	public void publishNotice(Notice notice, List<User> users) {
+	public void publishNotice(Notice notice, List<User> users) throws Exception {
 		getDefDao().add(notice);
 		for(User user : users){
 			NoticeMessage message = new NoticeMessage();

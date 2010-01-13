@@ -1,6 +1,5 @@
 package misc;
 
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.EnumMap;
 import java.util.List;
@@ -24,6 +23,7 @@ import net.fortunes.util.Tools;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jbpm.api.RepositoryService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
@@ -33,8 +33,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public class InitDb {
 	
-	public static final String DICT_XML_PATH = "build/classes/dict.xml";
-	public static final String FUNC_XML_PATH = "build/classes/function.xml";
+	public static final String DICT_XML_PATH = "/dict.xml";
+	public static final String FUNC_XML_PATH = "/function.xml";
 	
 	public SessionFactory sessionFactory;
 	public Session session; 
@@ -48,104 +48,77 @@ public class InitDb {
 	public MenuService menuService;
 	public ConfigService configService;
 	
+	private RepositoryService repositoryService;
+	
 	public void execute() throws Exception{
-		
+		doInitDb();
+	}
+	
+	private void doInitDb() throws Exception{
 		menuService.initToDb(new InputStreamReader(
-				new FileInputStream(FUNC_XML_PATH),"UTF-8"));
+				InitDb.class.getResourceAsStream(FUNC_XML_PATH),"utf-8"));
 		dictService.initToDb(new InputStreamReader(
-				new FileInputStream(DICT_XML_PATH),"UTF-8"));
+				InitDb.class.getResourceAsStream(DICT_XML_PATH),"utf-8"));
 		
 		//初始化系统参数
 		Map<ConfigKey, String> maps = new EnumMap<ConfigKey, String>(ConfigKey.class);
+		maps.put(ConfigKey.APP_ROOT_DIR, "/home/weblogic");
 		maps.put(ConfigKey.ADMIN_EMAIL, "admin@sz.pbc.org.cn");
-		configService.updateConfigs(maps);
+		maps.put(ConfigKey.TEMP_UPLOAD_DIR, "/upload");
+		maps.put(ConfigKey.NON_HOUSE_PAY_RATE, "50");
+		maps.put(ConfigKey.HOUSE_PAY_RATE, "40");
+		maps.put(ConfigKey.ALERT_PERCENT, "0.3");
+		maps.put(ConfigKey.FULL_PAY_DEVIATION_PERCENT, "0.03");
+		configService.initConfigs(maps);
 		
 		//新建权限
 		List<Privilege> pList = privilegeService.getListData().getList();	
 		
 		//新建角色
 		Role admin = new Role("系统管理员",Role.SYSTEM_ROLE);
-		Role typeMan = new Role("人行数据录入",Role.SYSTEM_ROLE);
-		Role feedReader = new Role("人行反馈审阅人员",Role.SYSTEM_ROLE);
-		Role bankMan = new Role("银行用户",Role.SYSTEM_ROLE);
-		Role companyMan = new Role("评估公司用户",Role.SYSTEM_ROLE);
+		Role typeMan = new Role("业务人员",Role.SYSTEM_ROLE);
+		Role feedReader = new Role("业务审批人员",Role.SYSTEM_ROLE);
 		roleService.add(admin);
 		roleService.add(typeMan);
 		roleService.add(feedReader);
-		roleService.add(bankMan);
-		roleService.add(companyMan);
 		
 		//关联角色和权限
 		admin.setPrivileges(pList);
-
+	
 		//新建员工
-		Employee liao = new Employee("01","廖清平");
-		Employee yu = new Employee("02","于涛");
-		Employee xinag = new Employee("03","向琰恒");
-		Employee zhang = new Employee("04","张歧文");
-		Employee yin = new Employee("05","尹厅");
-		employeeService.add(liao);
-		employeeService.add(yu);
-		employeeService.add(xinag);
-		employeeService.add(zhang);
-		employeeService.add(yin);
+		Employee adminEmployee = new Employee("00","超级管理员");
+		employeeService.add(adminEmployee);
 		
 		//新建用户 
-		User lqp = new User(liao.getCode(),Tools.encodePassword("neo"),liao.getName());
-		User yutao = new User(yu.getCode(),Tools.encodePassword("neo"),yu.getName());
-		User xyh = new User(xinag.getCode(),Tools.encodePassword("neo"),xinag.getName());
-		User zqw = new User(zhang.getCode(),Tools.encodePassword("neo"),zhang.getName());
-		User yt = new User(yin.getCode(),Tools.encodePassword("neo"),yin.getName());
+		User adminUser = new User("admin",Tools.encodePassword("admin"),adminEmployee.getName());
 		
 		//关联用户和角色,用户和员工
-		lqp.setEmployee(liao);
-		yutao.setEmployee(yu);
-		xyh.setEmployee(xinag);
-		zqw.setEmployee(zhang);
-		yt.setEmployee(yin);
+		adminUser.setEmployee(adminEmployee);
 		
-		lqp.getRoles().add(admin);
-		yutao.getRoles().add(typeMan);		
-		xyh.getRoles().add(feedReader);
-		zqw.getRoles().add(bankMan);
-		yt.getRoles().add(bankMan);
+		adminUser.getRoles().add(admin);
 		
-		userService.add(lqp);
-		userService.add(yutao);
-		userService.add(xyh);
-		userService.add(zqw);
-		userService.add(yt);
+		userService.add(adminUser);
 		
 		//新建部门 
 		Organization root = new Organization(null,"组织root","");
 		organizationService.add(root);
 		
-		Organization deparment1 = new Organization(root,"招商银行深圳分行","招商银行");
+		Organization deparment1 = new Organization(root,"维修资金管理中心","维修资金管理中心");
 		organizationService.add(deparment1);
 		
-		Organization deparment2 = new Organization(root,"建设银行深圳分行","建设银行");
-		deparment2.getEmployees().add(zhang);
+		Organization deparment2 = new Organization(root,"莞城房管所","莞城房管所");
 		organizationService.add(deparment2);
 		
-		Organization deparment11 = new Organization(deparment1,"招商银行天安支行","天安支行");
-		deparment11.setParent(deparment1);
-		deparment11.getEmployees().add(yin);
+		Organization deparment11 = new Organization(root,"东城房管所","东城房管所");
 		organizationService.add(deparment11);
 		
-		/*//新建企业信息
-		Enterprise sony = new Enterprise();
-		sony.setName("深圳信天喜科技公司");
-		sony.setOrganizationNumber("0755001-01");
-		enterpriseService.add(sony);
+		//importAreas(InitDb.class.getResourceAsStream("/areas.xls"));
 		
-		Enterprise fuji = new Enterprise();
-		fuji.setName("深圳富士精工有限公司");
-		fuji.setOrganizationNumber("0755001-02");
-		enterpriseService.add(fuji);*/
-		
+		//发布两个业务流程
+		//repositoryService.createDeployment().addResourceFromClasspath("process/refundApply.jpdl.xml").deploy();
+		//repositoryService.createDeployment().addResourceFromClasspath("process/batchRefund.jpdl.xml").deploy();
+
 	}
-	
-	 
 	
 	public InitDb() {
 	}
@@ -161,12 +134,18 @@ public class InitDb {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		String configFile = "spring-*.xml";
-		ApplicationContext context = new ClassPathXmlApplicationContext(configFile);
-		InitDb intiDb = (InitDb)context.getBean("initDb");
-		intiDb.setUp();
-		intiDb.execute();
-		intiDb.tearDown();
+		try {
+			String[] configFiles = {"spring-core.xml","spring-server.xml","spring-jbpm.xml"};
+			ApplicationContext context = new ClassPathXmlApplicationContext(configFiles);
+			InitDb intiDb = (InitDb)context.getBean("initDb");
+			intiDb.setUp();
+			intiDb.execute();
+			intiDb.tearDown();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		System.exit(0);
 	}
 	
 	//========================= setter and getter ==========================
@@ -251,5 +230,15 @@ public class InitDb {
 	public void setOrganizationService(OrganizationService organizationService) {
 		this.organizationService = organizationService;
 	}
+
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
 
 }

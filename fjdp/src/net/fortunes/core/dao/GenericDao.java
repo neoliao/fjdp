@@ -1,14 +1,21 @@
 package net.fortunes.core.dao;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 
 import net.fortunes.exception.DeleteForeignConstrainException;
 import net.fortunes.util.GenericsUtil;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.transaction.support.TransactionTemplate;
 
 
@@ -21,11 +28,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class GenericDao<E> extends BaseDao {
 	
 	private TransactionTemplate transactionTemplate;
+	private JdbcTemplate jdbcTemplate;
 	
 	/**
 	 * DetachedCriteria条件查询方法
 	 * @param criteria 一个DetachedCriteria对象
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public List<E> findByCriteria(DetachedCriteria criteria) {
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
@@ -36,6 +46,8 @@ public class GenericDao<E> extends BaseDao {
 	 * @param limit 数据集容量
 	 * @param criteria 一个DetachedCriteria对象
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public List<E> findByCriteria(DetachedCriteria criteria,int start,int limit){
 		return getHibernateTemplate().findByCriteria(criteria,start,limit);
 	}
@@ -46,6 +58,8 @@ public class GenericDao<E> extends BaseDao {
 	 * @param queryString HQL查询字符串
 	 * @return List
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public List findByQueryString(String queryString,Object...objects) {
 		return getHibernateTemplate().find(queryString, objects);
 	}
@@ -55,10 +69,47 @@ public class GenericDao<E> extends BaseDao {
 	 * @param queryString HQL查询字符串
 	 * @return List
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public List findByQueryString(String queryString) {
 		return getHibernateTemplate().find(queryString);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List findByQueryString(final String queryString,final int start,final int limit,final Object... values)  {
+		return (List) getHibernateTemplate().executeWithNativeSession(new HibernateCallback(){
+
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query queryObject = session.createQuery(queryString);
+				if (getHibernateTemplate().isCacheQueries()) {
+					queryObject.setCacheable(true);
+					if (getHibernateTemplate().getQueryCacheRegion() != null) {
+						queryObject.setCacheRegion(getHibernateTemplate().getQueryCacheRegion());
+					}
+				}
+				if (getHibernateTemplate().getFetchSize() > 0) {
+					queryObject.setFetchSize(getHibernateTemplate().getFetchSize());
+				}
+				SessionFactoryUtils.applyTransactionTimeout(queryObject, getSessionFactory());
+				
+				if (start >= 0) {
+					queryObject.setFirstResult(start);
+				}
+				if (limit > 0) {
+					queryObject.setMaxResults(limit);
+				}
+				if (values != null) {
+					for (int i = 0; i < values.length; i++) {
+						queryObject.setParameter(i, values[i]);
+					}
+				}
+				return queryObject.list();
+			}
+		});
+	}
+	
+
 	/**
 	 * example查询
 	 * @param exampleEntity
@@ -67,11 +118,12 @@ public class GenericDao<E> extends BaseDao {
 	public List<E> findByExample(E exampleEntity) {
 		return getHibernateTemplate().findByExample(exampleEntity);
 	}
-
+	
 	public E getById(Class<E> clazz,Serializable id) {
-		return (E)getHibernateTemplate().get(clazz,id);
+		Object o = getHibernateTemplate().get(clazz,id);
+		return (E)o;
 	}
-
+	
 	public E loadById(Class<E> clazz,Serializable id) {
 		return (E)getHibernateTemplate().load(clazz,id);
 	}
@@ -96,6 +148,10 @@ public class GenericDao<E> extends BaseDao {
 		getHibernateTemplate().refresh(entity);
 		return entity;
 	}
+	
+	public void clearSession(){
+		getHibernateTemplate().getSessionFactory().getCurrentSession().clear();
+	}
 
 	public void del(E entity) throws DeleteForeignConstrainException{
 		try {
@@ -106,11 +162,11 @@ public class GenericDao<E> extends BaseDao {
 		}
 	}
 	
-	public int queryUpdate(String queryHql){
+	public int bulkUpdate(String queryHql){
 		return getHibernateTemplate().bulkUpdate(queryHql);
 	}
 	
-	public int queryUpdate(String queryHql,Object...objects){
+	public int bulkUpdate(String queryHql,Object...objects){
 		return getHibernateTemplate().bulkUpdate(queryHql, objects);
 	}
 	
@@ -125,6 +181,14 @@ public class GenericDao<E> extends BaseDao {
 
 	public TransactionTemplate getTransactionTemplate() {
 		return transactionTemplate;
+	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
 	}
 
 }

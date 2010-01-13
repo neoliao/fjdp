@@ -12,7 +12,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 import net.fortunes.admin.model.Privilege;
@@ -20,17 +19,20 @@ import net.fortunes.admin.model.Role;
 import net.fortunes.admin.model.User;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
-import net.fortunes.util.Tools;
 
 @Component
 @LoggerClass
 public class UserService extends GenericService<User>{
 	
-	@Override
-	protected void setFilter(String query, Map<String, String> queryMap) {
-		getDefDao().getHibernateTemplate().enableFilter("user_queryFilter")
-			.setParameter("name", "%"+query+"%")
-			.setParameter("displayName", "%"+query+"%");
+	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap) {
+		DetachedCriteria criteria = super.getConditions(query, queryMap);
+		if(query !=  null){
+			criteria.add(Restrictions.or(
+					Restrictions.ilike("name", query, MatchMode.ANYWHERE), 
+					Restrictions.ilike("displayName", query, MatchMode.ANYWHERE)
+			));
+		}
+		return criteria;
 	}
 	
 	public boolean lockOrUnlockUser(String userId){
@@ -39,6 +41,7 @@ public class UserService extends GenericService<User>{
 		return true;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<User> getOnlineUsers(){
 		return getDefDao().findByQueryString("from User as u where u.loginSession.logined = true");
 	}
@@ -64,7 +67,7 @@ public class UserService extends GenericService<User>{
 		getDefDao().getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus status) {
-				getDefDao().queryUpdate("update User as u set u.loginSession.logined = false");
+				getDefDao().bulkUpdate("update User as u set u.loginSession.logined = false");
 			}
 		});
 	}
@@ -73,6 +76,8 @@ public class UserService extends GenericService<User>{
 	 * @param user
 	 * @return
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public User authUser(User user){
 		List<User> userList = getDefDao().findByQueryString(
 				"from User as u where u.name = ? and u.password = ? and locked = ?", 
@@ -95,6 +100,7 @@ public class UserService extends GenericService<User>{
 		return userPrivileges;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<User> getUsersByPrivilegeCode(String privilegeCode){
 		return getDefDao().findByQueryString(
 				"select u from User as u join u.roles as r join r.privileges as p" +

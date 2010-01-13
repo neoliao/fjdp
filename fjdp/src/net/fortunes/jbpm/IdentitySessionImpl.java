@@ -32,10 +32,14 @@ public class IdentitySessionImpl implements IdentitySession {
 	@Override
 	public String createGroup(String groupName, String groupType, String parentGroupId) {
 		net.fortunes.admin.model.Role role = new Role();
-		role.setName(groupName);
+		role.setName(groupName);		
 		role.setRoleType(groupType);
-		roleService.add(role);
-		return String.valueOf(role.getId());
+		try {
+			roleService.add(role);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return String.valueOf(role.getDbId());
 	}
 	
 	/** 
@@ -57,7 +61,11 @@ public class IdentitySessionImpl implements IdentitySession {
 		net.fortunes.admin.model.User user = new net.fortunes.admin.model.User();
 		user.setName(userName);
 		user.setDisplayName(lastName+firstName);
-		userService.add(user);
+		try {
+			userService.add(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return String.valueOf(user.getId());
 	}
 	

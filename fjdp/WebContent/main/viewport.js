@@ -82,11 +82,9 @@ Ext.onReady(function(){
 				var jo = Ext.decode(response.responseText);
 				if(jo.msg){
 					setTimeout('App.msg("'+jo.msg+'")', 500);
-					//App.msg(jo.msg);
 				}
 			}
 		}
-		
 	}, this);
 	
 	Ext.Ajax.on('requestexception', function (conn,response,options){

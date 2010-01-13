@@ -42,10 +42,10 @@ App = function(){
 
 ConfigWin = Ext.extend(Ext.app.FormWindow,{
 	id : 'header-config-win',
-	title : '个人设置',
+	title : '修改密码',
 	iconCls: 'conf',
 	winConfig　: {
-		title : '个人设置',
+		title : '修改密码',
 		height : 300, width : 390,
 		desc : '设置用户密码等个人信息',
 		bigIconClass : 'personalConfIcon'
@@ -103,14 +103,14 @@ App.Header = Ext.extend(Ext.Panel,{
 					handler: this.downloadManual,
 					menu: new Ext.menu.Menu({
 				        items: [
-				        	{text: '打开为网页', iconCls: 'html',fileType : 'htm',handler: this.downloadManual},
+				        	{text: '打开为网页', iconCls: 'html',fileType : 'htm',handler: this.downloadManual}
 					        //{text: '下载为Word文档', iconCls: 'word',fileType : 'doc',handler: this.downloadManual},
-					        {text: '下载为Pdf文档', iconCls: 'pdf',fileType : 'pdf',handler: this.downloadManual}
+					        //{text: '下载为pdf文档', iconCls: 'pdf',fileType : 'pdf',handler: this.downloadManual}
 				        ]
 				   	})
 				},'-',{
 					id:'settingButton',	
-					text:'个人设置',
+					text:'修改密码',
 					tooltip:'设置个人信息',  
 					iconCls: 'conf',
 					handler: function(){

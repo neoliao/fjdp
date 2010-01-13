@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.util.Date;
 import net.fortunes.admin.model.Log;
 import net.fortunes.admin.model.User;
-import net.fortunes.admin.service.LogService;
 import net.fortunes.core.Helper;
 import net.fortunes.core.Model;
 import net.fortunes.core.dao.GenericDao;

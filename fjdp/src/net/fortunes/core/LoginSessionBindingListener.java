@@ -10,10 +10,14 @@ import net.fortunes.admin.model.User;
 import net.fortunes.admin.service.UserService;
 import net.fortunes.util.Tools;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class LoginSessionBindingListener implements HttpSessionBindingListener {
+	
+	final Logger logger = LoggerFactory.getLogger("ROOT");
 	
 	private static final String USER_SERVICE_NAME = "userService";
 	
@@ -26,13 +30,13 @@ public class LoginSessionBindingListener implements HttpSessionBindingListener {
 	@Override
 	public void valueBound(HttpSessionBindingEvent event) {
 		User userInDb = loginOrLogOut(event, true);
-		Tools.println(Tools.date2String(new Date())+" 用户<"+userInDb.getDisplayName()+">登陆;");
+		logger.info("{} 用户<{}>登陆;",userInDb.getDisplayName(),Tools.date2String(new Date()));
 	}
 
 	@Override
 	public void valueUnbound(HttpSessionBindingEvent event) {
 		User userInDb = loginOrLogOut(event, false);
-		Tools.println(Tools.date2String(new Date())+" 用户<"+userInDb.getDisplayName()+">注销;");
+		logger.info("{} 用户<{}>注销;",userInDb.getDisplayName(),Tools.date2String(new Date()));
 	}
 	
 	private User loginOrLogOut(HttpSessionBindingEvent event,boolean flag){
