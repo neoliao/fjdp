@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MenuService extends GenericService<Menu>{
 	
+	private static final String NODE = "node";
+	private static final String MY_HOME = "myhome";
 	public static final String FUNC_ELEMENT = "func";
 	public static final String PRIVILEGE_ELEMENT = "privilege";
 	public static final String WIDGET_JS_ROOT = "/widget";
@@ -54,27 +56,26 @@ public class MenuService extends GenericService<Menu>{
 		walkPrivilegeTree(root.element(FUNC_ELEMENT),new Privilege());			
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void walkMenuTree(Element menuElement,Menu menu) throws Exception {
-		String funcType = menuElement.attributeValue("type") == null ? "node" : menuElement.attributeValue("type");
-		if(!funcType.equals("myhome")){
+		String funcType = menuElement.attributeValue("type") == null ? NODE : menuElement.attributeValue("type");
+		if(!funcType.equals(MY_HOME)){
 			createMenu(menuElement,menu,funcType);
 		}
 		
 		if (menuElement.hasContent()) {
 			//遍历子菜单
 			List<Element> funcElements = menuElement.elements(FUNC_ELEMENT);
-			for (Element funcElement : funcElements) {
-				if(!funcType.equals("myhome")){
+			for(int i = 0;i < funcElements.size();i++){
+				if(!funcType.equals(MY_HOME)){
 					Menu subMenu = new Menu();
+					subMenu.setOrderPlace(i+1);
 					subMenu.setParent(menu);
-					walkMenuTree(funcElement,subMenu);
+					walkMenuTree(funcElements.get(i),subMenu);
 				}
-			}		
+			}
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void walkPrivilegeTree(Element menuElement,Privilege privilege) throws Exception {
 		createPrivilegeForFunc(menuElement,privilege);
 		
@@ -88,16 +89,17 @@ public class MenuService extends GenericService<Menu>{
 			}
 			//遍历菜单包含的权限
 			List<Element> privilegeElements = menuElement.elements(PRIVILEGE_ELEMENT);
-			for (Element privilegeElement : privilegeElements) {
+			for(int i = 0;i < privilegeElements.size();i++){
 				Privilege subPrivilege = new Privilege();
 				subPrivilege.setParent(privilege);
-				createPrivilege(menuElement, privilegeElement, subPrivilege);
-			}	
+				subPrivilege.setOrderPlace(i+1);
+				createPrivilege(menuElement, privilegeElements.get(i), subPrivilege);
+			}
 		}
 	}
 	
 	private void createMenu(Element menuElement,Menu menu,String funcType) throws Exception{
-		if(funcType.equals("node")){
+		if(funcType.equals(NODE)){
 			menu.setUrl(getUrl(menuElement));
 		}
 		menu.setType(funcType);

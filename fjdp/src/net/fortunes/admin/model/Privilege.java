@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 
 import net.fortunes.core.Model;
@@ -19,15 +20,15 @@ public class Privilege  extends Model {
 	
 	@Id 
 	private String code;
-	
 	private String text;
-	
 	private boolean leaf;
+	private int orderPlace;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Privilege parent;
 	
 	@OneToMany(mappedBy = "parent")
+	@OrderBy("orderPlace")
 	private List<Privilege> children = new ArrayList<Privilege>();
 
 	private String description;
@@ -85,6 +86,14 @@ public class Privilege  extends Model {
 
 	public boolean isLeaf() {
 		return leaf;
+	}
+
+	public void setOrderPlace(int orderPlace) {
+		this.orderPlace = orderPlace;
+	}
+
+	public int getOrderPlace() {
+		return orderPlace;
 	}
 
 

@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
 <head>
-  	<title>东莞房屋维修资金管理系统</title>
+  	<title>FJDP</title>
   	<s:include value="/common/header.jsp" />
 	
 	<!-- framework -->

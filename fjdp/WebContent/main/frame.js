@@ -110,7 +110,7 @@ App.Header = Ext.extend(Ext.Panel,{
 				   	})
 				},'-',{
 					id:'settingButton',	
-					text:'修改密码',
+					text:'个人设置',
 					tooltip:'设置个人信息',  
 					iconCls: 'conf',
 					handler: function(){

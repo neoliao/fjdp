@@ -4,5 +4,5 @@
 		<wls:prefer-web-inf-classes>true</wls:prefer-web-inf-classes>
 	</wls:container-descriptor>
     <wls:weblogic-version>10.3.0</wls:weblogic-version>
-    <wls:context-root>hmfms</wls:context-root>
+    <wls:context-root>fjdp</wls:context-root>
 </wls:weblogic-web-app>

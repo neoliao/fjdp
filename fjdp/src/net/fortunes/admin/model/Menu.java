@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 
 import net.fortunes.core.Model;
@@ -29,6 +30,7 @@ public class Menu extends Model {
 	private String url;
 	private String icon;
 	private boolean display;
+	private int orderPlace;
 	private boolean leaf = true;
 	
 	@Enumerated(EnumType.STRING)
@@ -38,6 +40,7 @@ public class Menu extends Model {
 	private Menu parent;
 	
 	@OneToMany(mappedBy = "parent")
+	@OrderBy("orderPlace")
 	private List<Menu> children = new ArrayList<Menu>();
 	
     public Menu() {
@@ -123,6 +126,14 @@ public class Menu extends Model {
 
 	public boolean isLeaf() {
 		return leaf;
+	}
+
+	public void setOrderPlace(int orderPlace) {
+		this.orderPlace = orderPlace;
+	}
+
+	public int getOrderPlace() {
+		return orderPlace;
 	}
 
 }
