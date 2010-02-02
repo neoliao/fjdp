@@ -57,6 +57,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 			'beforedel',
 			'beforesave',
 			'afteradd',
+			'afterload',
 			'afterupdate'
         );
 		
@@ -349,6 +350,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		if(this.loadFromGrid){
 			var record = this.store.getById(this.selectedId)
 			this.win.formPanel.getForm().loadRecord(record);
+			this.fireEvent('afterload',this.win);	
 		}else{
 			this.win.formPanel.getForm().load({
 				url:this.url+'/edit' + urlPostPrefix,
@@ -356,6 +358,7 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 	            waitMsg:'加载中...',
 				scope:this,
 				success:function(form, action) {
+					this.fireEvent('afterload',this.win);
 				}
 			});	
 		}	
@@ -797,20 +800,15 @@ Ext.app.SelectField = Ext.extend(Ext.form.ComboBox, {
 			},this);
     	}
 		
-		
-        
-		this.on('render',function(field){
-			if(this.readOnly){
-	        	this.setReadOnly();
-	        }
-		},this);
     },
-	setReadOnly : function(){
-		this.readOnly = true;
-		this.trigger.setDisplayed(false);
-		this.el.dom.readOnly = true;
-		this.el.applyStyles('background-image: none; border: none;cursor:auto;');
-	},
+    setReadOnly : function(readOnly){
+        Ext.app.SelectField.superclass.setReadOnly.call(this, readOnly);
+        if(readOnly){
+        	this.el.addClass('blankReadOnly');
+        }else{
+        	this.el.removeClass('blankReadOnly');
+        }
+    },
 	doQuery : function(q, forceAll){
 		if(this.readOnly){
 			return;
@@ -877,18 +875,8 @@ Ext.app.NumberField = Ext.extend(Ext.form.NumberField, {
 	minValue : 0,
 	
 	initComponent : function(){
-        Ext.app.NumberField.superclass.initComponent.call(this);      
-		this.on('render',function(field){
-			if(this.readOnly){
-	        	this.setReadOnly(this.readOnly);
-	        }
-		},this);
-    },
-	setReadOnly : function(){
-		this.readOnly = true;
-		this.el.dom.readOnly = true;
-		this.el.applyStyles('background-image: none; border: none');
-	}
+        Ext.app.NumberField.superclass.initComponent.call(this);
+    }
 });
 Ext.reg('f-number', Ext.app.NumberField);
 
@@ -898,18 +886,7 @@ Ext.app.TextField = Ext.extend(Ext.form.TextField, {
 	
 	initComponent : function(){
         Ext.app.TextField.superclass.initComponent.call(this);  
-        
-		this.on('render',function(field){
-			if(this.readOnly){
-	        	this.setReadOnly(this.readOnly);
-	        }
-		},this);
-    },
-	setReadOnly : function(){
-		this.readOnly = true;
-		this.el.dom.readOnly = true;
-		this.el.applyStyles('background-image: none; border: none');
-	}
+    }
 });
 Ext.reg('f-text', Ext.app.TextField);
 
@@ -928,18 +905,7 @@ Ext.app.TextArea = Ext.extend(Ext.form.TextArea, {
 	
 	initComponent : function(){
         Ext.app.TextArea.superclass.initComponent.call(this);
-
-    	this.on('render',function(field){
-			if(this.readOnly){
-	        	this.setReadOnly(this.readOnly);
-	        }
-		},this);
-    },
-	setReadOnly : function(){
-		this.readOnly = true;
-		this.el.dom.readOnly = true;
-		this.el.applyStyles('background-image: none; border: none');
-	}
+    }
 });
 Ext.reg('f-textarea', Ext.app.TextArea);
 
@@ -954,19 +920,7 @@ Ext.app.DateField = Ext.extend(Ext.form.DateField, {
 	width: 230,
 	initComponent : function(){
         Ext.app.DateField.superclass.initComponent.call(this);
-
-    	this.on('render',function(field){
-			if(this.readOnly){
-	        	this.setReadOnly(this.readOnly);
-	        }
-		},this);
-    },
-	setReadOnly : function(){
-		this.readOnly = true;
-		this.trigger.setDisplayed(false);
-		this.el.dom.readOnly = true;
-		this.el.applyStyles('background-image: none; border: none');
-	}
+    }
 });
 Ext.reg('f-date', Ext.app.DateField);
 

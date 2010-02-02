@@ -28,6 +28,21 @@ Ext.override(Ext.tree.TreePanel, {
 	}
 });
 
+Ext.override(Ext.form.Field, {
+	setReadOnly : function(readOnly){
+        if(this.rendered){
+            this.el.dom.readOnly = readOnly;
+            if(readOnly){
+	        	this.el.addClass('blankReadOnly');
+	        }else{
+	        	this.el.removeClass('blankReadOnly');
+	        }
+        }
+        this.readOnly = readOnly;
+        
+    }
+});
+
 Ext.override(Ext.form.FormPanel, {
     bindHandler : function(){
         var valid = true;
