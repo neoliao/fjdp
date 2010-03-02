@@ -1275,10 +1275,9 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     onTrigger1Click : function(){
         if(this.hasSearch){
             this.el.dom.value = '';
-            var o = this.pageParams || {};
-            this.store.baseParams = this.store.baseParams || {};
-            this.store.baseParams[this.paramName] = '';
-            this.store.reload({params:o});
+            this.pageParams = this.pageParams || {};
+            this.pageParams[this.paramName] = '';
+            this.store.reload({params:this.pageParams});
             this.triggers[0].hide();
             this.hasSearch = false;
         }
@@ -1291,9 +1290,9 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             return;
         }
         var o = this.pageParams || {};
-        this.store.baseParams = this.store.baseParams || {};
-        this.store.baseParams[this.paramName] = v;
-        this.store.reload({params:o});
+		this.pageParams = this.pageParams || {};
+        this.pageParams[this.paramName] = v;
+        this.store.reload({params:this.pageParams});
         this.hasSearch = true;
         this.triggers[0].show();
     }

@@ -16,7 +16,7 @@ import org.jbpm.api.ProcessInstanceQuery;
 import org.jbpm.api.RepositoryService;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class ProcessManagerService {
 
 	@Resource private ProcessEngine processEngine;
