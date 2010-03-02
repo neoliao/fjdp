@@ -135,7 +135,7 @@ public class InitDb {
 	
 	public static void main(String[] args) throws Exception {
 		try {
-			String[] configFiles = {"spring-core.xml","spring-server.xml","spring-jbpm.xml"};
+			String[] configFiles = {"spring-core.xml","spring-server.xml"};
 			ApplicationContext context = new ClassPathXmlApplicationContext(configFiles);
 			InitDb intiDb = (InitDb)context.getBean("initDb");
 			intiDb.setUp();

@@ -1,7 +1,7 @@
 package net.fortunes.util;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.ByteOrder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -10,11 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * 一个工具类,用来处理日期等操作
@@ -145,13 +143,37 @@ public class Tools {
 	public static String toPercentString(double number){
 		return new DecimalFormat("%").format(number);
 	}
+	/**
+     * byte数组转int
+     * @param b The byte array
+     * @return The integer
+     */
+    public static int byteArrayToInt(byte[] b) {
+    	return (b[0] << 24)
+	        + ((b[1] & 0xFF) << 16)
+	        + ((b[2] & 0xFF) << 8)
+	        + (b[3] & 0xFF);
+    }
+
+    
+    /**
+     * int转byte数组
+     * @param value
+     * @return
+     */
+    public static final byte[] intToByteArray(int value) {
+        return new byte[] {
+                (byte)(value >>> 24),
+                (byte)(value >>> 16),
+                (byte)(value >>> 8),
+                (byte)value};
+}
 	
 	public static void main(String[] args) throws IOException {
-		byte[] bytes = FileUtils.readFileToByteArray(new File("D:/data.xls"));
-		String contents = new BASE64Encoder().encode(bytes);
-		
-		byte[] tobytes = new BASE64Decoder().decodeBuffer(contents);
-		FileUtils.writeByteArrayToFile(new File("d:/a.xls"), tobytes);
-		
+		byte[] bs = {0,0,1,1};
+		System.out.println(Tools.byteArrayToInt(bs));
+		byte[] ob = Tools.intToByteArray(257);
+		System.out.println(ob);
+		System.out.println(ByteOrder.nativeOrder());
 	}
 }

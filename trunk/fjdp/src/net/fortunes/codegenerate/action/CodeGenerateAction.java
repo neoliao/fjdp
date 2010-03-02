@@ -77,7 +77,7 @@ public class CodeGenerateAction extends BaseAction {
 		
 		Map<String,Object> root = new HashMap<String, Object>();
 		root.put(PACKAGE_PREFIX_KEY, packagePrefix);
-		root.put(MODEL_NAME_KEY, modelName);
+		root.put(MODEL_NAME_KEY, modelName.trim());
 		root.put(FIELDS_KEY, processFields());
 		
 		//renerate
@@ -128,12 +128,12 @@ public class CodeGenerateAction extends BaseAction {
 		String fileName = "";
 		if(fileType.equals("Action") || fileType.equals("Service")){
 			fileName = OUT_PATH + "/src" + "/" + packagePrefix.replace('.', '/') + "/" +
-				getLower(fileType) + "/" +modelName + fileType + ".java";
+				getLower(fileType) + "/" +modelName.trim() + fileType + ".java";
 		}else if(fileType.equals("Model")){
 			fileName = OUT_PATH + "/src" + "/" + packagePrefix.replace('.', '/') +  "/" +
-				getLower(fileType) + "/" +modelName + ".java";
+				getLower(fileType) + "/" +modelName.trim() + ".java";
 		}else if(fileType.equals("Widget")){
-			fileName = OUT_PATH + "/WebContent/widget/app/" + getLower(modelName) + ".js";
+			fileName = OUT_PATH + "/WebContent/widget/app/" + getLower(modelName.trim()) + ".js";
 		}
 		System.out.println(fileName);
 		File codeFile = new File(fileName);

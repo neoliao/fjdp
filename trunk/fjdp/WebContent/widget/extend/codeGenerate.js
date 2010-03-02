@@ -3,7 +3,7 @@ CodeGenerateFieldGrid = Ext.extend(Ext.grid.EditorGridPanel,{
     frame : true,
     title : '字段列表',
     style : 'padding : 20px;',
-    height : 300,
+    height : 400,
     initComponent : function(){
     	
     	this.FieldItem = Ext.data.Record.create([
