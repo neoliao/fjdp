@@ -10,7 +10,6 @@
 	    	classpath*:spring-core.xml,
 	    	classpath*:spring-server.xml,
 	    	classpath*:spring-jbpm.xml,
-	    	classpath*:spring-webservice.xml,
 	    	classpath*:spring-timerTask.xml
 	    </param-value>
 	</context-param>
