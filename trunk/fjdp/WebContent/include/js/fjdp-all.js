@@ -1489,6 +1489,7 @@ Ext.app.Portal = Ext.extend(Ext.app.GroupPanel,{
     	
     	this.on('beforerender',function(){
     		if(this.privilegeCode){
+    			this.anchor = null;
 				return loginUser.ownPrivilege(this.privilegeCode);
 			}
     	},this);

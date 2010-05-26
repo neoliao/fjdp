@@ -43,29 +43,6 @@ Ext.override(Ext.form.Field, {
     }
 });
 
-Ext.override(Ext.form.FormPanel, {
-    bindHandler : function(){
-        var valid = true;
-        if(!this.getForm().isDirty())
-        	valid = false;
-        this.form.items.each(function(f){
-            if(!f.isValid(true)){
-                valid = false;
-                return false;
-            }
-        });
-        if(this.fbar){
-            var fitems = this.fbar.items.items;
-            for(var i = 0, len = fitems.length; i < len; i++){
-                var btn = fitems[i];
-                if(btn.formBind === true && btn.disabled === valid){
-                    btn.setDisabled(!valid);
-                }
-            }
-        }
-        this.fireEvent('clientvalidation', this, valid);
-    }
-});
 
 Ext.override(Ext.form.BasicForm, {
     trackResetOnLoad : true
@@ -127,25 +104,51 @@ Ext.apply(Ext.form.VTypes, {
 
 
 /**
- * 给不为空field前面的lable加上小红点
+ * 给不为空field前面的lable加上小红点,适用于ExtJs3.1
  * 
  */
 Ext.apply(Ext.layout.FormLayout.prototype, {
 	 renderItem : function(c, position, target){
-        if(c && !c.rendered && (c.isFormField || c.fieldLabel) && c.inputType != 'hidden'){
-        	if(c.allowBlank==false){
+	 	if(c && (c.isFormField || c.fieldLabel) && c.inputType != 'hidden'){
+	 		if(c.allowBlank==false){
                 c.fieldLabel = "<span style=\"color:red;font-weight:bold;\" ext:qtip=\"该字段不能为空\"> * </span>"+c.fieldLabel;
             }
             var args = this.getTemplateArgs(c);
-            if(typeof position == 'number'){
+            if(Ext.isNumber(position)){
                 position = target.dom.childNodes[position] || null;
             }
             if(position){
-                this.fieldTpl.insertBefore(position, args);
+                c.itemCt = this.fieldTpl.insertBefore(position, args, true);
             }else{
-                this.fieldTpl.append(target, args);
+                c.itemCt = this.fieldTpl.append(target, args, true);
             }
-            c.render('x-form-el-'+c.id);
+            if(!c.getItemCt){
+                // Non form fields don't have getItemCt, apply it here
+                // This will get cleaned up in onRemove
+                Ext.apply(c, {
+                    getItemCt: function(){
+                        return c.itemCt;
+                    },
+                    customItemCt: true
+                });
+            }
+            c.label = c.getItemCt().child('label.x-form-item-label');
+            if(!c.rendered){
+                c.render('x-form-el-' + c.id);
+            }else if(!this.isValidParent(c, target)){
+                Ext.fly('x-form-el-' + c.id).appendChild(c.getPositionEl());
+            }
+            if(this.trackLabels){
+                if(c.hidden){
+                    this.onFieldHide(c);
+                }
+                c.on({
+                    scope: this,
+                    show: this.onFieldShow,
+                    hide: this.onFieldHide
+                });
+            }
+            this.configureItem(c);
         }else {
             Ext.layout.FormLayout.superclass.renderItem.apply(this, arguments);
         }
