@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 
 import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  * 一个工具类,用来处理日期等操作
@@ -138,6 +139,11 @@ public class Tools {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	
+	public static String encodeToBase64(byte[] bytes) {
+		BASE64Encoder encoder = new BASE64Encoder();
+		return encoder.encode(bytes);
 	}
 	
 	public static String toPercentString(double number){
