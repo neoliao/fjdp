@@ -10,7 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.fortunes.Constants;
+import com.fortunes.fjdp.Constants;
 
 import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Menu;

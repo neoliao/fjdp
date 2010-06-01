@@ -1,4 +1,4 @@
-package com.fortunes;
+package com.fortunes.fjdp;
 
 public class Constants {
 	

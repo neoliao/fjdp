@@ -20,7 +20,7 @@ import org.jbpm.api.ProcessInstance;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.fortunes.AppHelper;
+import com.fortunes.fjdp.AppHelper;
 
 @Component @Scope("prototype")
 public class ProcessManagerAction extends BaseAction  {
