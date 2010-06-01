@@ -12,12 +12,10 @@
     http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd" 
     default-autowire="byName">
 
-  <wss:binding url="/webService">
+	
+	<wss:binding url="/webService">
   	<wss:service>
-  		<ws:service bean="#myService" impl="com.fortunes.webservice.AppWebService"/>
+  		<ws:service bean="#appWebService" impl="com.fortunes.webservice.AppWebService"/>
   	</wss:service>
   </wss:binding>
-
-  <bean id="myService" class="com.fortunes.webservice.AppWebService" />
-
 </beans>
