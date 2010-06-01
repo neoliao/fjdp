@@ -18,7 +18,7 @@ import net.fortunes.core.action.GenericAction;
 import net.fortunes.core.service.GenericService;
 import net.sf.json.JSONObject;
 
-import com.fortunes.AppHelper;
+import com.fortunes.fjdp.AppHelper;
 
 import net.fortunes.admin.model.Notice;
 import net.fortunes.admin.service.NoticeService;

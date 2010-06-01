@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.fortunes.AppHelper;
+import com.fortunes.fjdp.AppHelper;
 
 import net.fortunes.admin.AdminHelper;
 import net.fortunes.admin.model.Log;
