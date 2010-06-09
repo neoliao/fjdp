@@ -4,9 +4,14 @@ Myhome.Welcome = Ext.extend(Ext.Panel,{
 	border : false,
 	bodyStyle  : 'padding: 5px 10px',
 	html : '<div class="msg-body"><p>欢迎您，<span class="userName">'+loginUser.userName+'</span></p></div>'
+	
 });
 
-
+var f=function(){
+	if (v == 01) {
+		Ext.MessageBox.alert('成功啦！');
+	} 
+}
 
 Myhome.LoginStat = Ext.extend(Ext.app.Portal,{
 	id : 'loginStat-portal',
@@ -56,9 +61,7 @@ MyHome = Ext.extend(Ext.Panel,{
 			new Myhome.LoginStat({anchor: '-10'}),
 			new Myhome.Notice({anchor: '-10'})
 		];
-		
     	MyHome.superclass.initComponent.call(this);
-    	
     }
 
 });

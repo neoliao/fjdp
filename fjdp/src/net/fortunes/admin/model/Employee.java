@@ -38,6 +38,8 @@ public class Employee extends Model{
 	
 	private String email;
 	
+	private String photoId;
+	
 	private String phone;
 	
 	private String mobile;
@@ -185,6 +187,14 @@ public class Employee extends Model{
 
 	public Organization getDefaultOrganization() {
 		return defaultOrganization;
+	}
+
+	public void setPhotoId(String photoId) {
+		this.photoId = photoId;
+	}
+
+	public String getPhotoId() {
+		return photoId;
 	}
 
 }

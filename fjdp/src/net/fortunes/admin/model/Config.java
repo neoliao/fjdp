@@ -21,6 +21,7 @@ public class Config extends Model {
 		NON_HOUSE_PAY_RATE("非住宅缴纳标准"),
 		HOUSE_PAY_RATE("住宅缴纳标准"),
 		ALERT_PERCENT("续缴预警百分比"),
+		//PHOTO_DIR("人员照片文件夹","E:/app/photo"),
 		FULL_PAY_DEVIATION_PERCENT("缴齐偏差百分比");
 		
 		private String label;

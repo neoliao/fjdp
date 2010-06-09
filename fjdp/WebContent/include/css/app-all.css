@@ -231,3 +231,12 @@
 	font-size: 15px
 }
 
+.photo {
+	position: relative;
+	padding: 5px;
+	border: solid 1px #ccc;
+	width: 105px;
+}
+.photo img{
+	height:140px;
+}
