@@ -60,6 +60,7 @@ public class SystemAction extends BaseAction {
 					return render(jo);
 				}
 			}
+			
 			getSessionMap().clear();
 			getSessionMap().put(Helper.LOGIN_LISTENER, new LoginSessionBindingListener(authedUser));
 			getSessionMap().put(Helper.AUTHED_USER, authedUser);
@@ -68,8 +69,10 @@ public class SystemAction extends BaseAction {
 			getSessionMap().put(Helper.WIDGET_URLS,getWidgetUrlsList());
 			getSessionMap().put(Helper.ROLES_STRING, getRolesArray(authedUser).toString());
 			jo.put(SUCCESS_KEY, true);
+			
 			return render(jo);
 		}
+		
 	}
 	
 	public String logout() throws Exception {
@@ -108,6 +111,9 @@ public class SystemAction extends BaseAction {
 	
 	public String personalConfig() throws Exception{
 		authedUser.setPassword(Tools.encodePassword(p("password")));
+		if (!authedUser.isPasswordChanged()) {
+			authedUser.setPasswordChanged(true);
+		}
 		userService.update(authedUser);
 		jo.put("success", true);
 		jo.put("msg", "个人设置成功!");

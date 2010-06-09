@@ -2,15 +2,15 @@ package net.fortunes.admin.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
 import net.fortunes.core.Model;
 
 @Entity @Table(name = "TUser")
@@ -27,6 +27,8 @@ public class User extends Model implements org.jbpm.api.identity.User{
 	private String password;
 	
 	private boolean locked; 
+	
+	private boolean passwordChanged;
 	
 	@ManyToMany
 	private List<Role> roles = new ArrayList<Role>(); 
@@ -141,6 +143,14 @@ public class User extends Model implements org.jbpm.api.identity.User{
 
 	public LoginSession getLoginSession() {
 		return loginSession;
+	}
+
+	public void setPasswordChanged(boolean passwordChanged) {
+		this.passwordChanged = passwordChanged;
+	}
+
+	public boolean isPasswordChanged() {
+		return passwordChanged;
 	}
 
 }
