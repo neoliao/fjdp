@@ -23,11 +23,15 @@ import net.fortunes.util.Tools;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.jbpm.api.RepositoryService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 
@@ -37,6 +41,7 @@ public class InitDb {
 	public static final String FUNC_XML_PATH = "/function.xml";
 	
 	public SessionFactory sessionFactory;
+	private AnnotationSessionFactoryBean annotationSessionFactoryBean; 
 	public Session session; 
 	
 	public PrivilegeService privilegeService;
@@ -51,6 +56,10 @@ public class InitDb {
 	private RepositoryService repositoryService;
 	
 	public void execute() throws Exception{
+		Configuration conf = annotationSessionFactoryBean.getConfiguration();
+		annotationSessionFactoryBean.createDatabaseSchema();
+		/*SchemaExport dbExport=new SchemaExport(conf);
+		dbExport.create(true, true);*/
 		doInitDb();
 	}
 	
@@ -138,6 +147,8 @@ public class InitDb {
 			String[] configFiles = {"spring-core.xml","spring-server.xml"};
 			ApplicationContext context = new ClassPathXmlApplicationContext(configFiles);
 			InitDb intiDb = (InitDb)context.getBean("initDb");
+			intiDb.setAnnotationSessionFactoryBean(
+					(AnnotationSessionFactoryBean)context.getBean("&sessionFactory"));
 			intiDb.setUp();
 			intiDb.execute();
 			intiDb.tearDown();
@@ -238,6 +249,15 @@ public class InitDb {
 
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	public void setAnnotationSessionFactoryBean(
+			AnnotationSessionFactoryBean annotationSessionFactoryBean) {
+		this.annotationSessionFactoryBean = annotationSessionFactoryBean;
+	}
+
+	public AnnotationSessionFactoryBean getAnnotationSessionFactoryBean() {
+		return annotationSessionFactoryBean;
 	}
 
 
