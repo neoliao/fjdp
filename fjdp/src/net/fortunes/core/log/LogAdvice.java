@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Date;
-import net.fortunes.admin.model.Log;
-import net.fortunes.admin.model.User;
 import net.fortunes.core.Helper;
 import net.fortunes.core.Model;
 import net.fortunes.core.dao.GenericDao;
@@ -14,6 +12,9 @@ import net.fortunes.core.log.annotation.LoggerMethod;
 import net.fortunes.util.Tools;
 
 import org.springframework.aop.AfterReturningAdvice;
+
+import com.fortunes.fjdp.admin.model.Log;
+import com.fortunes.fjdp.admin.model.User;
 
 /**
  * 日志切面通知,给特定的Service类中的方法记录日志

@@ -1,8 +1,5 @@
 package misc;
 
-import net.fortunes.admin.service.DictService;
-import net.fortunes.admin.service.EmployeeService;
-import net.fortunes.admin.service.UserService;
 import net.fortunes.util.Tools;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +8,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import com.fortunes.fjdp.admin.service.DictService;
+import com.fortunes.fjdp.admin.service.EmployeeService;
+import com.fortunes.fjdp.admin.service.UserService;
 
 public class Test{
 	

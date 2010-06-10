@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="fjdp" basedir="." default="initDbData">
-	
-	<!-- hibernate.cfg文件目录 -->
-	<property name="src.dir" value="./conf" />
+<project name="fjdp" basedir="." default="initDb">
+
 	
 	<!-- 输出的Class文件目录-->
 	<property name="class.dir" value="./build/classes" />
@@ -18,32 +16,9 @@
 		<pathelement location="${class.dir}" />
 	</path>
 	
-	<taskdef name="hibernatetool"
-		classname="org.hibernate.tool.ant.HibernateToolTask"
-		classpathref="toolslib" />
-		
 	<target name="initDb">
-		<echo>Init DB schema!</echo>
-		<hibernatetool destdir="${class.dir}">
-			<annotationconfiguration 
-				configurationfile="${src.dir}/hibernate.cfg.xml"/>
-			<!-- 生成数据库中的表和建表SQL文件 -->
-			<hbm2ddl 
-				export="true" 
-				update="false"
-				drop="true" 
-				create="true" 
-				delimiter=";" 
-				format="true" 
-				haltonerror="false"
-				outputfilename="db.sql" />
-		</hibernatetool>
-	</target>
-	
-	<target name="initDbData" depends="initDb">
 		<echo>Init DB data!</echo>
-		<java classname="misc.InitDb"
-			classpathref="toolslib" />
+		<java classname="misc.InitDb" classpathref="toolslib" />
 		<echo>All task complete succussful！</echo>
 	</target>
 	

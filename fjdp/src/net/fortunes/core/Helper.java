@@ -14,8 +14,9 @@ import jxl.Sheet;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.xwork.StringUtils;
 
+import com.fortunes.fjdp.admin.model.User;
 
-import net.fortunes.admin.model.User;
+
 import net.fortunes.core.action.BaseAction;
 import net.fortunes.util.Tools;
 import net.sf.json.JSONArray;

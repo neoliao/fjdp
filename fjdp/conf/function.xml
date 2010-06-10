@@ -17,16 +17,6 @@
 				<privilege text="修改" name="edit"/>
 			</func>
 		</func>
-		<func name="Info" text="基础数据" icon="pencil" type="category">
-			<func name="Enterprise" text="企业基础数据" >
-				<privilege text="浏览" name="view"/>
-				<privilege text="增加" name="add"/>
-				<privilege text="删除" name="del"/>
-				<privilege text="修改" name="edit"/>
-				<privilege text="导入" name="import"/>
-				<privilege text="关联机构" name="relative"/>
-			</func>			
-		</func>
 		
 		<func name="Admin" text="系统设置" icon="settings" type="category">
 			<func name="Employee" text="员工管理" >

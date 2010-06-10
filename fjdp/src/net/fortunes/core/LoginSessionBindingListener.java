@@ -6,14 +6,15 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-import net.fortunes.admin.model.User;
-import net.fortunes.admin.service.UserService;
 import net.fortunes.util.Tools;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.fortunes.fjdp.admin.model.User;
+import com.fortunes.fjdp.admin.service.UserService;
 
 public class LoginSessionBindingListener implements HttpSessionBindingListener {
 	

@@ -5,27 +5,10 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import net.fortunes.admin.model.Employee;
-import net.fortunes.admin.model.Organization;
-import net.fortunes.admin.model.Privilege;
-import net.fortunes.admin.model.Role;
-import net.fortunes.admin.model.User;
-import net.fortunes.admin.model.Config.ConfigKey;
-import net.fortunes.admin.service.ConfigService;
-import net.fortunes.admin.service.DictService;
-import net.fortunes.admin.service.EmployeeService;
-import net.fortunes.admin.service.MenuService;
-import net.fortunes.admin.service.OrganizationService;
-import net.fortunes.admin.service.PrivilegeService;
-import net.fortunes.admin.service.RoleService;
-import net.fortunes.admin.service.UserService;
 import net.fortunes.util.Tools;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.jbpm.api.RepositoryService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -33,6 +16,21 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import com.fortunes.fjdp.admin.model.Employee;
+import com.fortunes.fjdp.admin.model.Organization;
+import com.fortunes.fjdp.admin.model.Privilege;
+import com.fortunes.fjdp.admin.model.Role;
+import com.fortunes.fjdp.admin.model.User;
+import com.fortunes.fjdp.admin.model.Config.ConfigKey;
+import com.fortunes.fjdp.admin.service.ConfigService;
+import com.fortunes.fjdp.admin.service.DictService;
+import com.fortunes.fjdp.admin.service.EmployeeService;
+import com.fortunes.fjdp.admin.service.MenuService;
+import com.fortunes.fjdp.admin.service.OrganizationService;
+import com.fortunes.fjdp.admin.service.PrivilegeService;
+import com.fortunes.fjdp.admin.service.RoleService;
+import com.fortunes.fjdp.admin.service.UserService;
 
 
 public class InitDb {
@@ -56,10 +54,9 @@ public class InitDb {
 	private RepositoryService repositoryService;
 	
 	public void execute() throws Exception{
-		Configuration conf = annotationSessionFactoryBean.getConfiguration();
+		annotationSessionFactoryBean.dropDatabaseSchema();
 		annotationSessionFactoryBean.createDatabaseSchema();
-		/*SchemaExport dbExport=new SchemaExport(conf);
-		dbExport.create(true, true);*/
+
 		doInitDb();
 	}
 	

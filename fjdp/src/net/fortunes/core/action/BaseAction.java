@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.fortunes.admin.model.User;
 import net.fortunes.core.Helper;
 import net.fortunes.util.Tools;
 import net.sf.json.JSON;
@@ -18,6 +17,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fortunes.fjdp.admin.model.User;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.annotations.Before;
 import com.opensymphony.xwork2.interceptor.annotations.BeforeResult;
