@@ -1,6 +1,6 @@
 package net.fortunes.codegenerate;
 
-import net.fortunes.admin.AdminHelper;
+import com.fortunes.fjdp.admin.AdminHelper;
 
 public class GenerateHelper extends AdminHelper {
 

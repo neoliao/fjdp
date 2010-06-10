@@ -3,13 +3,14 @@ package net.fortunes.jbpm;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.fortunes.admin.model.Role;
-import net.fortunes.admin.service.RoleService;
-import net.fortunes.admin.service.UserService;
 
 import org.jbpm.api.identity.Group;
 import org.jbpm.api.identity.User;
 import org.jbpm.pvm.internal.identity.spi.IdentitySession;
+
+import com.fortunes.fjdp.admin.model.Role;
+import com.fortunes.fjdp.admin.service.RoleService;
+import com.fortunes.fjdp.admin.service.UserService;
 
 /**
  * 本类是jBPM4 IdentitySession的一个实现
@@ -31,7 +32,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	 */
 	@Override
 	public String createGroup(String groupName, String groupType, String parentGroupId) {
-		net.fortunes.admin.model.Role role = new Role();
+		com.fortunes.fjdp.admin.model.Role role = new Role();
 		role.setName(groupName);		
 		role.setRoleType(groupType);
 		try {
@@ -48,7 +49,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	 */
 	@Override
 	public void createMembership(String userId, String groupId, String role) {
-		net.fortunes.admin.model.User user = userService.get(userId);
+		com.fortunes.fjdp.admin.model.User user = userService.get(userId);
 		user.getRoles().add(new Role(Long.parseLong(groupId)));
 	}
 	
@@ -58,7 +59,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	 */
 	@Override
 	public String createUser(String userName, String firstName, String lastName, String businessEmail) {
-		net.fortunes.admin.model.User user = new net.fortunes.admin.model.User();
+		com.fortunes.fjdp.admin.model.User user = new com.fortunes.fjdp.admin.model.User();
 		user.setName(userName);
 		user.setDisplayName(lastName+firstName);
 		try {
@@ -75,7 +76,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	 */
 	@Override
 	public void deleteGroup(String groupId) {
-		net.fortunes.admin.model.Role role = roleService.get(groupId);
+		com.fortunes.fjdp.admin.model.Role role = roleService.get(groupId);
 		try {
 			roleService.del(role);
 		} catch (Exception e) {
@@ -89,7 +90,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	 */
 	@Override
 	public void deleteMembership(String userId, String groupId, String role) {
-		net.fortunes.admin.model.User user = userService.get(userId);
+		com.fortunes.fjdp.admin.model.User user = userService.get(userId);
 		user.getRoles().remove(roleService.get(groupId));
 	}
 	
@@ -99,7 +100,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	 */
 	@Override
 	public void deleteUser(String userId) {
-		net.fortunes.admin.model.User user = userService.get(userId);
+		com.fortunes.fjdp.admin.model.User user = userService.get(userId);
 		try {
 			userService.del(user);
 		} catch (Exception e) {
@@ -119,8 +120,8 @@ public class IdentitySessionImpl implements IdentitySession {
 	@Override
 	public List<Group> findGroupsByUser(String userId) {
 		List<Group> jbpmGroups = new ArrayList<Group>();
-		List<net.fortunes.admin.model.Role> roles = userService.get(userId).getRoles();
-		for(net.fortunes.admin.model.Role role : roles){
+		List<com.fortunes.fjdp.admin.model.Role> roles = userService.get(userId).getRoles();
+		for(com.fortunes.fjdp.admin.model.Role role : roles){
 			jbpmGroups.add((Group)role);
 		}
 		return jbpmGroups;
@@ -139,8 +140,8 @@ public class IdentitySessionImpl implements IdentitySession {
 	@Override
 	public List<User> findUsers() {
 		List<User> jbpmUsers = new ArrayList<User>();
-		List<net.fortunes.admin.model.User> users = userService.getAll();
-		for(net.fortunes.admin.model.User user : users){
+		List<com.fortunes.fjdp.admin.model.User> users = userService.getAll();
+		for(com.fortunes.fjdp.admin.model.User user : users){
 			jbpmUsers.add((User)user);
 		}
 		return jbpmUsers;
@@ -149,8 +150,8 @@ public class IdentitySessionImpl implements IdentitySession {
 	@Override
 	public List<User> findUsersByGroup(String groupId) {
 		List<User> jbpmUsers = new ArrayList<User>();
-		List<net.fortunes.admin.model.User> users = roleService.get(groupId).getUsers();
-		for(net.fortunes.admin.model.User user : users){
+		List<com.fortunes.fjdp.admin.model.User> users = roleService.get(groupId).getUsers();
+		for(com.fortunes.fjdp.admin.model.User user : users){
 			jbpmUsers.add((User)user);
 		}
 		return jbpmUsers;
