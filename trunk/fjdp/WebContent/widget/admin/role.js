@@ -103,6 +103,7 @@ PriviTree = Ext.extend(Ext.tree.TreePanel,{
 Role = Ext.extend(Ext.Panel,{
 	layout:'border',
 	closable: true,
+	hideMode:'offsets',
 	initComponent : function(){
 		this.roleList = new RoleList({
 			funcCode: this.funcCode,
