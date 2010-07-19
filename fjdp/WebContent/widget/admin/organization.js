@@ -142,6 +142,7 @@ EmployeeTree = Ext.extend(Ext.tree.TreePanel,{
 Organization = Ext.extend(Ext.Panel,{
 	layout:'border',
 	closable: true,
+	hideMode:'offsets',
 	initComponent : function(){
 		this.organizationList = new OrganizationTree({
 			funcCode: this.funcCode,

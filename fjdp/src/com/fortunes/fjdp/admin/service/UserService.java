@@ -64,7 +64,7 @@ public class UserService extends GenericService<User>{
 	 * 当程序启动时，初始化登陆状态（设置所有用户为未登陆)
 	 * 不能使用声明式事务，原因未知
 	 */
-	@PostConstruct 
+	//@PostConstruct 
 	public void initLoginSession(){
 		try {
 			getDefDao().getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){

@@ -14,8 +14,8 @@
 
 	
 	<wss:binding url="/webService">
-  	<wss:service>
-  		<ws:service bean="#appWebService" impl="com.fortunes.webservice.AppWebService"/>
-  	</wss:service>
-  </wss:binding>
+	 	<wss:service>
+	 		<ws:service bean="#appWebService" impl="com.fortunes.webservice.AppWebService"/>
+	 	</wss:service>
+	 </wss:binding>
 </beans>

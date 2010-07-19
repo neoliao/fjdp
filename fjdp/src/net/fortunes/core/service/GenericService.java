@@ -33,7 +33,6 @@ public abstract class GenericService<E> extends BaseService{
 	/**
 	 * 子类初始时根据子类的泛型参数决定Entity的类型,这个构造函数不能直接调用
 	 */
-	@SuppressWarnings("unchecked")
 	protected GenericService(){
 		this.entityClass = GenericsUtil.getGenericClass(getClass());
 	}
@@ -77,11 +76,17 @@ public abstract class GenericService<E> extends BaseService{
 		int total = getTotal(criteria);
 		criteria.setProjection(null);
 		criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+		if(getOrder() != null){
+			criteria.addOrder(getOrder());
+		}
 		List<E> list = defDao.findByCriteria(criteria,start, limit);
 		return new ListData<E>(list,total);
 	}
 	
 	public ListData<E> getListData(DetachedCriteria criteria){
+		if(getOrder() != null){
+			criteria.addOrder(getOrder());
+		}
 		List<E> list = defDao.findByCriteria(criteria);
 		int total = list.size();
 		return new ListData<E>(list,total);
@@ -115,7 +120,7 @@ public abstract class GenericService<E> extends BaseService{
 	 * @return
 	 */
 	protected DetachedCriteria getConditions(String query,Map<String,String> queryMap){
-		return DetachedCriteria.forClass(this.entityClass).addOrder(getOrder());
+		return DetachedCriteria.forClass(this.entityClass);
 	}
 	
 	
@@ -125,7 +130,6 @@ public abstract class GenericService<E> extends BaseService{
 	 * @param operator 操作符
 	 * @param value 属性值
 	 */
-	@SuppressWarnings("unchecked")
 	public List<E> findByProperty(String propertyName,String operator,Object value) {
 		String queryString = "from " + this.entityClass.getSimpleName()
 				+ " as e where e." + propertyName +" "+ operator +" ? ";
@@ -156,7 +160,6 @@ public abstract class GenericService<E> extends BaseService{
 			return null;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public E getRoot(){
 		return (E)defDao.findByQueryString(
 				"from "+entityClass.getSimpleName()+" as e where e.parent is null").get(0);
