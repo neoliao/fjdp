@@ -3,15 +3,15 @@ package com.fortunes.fjdp.admin.service;
 import java.util.List;
 import java.util.Map;
 
+import net.fortunes.core.log.annotation.LoggerClass;
+import net.fortunes.core.service.GenericService;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import com.fortunes.fjdp.admin.model.Employee;
-
-import net.fortunes.core.log.annotation.LoggerClass;
-import net.fortunes.core.service.GenericService;
 
 @Component
 @LoggerClass
@@ -35,5 +35,4 @@ public class EmployeeService extends GenericService<Employee> {
 		return getDefDao().findByQueryString(
 				"select e from Employee as e left join e.user as u where u.id is null");
 	}
-	
 }

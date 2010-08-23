@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import com.fortunes.fjdp.admin.AdminHelper;
 import com.fortunes.fjdp.admin.model.Employee;
 import com.fortunes.fjdp.admin.service.EmployeeService;
+import com.fortunes.fjdp.admin.service.OrganizationService;
 
 @Component @Scope("prototype")
 public class EmployeeAction extends GenericAction<Employee> {
@@ -28,6 +29,7 @@ public class EmployeeAction extends GenericAction<Employee> {
 	@Resource private EmployeeService employeeService;
 	private File photoFile;
 	public static final String PHOTO_URL_PREFIX = "/employee/photo?photoId=";
+	@Resource private OrganizationService organizationService;
 	
 	protected void setEntity(Employee employee) throws ParseException{
 		employee.setCode(p("code"));
@@ -39,6 +41,51 @@ public class EmployeeAction extends GenericAction<Employee> {
 		employee.setSex(AdminHelper.toDict(p("sex")));
 		employee.setStatus(AdminHelper.toDict(p("status")));
 		employee.setHireDate(AdminHelper.toDate(p("hireDate")));
+		employee.setPrimaryOrganization(AdminHelper.toOrganization(p("primaryOrganization")));
+		employee.getOrganizations().add(AdminHelper.toOrganization(p("primaryOrganization")));
+		
+		System.out.println("测试EmployeeAction.setEntity()"+p("test"));
+	}
+	
+	/**
+	 * 覆盖父类的create
+	 * 在新增员工选择了所在部门时,在"员工_部门表"中插入信息.
+	 * */
+	public String create() throws Exception{
+		Employee e = getEntityClass().newInstance();
+		setEntity(e);
+		employeeService.add(e);
+		
+		String primaryOrganization = p("primaryOrganization");
+		if(primaryOrganization!=null&&primaryOrganization!=""){
+			organizationService.addEmployee(primaryOrganization,e.getId()+"");
+		}
+		jo.put(ENTITY_KEY, toJsonObject(e));
+		setJsonMessage(true, e.toString().equals("")?
+				"新增了一条记录!" : "新增了("+e+")的记录");
+		return render(jo);
+	}
+	
+	/**
+	 * 覆盖父类的update
+	 * 若选择了部门修改项,先把此员工从原来的部门中移除,再加入到新的部门.
+	 **/
+	public String update() throws Exception{
+		Employee entity = getDefService().get(id);
+		if(entity.getPrimaryOrganization()!=null)
+		    organizationService.removeEmployee(entity.getPrimaryOrganization().getId()+"", id);
+		
+		setEntity(entity);
+		String primaryOrganization = p("primaryOrganization");
+		System.out.println(primaryOrganization+"测试一下EmployeeAction.update()"+p("month"));
+		if(primaryOrganization!=null&&primaryOrganization!="")
+		    organizationService.addEmployee(primaryOrganization,entity.getId()+"");
+	
+		getDefService().update(entity);
+		jo.put(ENTITY_KEY, toJsonObject(entity));
+		setJsonMessage(true, entity.toString().equals("")?
+				"更新了一条记录!" : "更新了("+entity+")的记录");
+		return render(jo);
 	}
 	
 	protected JSONObject toJsonObject(Employee e) throws ParseException{
@@ -53,6 +100,7 @@ public class EmployeeAction extends GenericAction<Employee> {
 		record.put("email", e.getEmail());
 		record.put("hireDate", e.getHireDate());
 		record.put("photoId",e.getPhotoId());
+		record.put("primaryOrganization", e.getPrimaryOrganization());
 		return record.getJsonObject();
 	}
 	
@@ -132,5 +180,13 @@ public class EmployeeAction extends GenericAction<Employee> {
 
 	public void setPhotoFile(File photoFile) {
 		this.photoFile = photoFile;
+	}
+
+	public void setOrganizationService(OrganizationService organizationService) {
+		this.organizationService = organizationService;
+	}
+
+	public OrganizationService getOrganizationService() {
+		return organizationService;
 	}
 }

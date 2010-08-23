@@ -3,15 +3,14 @@ package com.fortunes.fjdp.admin.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -54,7 +53,7 @@ public class Employee extends Model{
 	private User user;
 	
 	@ManyToOne
-	private Organization defaultOrganization;
+	private Organization primaryOrganization;
 	
 	@ManyToMany(mappedBy = "employees")
 	private List<Organization> organizations = new ArrayList<Organization>();
@@ -181,12 +180,12 @@ public class Employee extends Model{
 		return organizations;
 	}
 
-	public void setDefaultOrganization(Organization defaultOrganization) {
-		this.defaultOrganization = defaultOrganization;
+	public void setPrimaryOrganization(Organization primaryOrganization) {
+		this.primaryOrganization = primaryOrganization;
 	}
 
-	public Organization getDefaultOrganization() {
-		return defaultOrganization;
+	public Organization getPrimaryOrganization() {
+		return primaryOrganization;
 	}
 
 	public void setPhotoId(String photoId) {

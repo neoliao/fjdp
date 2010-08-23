@@ -37,6 +37,17 @@ public class AdminHelper extends Helper{
 		return jo;
 	}
 	
+	public JSONObject put(String key,Organization o){	
+		JSONObject jo = new JSONObject();
+		if(o != null){
+			jo.put("id", o.getId());
+			jo.put("text", o.getName());
+			jsonObject.put(key, jo);
+		}
+		return jo;
+	}
+
+	
 	public JSONObject put(String key,User user){
 		JSONObject jo = new JSONObject();
 		if(user != null){
