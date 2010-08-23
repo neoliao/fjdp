@@ -4,14 +4,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import net.fortunes.core.log.annotation.LoggerClass;
+import net.fortunes.core.service.GenericService;
+
 import org.springframework.stereotype.Component;
 
 import com.fortunes.fjdp.admin.model.Employee;
 import com.fortunes.fjdp.admin.model.Organization;
-
-import net.fortunes.core.log.annotation.LoggerClass;
-import net.fortunes.core.service.GenericService;
 
 @Component
 @LoggerClass
@@ -44,29 +43,15 @@ public class OrganizationService extends GenericService<Organization> {
 		Employee employee = employeeService.get(employeeId);
 		//在组织中加入员工
 		organization.getEmployees().add(employee);
-		//将最新关联(添加)的组织设为缺省组织
-		employee.setDefaultOrganization(organization);
-		
 	}
 	
 	public void removeEmployee(String organizationId,String employeeId){
 		Organization organization = this.get(organizationId);
 		Employee employee = employeeService.get(employeeId);
-		//在组织中移除员工
+		
+		//从组织中移除员工
 		organization.getEmployees().remove(employee);
 		this.getDefDao().getHibernateTemplate().flush();
-		
-		//将要移除的级织为缺省组织时，更改缺省组织为另一个或者设为null
-		if(employee.getDefaultOrganization().getId() == organization.getId()){
-			List<Organization> organizations = employee.getOrganizations();
-			if(organizations != null && organizations.size() > 0){
-				employee.setDefaultOrganization(organizations.get(0));
-			}else{
-				employee.setDefaultOrganization(null);
-			}
-		}
-		
-			
 	}
 
 	/**
@@ -87,9 +72,9 @@ public class OrganizationService extends GenericService<Organization> {
 	 */
 	public List<Employee> getUnassignEmployees() {
 		return getDefDao().findByQueryString(
-				" select e from Employee as e left join fetch e.defaultOrganization as o where o is null" );
+				" select e from Employee as e left join fetch e.primaryOrganization as o where o is null" );
 	}
-
+    
 	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}

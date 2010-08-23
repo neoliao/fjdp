@@ -142,12 +142,23 @@ public class OrganizationAction extends GenericAction<Organization> {
 	//加入一个员工到一个部门
 	public String addEmployee() throws Exception{
 		getOrganizationService().addEmployee(p("organizationId"), p("employeeId"));
+		
+		//修改员工表里面的primaryOrganization属性
+	    Employee entity=employeeService.get(p("employeeId"));
+	    entity.setPrimaryOrganization(AdminHelper.toOrganization(p("organizationId")));
+		employeeService.update(entity);
+		
 		return render(jo);
 	}
 	
 	//从一个部门移除某一个员工
 	public String removeEmployee() throws Exception{
 		getOrganizationService().removeEmployee(p("organizationId"), p("employeeId"));
+		
+		//修改员工表里面的primaryOrganization属性设置为null
+		Employee entity=employeeService.get(p("employeeId"));
+	    entity.setPrimaryOrganization(AdminHelper.toOrganization(null));
+	    employeeService.update(entity);
 		return render(jo);
 	}
 	
