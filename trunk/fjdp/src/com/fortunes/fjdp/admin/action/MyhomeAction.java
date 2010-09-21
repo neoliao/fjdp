@@ -1,4 +1,4 @@
-package com.fortunes.fjdp.myhome.action;
+package com.fortunes.fjdp.admin.action;
 
 import java.util.List;
 
