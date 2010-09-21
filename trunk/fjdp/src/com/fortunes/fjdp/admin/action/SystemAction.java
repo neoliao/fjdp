@@ -55,10 +55,12 @@ public class SystemAction extends BaseAction {
 			return render(jo);
 		}else{
 			if(NOT_ALLOW_REPEAT_LOGIN){
-				if(authedUser.getLoginSession().isLogined()){
+				Integer b = UserService.getUserLoginStatus().get(authedUser.getName());
+				
+				if(b!=null&&Constants.USER_STATUS_LOGIN==b.intValue()){
 					setJsonMessage(false, "该用户已经登陆,不可重复登陆");
 					return render(jo);
-				}
+				}	
 			}
 			
 			getSessionMap().clear();

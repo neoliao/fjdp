@@ -2,19 +2,16 @@ package com.fortunes.fjdp.admin.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
+import java.util.Set;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
+import com.fortunes.fjdp.Constants;
 import com.fortunes.fjdp.admin.model.Privilege;
 import com.fortunes.fjdp.admin.model.Role;
 import com.fortunes.fjdp.admin.model.User;
@@ -25,6 +22,8 @@ import net.fortunes.core.service.GenericService;
 @Component
 @LoggerClass
 public class UserService extends GenericService<User>{
+	
+	private static Map<String,Integer> userLoginStatus = new HashMap<String,Integer>();
 	
 	protected DetachedCriteria getConditions(String query,Map<String, String> queryMap) {
 		DetachedCriteria criteria = super.getConditions(query, queryMap);
@@ -45,7 +44,28 @@ public class UserService extends GenericService<User>{
 	
 	@SuppressWarnings("unchecked")
 	public List<User> getOnlineUsers(){
-		return getDefDao().findByQueryString("from User as u where u.loginSession.logined = true");
+		Set<String> names = userLoginStatus.keySet();
+		int i = 0 ;
+		int len = names.size();
+		StringBuffer HQL = new StringBuffer("from User as u where u.name in (");
+		if(0==len){
+			return null;
+		}
+		for(String name : names){
+			i++;
+			if(1 == len){
+				HQL.append("'").append(name).append("'");
+			}
+			else{
+				HQL.append("'").append(name).append("'");
+			}
+			if (i != len) {
+				HQL.append(",");
+			}
+		}	
+		HQL.append(")");
+		return getDefDao().findByQueryString(HQL.toString());
+		//return getDefDao().findByQueryString("from User as u where u.loginSession.logined = true");
 	}
 	
 	public boolean resetPassword(String userId,String password){		
@@ -54,29 +74,17 @@ public class UserService extends GenericService<User>{
 		return true;
 	}
 	
-	public void updateLoginSession(User user, boolean logined){
+	public void updateLoginSession(User user, int logined){
 		user.getLoginSession().setLastLoginTime(new Date());
-		user.getLoginSession().setLogined(logined);
 		update(user);
+		if(Constants.USER_STATUS_LOGOUT == logined){
+			userLoginStatus.remove(user.getName());
+			return;
+		}
+		userLoginStatus.put(user.getName(), logined);
+		
 	}
 	
-	/**
-	 * 当程序启动时，初始化登陆状态（设置所有用户为未登陆)
-	 * 不能使用声明式事务，原因未知
-	 */
-	//@PostConstruct 
-	public void initLoginSession(){
-		try {
-			getDefDao().getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
-				@Override
-				protected void doInTransactionWithoutResult(TransactionStatus status) {
-					getDefDao().bulkUpdate("update User as u set u.loginSession.logined = false");
-				}
-			});
-		} catch (TransactionException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/** 验证用户
 	 * @param user
@@ -111,6 +119,14 @@ public class UserService extends GenericService<User>{
 		return getDefDao().findByQueryString(
 				"select u from User as u join u.roles as r join r.privileges as p" +
 				" where p.code = '"+privilegeCode+"'");
+	}
+
+	public static Map<String, Integer> getUserLoginStatus() {
+		return userLoginStatus;
+	}
+
+	public static void setUserLoginStatus(HashMap<String, Integer> userLoginStatus) {
+		UserService.userLoginStatus = userLoginStatus;
 	}
 
 }

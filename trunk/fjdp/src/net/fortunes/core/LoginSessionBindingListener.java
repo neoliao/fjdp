@@ -30,17 +30,17 @@ public class LoginSessionBindingListener implements HttpSessionBindingListener {
 
 	@Override
 	public void valueBound(HttpSessionBindingEvent event) {
-		User userInDb = loginOrLogOut(event, true);
+		User userInDb = loginOrLogOut(event, 1);
 		logger.info("{} 用户<{}>登陆;",userInDb.getDisplayName(),Tools.date2String(new Date()));
 	}
 
 	@Override
 	public void valueUnbound(HttpSessionBindingEvent event) {
-		User userInDb = loginOrLogOut(event, false);
+		User userInDb = loginOrLogOut(event, 0);
 		logger.info("{} 用户<{}>注销;",userInDb.getDisplayName(),Tools.date2String(new Date()));
 	}
 	
-	private User loginOrLogOut(HttpSessionBindingEvent event,boolean flag){
+	private User loginOrLogOut(HttpSessionBindingEvent event,int flag){
 		HttpSession session = event.getSession();
 		UserService userService = lookupService(session);
 		User userInDb = userService.get(String.valueOf(user.getId()));
