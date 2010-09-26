@@ -36,6 +36,12 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	
 	protected final Logger logger = LoggerFactory.getLogger("ROOT");
 	
+	public static final String[] EXCLUDED_URL = {
+		"/system/login",
+		"/console/initDb",
+		"/console/rebuildDb"
+	};
+	
 	public static final String TEMPLATE = "template";
 	public static final String VIEWPORT = "viewport";
 	public static final String EXCEPTION = "exception";
@@ -127,13 +133,21 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 		
 		//身份验证
 		authedUser = (User)getSessionMap().get(Helper.AUTHED_USER);
- 		if(this.authedUser == null && !
- 				(request.getServletPath().equals("/system/initDb")||
- 				request.getServletPath().equals("/system/login"))){
+		
+ 		if(this.authedUser == null && ! isExcudedUrl(request.getServletPath())){
 			return authFailed();
 		}
 		return null;
  	}
+	
+	private boolean isExcudedUrl(String servletPath){
+		for(String url:EXCLUDED_URL){
+			if(servletPath.equals(url)){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * action方法拦截器方法,在return result之前执行

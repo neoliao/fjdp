@@ -78,12 +78,5 @@ public class DictAction extends GenericAction<Dict> {
 		return dictService;
 	}
 
-	public DictService getDictService() {
-		return dictService;
-	}
-
-	public void setDictService(DictService dictService) {
-		this.dictService = dictService;
-	}
 
 }

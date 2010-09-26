@@ -3,7 +3,7 @@
 <div class="msg-body">
 	<p class="welcome">
 		共有<span class="countNumber"><s:property value="onlineUsers.size"/></span>个用户在线！
-		<a class="block refreshBt" href="#" onclick="Ext.getCmp('loginStat-portal').refresh();">点击刷新</a>
+		<a class="block refreshBt" href="#" onclick="Ext.getCmp('loginStat-portal').refresh();">刷新</a>
 	</p>
 	<table class="body-table"><tbody>
 		<s:iterator value="onlineUsers" status="rowStatus">

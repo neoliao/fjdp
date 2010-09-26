@@ -4,7 +4,7 @@
 	<p class="welcome">
 		您共有<span class="countNumber"><s:property value="noticeMessages.size"/></span>条公告信息未读！
 		<a id="myhome-notice-refresh" class="block refreshBt" href="#" 
-			onclick="Ext.getCmp('notice-portal').refresh();">点击刷新</a>
+			onclick="Ext.getCmp('notice-portal').refresh();">刷新</a>
 	</p>
 	<s:iterator value="noticeMessages" status="rowStatus">
 		<div class="msg-item <s:if test="#rowStatus.even">even</s:if>">

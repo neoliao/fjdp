@@ -52,6 +52,10 @@ public abstract class GenericService<E> extends BaseService{
 		return defDao.update(entity);
 	}
 	
+	public E addOrUpdate(E entity){
+		return defDao.saveOrUpdate(entity);
+	}
+	
 	public E get(String id){
 		return StringUtils.isEmpty(id) ? null : defDao.getById(entityClass,getPk(id));
 	}

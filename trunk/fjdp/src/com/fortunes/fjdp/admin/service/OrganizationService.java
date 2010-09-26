@@ -75,11 +75,4 @@ public class OrganizationService extends GenericService<Organization> {
 				" select e from Employee as e left join fetch e.primaryOrganization as o where o is null" );
 	}
     
-	public void setEmployeeService(EmployeeService employeeService) {
-		this.employeeService = employeeService;
-	}
-
-	public EmployeeService getEmployeeService() {
-		return employeeService;
-	}
 }

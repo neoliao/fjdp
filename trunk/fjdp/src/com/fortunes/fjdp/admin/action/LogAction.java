@@ -68,12 +68,5 @@ public class LogAction extends GenericAction<Log> {
 		return logService;
 	}
 	
-	public LogService getLogService() {
-		return logService;
-	}
-
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
 	
 }

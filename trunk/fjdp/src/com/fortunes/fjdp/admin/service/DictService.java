@@ -38,16 +38,15 @@ public class DictService extends GenericService<Dict> {
 			parent.setLeaf(true);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void initToDb(Reader reader) throws Exception{
 		SAXReader xmlReader = new SAXReader(); 
 		Document doc = xmlReader.read(reader);
 		Element root = doc.getRootElement();
 		
-		this.delAll();
 		List<Element> elements = root.elements();
-		Dict rootDict = new Dict(ROOT_DICT_KEY,"根字典");
-		getDefDao().add(rootDict);
+		
+		Dict rootDict = updateOrCreate(ROOT_DICT_KEY,"根字典",null);
+		
 		for (Element element : elements) {
 			walkTree(element,rootDict);
 		}
@@ -57,20 +56,33 @@ public class DictService extends GenericService<Dict> {
 		return findByProperty("parent.id", key);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void walkTree(Element element,Dict parentDict) throws Exception{
-		Dict dict = new Dict();
-		dict.setText(element.attributeValue(TEXT_ATTRIBUTE));
-		if(parentDict.getId().equals(ROOT_DICT_KEY))
-			dict.setId(element.attributeValue(KEY_ATTRIBUTE));
-		else
-			dict.setId(parentDict.getId()+"_"+element.attributeValue(KEY_ATTRIBUTE));
-		dict.setParent(parentDict);
-		this.add(dict);
+		String id = "";
+		if(parentDict.getId().equals(ROOT_DICT_KEY)){
+			id = element.attributeValue(KEY_ATTRIBUTE);
+		}else{
+			id = parentDict.getId()+"_"+element.attributeValue(KEY_ATTRIBUTE);
+		}
+		
+		Dict dict = updateOrCreate(id,element.attributeValue(TEXT_ATTRIBUTE),parentDict);
+		
 		List<Element> subElements = element.elements();
 		for(Element e : subElements){
 			walkTree(e,dict);
 		}
+	}
+	
+	private Dict updateOrCreate(String id,String text,Dict parentDict) throws Exception{
+		Dict dict = new Dict();
+		dict.setId(id);
+		dict.setText(text);
+		dict.setParent(parentDict);
+		this.addOrUpdate(dict);
+		if(parentDict != null){
+			parentDict.setLeaf(false);
+			this.update(parentDict);
+		}
+		return dict;
 	}
 
 	

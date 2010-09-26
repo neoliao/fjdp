@@ -1,19 +1,17 @@
 
 /*big Icon*/
-.areaBigIcon{
-	background-image:url( ../image/bigIcon/area.gif ) !important;
+
+
+/*
+ * icons
+ */
+
+.zoomIn {
+	background-image:url(../image/icon/i_zoom_out_r.gif) !important;
 }
 
-.projectBigIcon{
-	background-image:url( ../image/bigIcon/project.gif ) !important;
-}
-
-.buildingBigIcon{
-	background-image:url( ../image/bigIcon/building.gif ) !important;
-}
-
-.companyBigIcon{
-	background-image:url( ../image/bigIcon/company.gif ) !important;
+.zoomOut {
+	background-image:url(../image/icon/i_zoom_in_r.gif) !important;
 }
 
 .msg-body{
@@ -24,7 +22,7 @@
 	font-size: 14px;
 }
 .msg-body .welcome{
-	margin-bottom: 10px;	
+	margin-bottom: 10px;
 }
 
 .msg-body .userName{
@@ -78,6 +76,8 @@
 }
 
 .msg-body .refreshBt{
+	-khtml-border-radius:5px;
+	border-radius: 5px;
 	color: white;
 	background-color: navy;
 	margin-left: 30px;
@@ -113,6 +113,14 @@
 	background-repeat: no-repeat;
 	padding-right: 30px;
 	width: 30px;
+}
+
+.x-grid3-row-highlight{
+	background-color: #CEDFFB;
+}
+
+.x-grid3-row-highlight .x-grid3-cell-inner {
+	font-weight: bold;
 }
 
 .info-ct{
@@ -231,12 +239,3 @@
 	font-size: 15px
 }
 
-.photo {
-	position: relative;
-	padding: 5px;
-	border: solid 1px #ccc;
-	width: 105px;
-}
-.photo img{
-	height:140px;
-}

@@ -5,7 +5,7 @@
 	<p class="welcome">
 		单笔退款和批量退款确认任务列表！
 		<a id="myhome-notice-refresh" class="block refreshBt" href="#" 
-			onclick="Ext.getCmp('task-portal').refresh();">点击刷新</a>
+			onclick="Ext.getCmp('task-portal').refresh();">刷新</a>
 	</p>
 	
 	<p>

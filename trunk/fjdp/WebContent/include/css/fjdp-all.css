@@ -1,6 +1,7 @@
 /*
  * ext override
  */
+
 html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{font-size:12px;}
 .x-btn button{font-size:12px;}
 .x-window-tl .x-window-header{font-size:12px;}
@@ -13,6 +14,11 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .x-list-body{
 	height: 96%;
 }
+
+body{
+	background:#ffffff url(../image/barner-back.gif) repeat-x 0 0;
+}
+
 /*
  * busyIcon
  */
@@ -134,6 +140,9 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .userman {
 	background-image: url(../image/icon/user.gif ) !important;
 }
+.tag {
+	background-image: url(../image/icon/tag.gif) !important;
+}
 .employee {
 	background-image: url(../image/icon/user_suit.gif ) !important;
 }
@@ -150,6 +159,9 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .pencil {
 	background-image: url(../image/icon/pencil.gif ) !important;
 	
+}
+.moveZone {
+	background-image: url(../image/icon/move_zone.gif) !important;
 }
 .conf {
 	background-image: url(../image/icon/conf.gif ) !important;
@@ -173,6 +185,9 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	background-image: url(../image/icon/expand-all.gif ) !important;	
 }
 
+.connect {
+    background-image:url(../image/icon/connect.gif) !important;  
+}
 
 
 .x-tree-node div.parent-menu{
@@ -316,7 +331,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
  * My home
  */
 .group-panel {
-	padding-bottom:5px;
+	padding-bottom:12px;
 	overflow:hidden;
 }
  
@@ -367,6 +382,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	width:100%;
 	text-align:center;
 	font-family:simHei;
+	font-size:12px;
 	color:#3c4da6; 
 	background:white transparent;
 	padding:10px 0px;
@@ -391,7 +407,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
  */
  #logo-banner{ 
    border:0 none;
-   background:#1E4176 url(../image/barner-back.gif) repeat-x 0 0;
+   background:red url(../image/barner-back.gif) repeat-x 0 0;
 }
 
 #loading-mask{
@@ -433,41 +449,33 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 }
 
 /*
- * msg
+ * App.msg
  */
 #msg-div {
     position:absolute;
     z-index:20000;
+    
 }
 
-#msg-div p{font-weight:bold;padding:3px 10px 0px 10px;font-size:100%;}
+#msg-div p{
+	font-weight:bold;
+	padding:7px 10px 5px 10px;
+	font-size: 12px;
+}
+
+#msg-div .content{
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
 
 .errorMsg{
 	background: red;
 }
+
 .infoMsg{
 	background: #38E100;
 }
-.round-box .r1 {
-	height:1px;
-	overflow:hidden;
-	margin:0 5px;	
-}
-.round-box .r2 {
-	height:1px;
-	margin:0 3px;
-	overflow:hidden;
-}
-.round-box .r3 {
-	height:1px;
-	margin:0 2px;	
-	overflow:hidden;
-}
-.round-box .r4 {
-	height:2px;
-	margin:0 1px;
-	overflow:hidden;
-}
+
 
 /*
  * upload
@@ -554,7 +562,15 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .employeeIcon{
 	background-image:url( ../image/bigIcon/employee.gif ) !important;
 }
-
+.tagIcon {
+	background-image: url(../image/bigIcon/tagIcon.gif) !important;
+}
+.assetIcon {
+	background-image: url(../image/bigIcon/assetIcon.gif) !important;
+}
+.zoneIcon {
+	background-image: url(../image/bigIcon/zone.gif) !important;
+}
 .noticeIcon{
 	background-image:url( ../image/bigIcon/notice.gif ) !important;
 }
@@ -604,7 +620,12 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	padding-top : 2px;
 }
 
+.photo {
+	position: relative;
+	padding: 5px;
+	border: solid 1px #ccc;
+	width: 105px;
 }
-
-
-
+.photo img{
+	height:140px;
+}

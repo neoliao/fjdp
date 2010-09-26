@@ -49,10 +49,7 @@ public class MenuService extends GenericService<Menu>{
 		Document doc = xmlReader.read(reader);
 		Element root = doc.getRootElement();
 		
-		this.delAll();
 		walkMenuTree(root.element(FUNC_ELEMENT),new Menu());
-		
-		privilegeService.delAll();
 		
 		walkPrivilegeTree(root.element(FUNC_ELEMENT),new Privilege());			
 	}
@@ -105,14 +102,21 @@ public class MenuService extends GenericService<Menu>{
 		}
 		menu.setType(funcType);
 		setMenu(menuElement, menu);
-		this.add(menu);
+		this.addOrUpdate(menu);
+		
+		Menu parent = menu.getParent();
+		if(parent != null){
+			parent.setLeaf(false);
+			this.update(menu.getParent());
+		}
+		
 	}
 	
 	private void setMenu(Element menuElement,Menu menu){
 		menu.setName(menuElement.attributeValue("name"));
 		menu.setText(menuElement.attributeValue("text"));
 		menu.setIcon(menuElement.attributeValue("icon"));
-		if(menuElement.attributeValue("icon") != null && menuElement.attributeValue("icon").equals("false"))
+		if(menuElement.attributeValue("display") != null && menuElement.attributeValue("display").equals("false"))
 			menu.setDisplay(false);
 		else
 			menu.setDisplay(true);
@@ -127,7 +131,7 @@ public class MenuService extends GenericService<Menu>{
 	private void createPrivilegeForFunc(Element funcElement,Privilege p) throws Exception{
 		p.setCode(funcElement.attributeValue("name"));
 		p.setText(funcElement.attributeValue("text"));
-		privilegeService.add(p);
+		privilegeService.addOrUpdate(p);
 	}
 	
 	private void createPrivilege(Element funcElement,Element privilegeElement,Privilege p) throws Exception{
@@ -135,16 +139,7 @@ public class MenuService extends GenericService<Menu>{
 		p.setText(privilegeElement.attributeValue("text"));
 		p.setDescription(privilegeElement.attributeValue("text")+funcElement.attributeValue("text"));
 		p.setLeaf(true);
-		privilegeService.add(p);
-	}
-	
-
-	public void setPrivilegeService(PrivilegeService privilegeService) {
-		this.privilegeService = privilegeService;
-	}
-
-	public PrivilegeService getPrivilegeService() {
-		return privilegeService;
+		privilegeService.addOrUpdate(p);
 	}
 
 }
