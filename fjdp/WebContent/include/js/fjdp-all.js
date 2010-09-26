@@ -364,13 +364,18 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		}	
 	},
 	loadData : function(o,callback,scope){
-		if(o)
-			Ext.apply(this.store.baseParams,o);
-		if(this.paging){
-			this.store.load({params: {start: 0,limit: this.itemSize},callback :callback,scope:scope});
-		}else{
-			this.store.load({params: {},callback :callback,scope:scope});
+		var storeParams = {};
+		if(o){
+			Ext.apply(storeParams,o);
 		}
+		if(this.store.lastOptions && this.store.lastOptions.params){
+			Ext.applyIf(storeParams,this.store.lastOptions.params);
+		}
+		if(this.paging){
+			storeParams.start = storeParams.start||0;
+			storeParams.limit = storeParams.limit||this.itemSize;
+		}
+		this.store.load({params: storeParams,callback :callback,scope:scope});
 	}
 });
 
@@ -1272,10 +1277,13 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     hasSearch : false,
     paramName : 'query',
 
-    onTrigger1Click : function(){
+     onTrigger1Click : function(){
         if(this.hasSearch){
             this.el.dom.value = '';
-            this.pageParams = this.pageParams || {};
+            this.pageParams = {};
+            if(this.store.lastOptions && this.store.lastOptions.params){
+				Ext.applyIf(this.pageParams,this.store.lastOptions.params);
+			}
             this.pageParams[this.paramName] = '';
             this.store.reload({params:this.pageParams});
             this.triggers[0].hide();
@@ -1289,8 +1297,10 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             this.onTrigger1Click();
             return;
         }
-        var o = this.pageParams || {};
-		this.pageParams = this.pageParams || {};
+		this.pageParams = {};
+		if(this.store.lastOptions && this.store.lastOptions.params){
+			Ext.applyIf(this.pageParams,this.store.lastOptions.params);
+		}
         this.pageParams[this.paramName] = v;
         this.store.reload({params:this.pageParams});
         this.hasSearch = true;

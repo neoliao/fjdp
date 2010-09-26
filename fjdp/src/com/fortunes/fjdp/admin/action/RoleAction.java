@@ -126,29 +126,6 @@ public class RoleAction extends GenericAction<Role> {
 		this.checkedId = checkedId;
 	}
 
-	public RoleService getRoleService() {
-		return roleService;
-	}
-
-	public void setRoleService(RoleService roleService) {
-		this.roleService = roleService;
-	}
-
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	public PrivilegeService getPrivilegeService() {
-		return privilegeService;
-	}
-
-	public void setPrivilegeService(PrivilegeService privilegeService) {
-		this.privilegeService = privilegeService;
-	}
 	
 
 }

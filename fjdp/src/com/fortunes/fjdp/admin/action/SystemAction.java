@@ -86,24 +86,6 @@ public class SystemAction extends BaseAction {
 		return VIEWPORT;
 	}
 	
-	public String initDb(){
-		Menu menu;
-		try {
-			menu = menuService.getRoot();
-			setInitMsg("数据库内容已存在,不能再次初始化!");
-			
-		} catch (Exception e1) {
-			try {
-				initDb.execute();
-				setInitMsg("数据库初始化成功!");
-			} catch (Exception e) {
-				e.printStackTrace();
-				setInitMsg("数据库初始化失败!"+e);
-			}
-			
-		}
-		return "initDb";
-	}
 	
 	public String getMenuTree() throws Exception{
 		Menu rootMenu = menuService.getRoot();
@@ -216,44 +198,6 @@ public class SystemAction extends BaseAction {
 	
 	//======================== setter and getter ====================
 	
-	public PrivilegeService getPrivilegeService() {
-		return privilegeService;
-	}
 
-	public void setPrivilegeService(PrivilegeService privilegeService) {
-		this.privilegeService = privilegeService;
-	}
-
-	public MenuService getMenuService() {
-		return menuService;
-	}
-
-	public void setMenuService(MenuService menuService) {
-		this.menuService = menuService;
-	}
-
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	public void setInitMsg(String initMsg) {
-		this.initMsg = initMsg;
-	}
-
-	public String getInitMsg() {
-		return initMsg;
-	}
-
-	public void setInitDb(misc.InitDb initDb) {
-		this.initDb = initDb;
-	}
-
-	public misc.InitDb getInitDb() {
-		return initDb;
-	}
 	
 }

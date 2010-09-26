@@ -14,7 +14,7 @@ App = function(){
     var msgCt;
 
     function createBox(s,msgType){
-        return [
+       /* return [
                 '<table><tr><td><div class="round-box" >',
                 '<div class="content ',msgType,'"><p align="center">',s,'</p></div>',
                 '<div class="bottom">',
@@ -22,7 +22,10 @@ App = function(){
                 '<div class="r3 ',msgType,'"/></div>',
                 '<div class="r2 ',msgType,'"/></div>',
                 '<div class="r1 ',msgType,'"/></div>',
-                '</div></div></td></tr></table>'].join('');
+                '</div></div></td></tr></table>'].join('');*/
+    	return [
+                '<div class="content ',msgType,'"><p align="center">',s,'</p></div>'
+				].join('');
     }
     return {
         msg : function(s,error){

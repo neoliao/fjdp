@@ -14,7 +14,7 @@
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd"
 		default-autowire="byName">
 		
-	<bean id="oracleDS" destroy-method="close" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<bean id="defaultDs" destroy-method="close" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
 		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/fjdp"/>
 		<property name="user" value="root"/>
@@ -24,8 +24,7 @@
 	
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="oracleDS"/>
-        <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
+        <property name="dataSource" ref="defaultDs"/>
         <property name="annotatedClasses">
 		   <list>
 		      <value>com.fortunes.fjdp.admin.model.Config</value>
@@ -55,17 +54,17 @@
 			  <props>
 					<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
 					<prop key="hibernate.show_sql">true</prop>
-					<!-- <prop key="hibernate.hbm2ddl.auto">create</prop>-->
+					<prop key="hibernate.hbm2ddl.auto">update</prop>
 			  </props>
 		</property>
     </bean>
     
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="oracleDS"/>
+        <property name="dataSource" ref="defaultDs"/>
     </bean>
     
     <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-    	<property name="dataSource" ref="oracleDS"/>
+    	<property name="dataSource" ref="defaultDs"/>
     	<property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     

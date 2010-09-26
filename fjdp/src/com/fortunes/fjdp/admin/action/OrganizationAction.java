@@ -80,7 +80,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	
 	//所有部门（用于下拉菜单）
 	public String getOrganizations() throws Exception{  
-		List<Organization> organizationList = getOrganizationService().getListData().getList();
+		List<Organization> organizationList = organizationService.getListData().getList();
 		JSONArray ja = new JSONArray();
 		JSONObject record = null;
 		for(Organization organization:organizationList){
@@ -99,7 +99,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	
 	//列出某个部门所拥有的所有员工
 	public String ListEmployees() throws Exception{
-		List<Employee> employees = getOrganizationService().get(p("organizationId")).getEmployees();
+		List<Employee> employees = organizationService.get(p("organizationId")).getEmployees();
 		JSONArray ja = new JSONArray();
 		for(Employee e : employees){
 			JSONObject record = new JSONObject();
@@ -118,9 +118,9 @@ public class OrganizationAction extends GenericAction<Organization> {
 	public String ListEmployeesUnassign() throws Exception{
 		List<Employee> employeeList;
 		if(OrganizationService.SINGLE_ORGANIZATION){
-			employeeList = getOrganizationService().getUnassignEmployees();
+			employeeList = organizationService.getUnassignEmployees();
 		}else{
-			employeeList = getOrganizationService().getUnassignEmployeesByOrganizationId(p("organizationId"));
+			employeeList = organizationService.getUnassignEmployeesByOrganizationId(p("organizationId"));
 		}
 		JSONArray ja = new JSONArray();
 		for(Employee employee:employeeList){
@@ -141,7 +141,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	
 	//加入一个员工到一个部门
 	public String addEmployee() throws Exception{
-		getOrganizationService().addEmployee(p("organizationId"), p("employeeId"));
+		organizationService.addEmployee(p("organizationId"), p("employeeId"));
 		
 		//修改员工表里面的primaryOrganization属性
 	    Employee entity=employeeService.get(p("employeeId"));
@@ -153,7 +153,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	
 	//从一个部门移除某一个员工
 	public String removeEmployee() throws Exception{
-		getOrganizationService().removeEmployee(p("organizationId"), p("employeeId"));
+		organizationService.removeEmployee(p("organizationId"), p("employeeId"));
 		
 		//修改员工表里面的primaryOrganization属性设置为null
 		Employee entity=employeeService.get(p("employeeId"));
@@ -169,14 +169,6 @@ public class OrganizationAction extends GenericAction<Organization> {
 		return organizationService;
 	}
 	
-	public DictService getDictService() {
-		return dictService;
-	}
-
-	public void setDictService(DictService dictService) {
-		this.dictService = dictService;
-	}
-	
 	public int[] getCheckedId() {
 		return checkedId;
 	}
@@ -185,21 +177,6 @@ public class OrganizationAction extends GenericAction<Organization> {
 		this.checkedId = checkedId;
 	}
 
-	public EmployeeService getEmployeeService() {
-		return employeeService;
-	}
-
-	public void setEmployeeService(EmployeeService employeeService) {
-		this.employeeService = employeeService;
-	}
-
-	public void setOrganizationService(OrganizationService organizationService) {
-		this.organizationService = organizationService;
-	}
-
-	public OrganizationService getOrganizationService() {
-		return organizationService;
-	}
 	
 	
 }

@@ -55,14 +55,6 @@ public class ConfigAction extends BaseAction {
 
 	//================== setter and getter ===================
 	
-	public void setConfigService(ConfigService configService) {
-		this.configService = configService;
-	}
-
-
-	public ConfigService getConfigService() {
-		return configService;
-	}
 	
 
 }

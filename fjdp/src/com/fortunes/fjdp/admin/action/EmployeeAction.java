@@ -44,7 +44,6 @@ public class EmployeeAction extends GenericAction<Employee> {
 		employee.setPrimaryOrganization(AdminHelper.toOrganization(p("primaryOrganization")));
 		employee.getOrganizations().add(AdminHelper.toOrganization(p("primaryOrganization")));
 		
-		System.out.println("测试EmployeeAction.setEntity()"+p("test"));
 	}
 	
 	/**
@@ -77,7 +76,6 @@ public class EmployeeAction extends GenericAction<Employee> {
 		
 		setEntity(entity);
 		String primaryOrganization = p("primaryOrganization");
-		System.out.println(primaryOrganization+"测试一下EmployeeAction.update()"+p("month"));
 		if(primaryOrganization!=null&&primaryOrganization!="")
 		    organizationService.addEmployee(primaryOrganization,entity.getId()+"");
 	

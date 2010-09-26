@@ -8,8 +8,7 @@ import com.fortunes.fjdp.admin.model.Role;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.service.GenericService;
 
-@Component
-@LoggerClass
+@Component @LoggerClass
 public class RoleService extends GenericService<Role> {
 	
 	public void updatePrivileges(String roleId,String[] privilegeCodes){

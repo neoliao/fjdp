@@ -24,7 +24,7 @@ Ext.onReady(function(){
 	}
 
 	//验证用户权限
-	if(!loginUser ||loginUser.privileges.length == 0){
+	if(!loginUser.userName || loginUser.privileges.length == 0){
 		showNotLoginMsg();
 	}else{
 		var viewport = new Ext.Viewport({
@@ -71,24 +71,22 @@ Ext.onReady(function(){
 		
 		//当用户密处于初始态时，提示用户修改密码。
 		if(loginUser.changed=='false') {  
-			Ext.MessageBox.confirm1 = function(title, msg, fn) {   
-		        this.show({   
-                    title :title ,   
-                    msg : msg,   
-                    buttons : {   
-                        yes : '立即修改',   
-                        no : '以后再说'  
-                    },   
-                    fn : fn   
-                });   
-		        return this;   
-		    }   
-		    Ext.MessageBox.confirm1('密码修改提示', '您的密码处于初始状态,请及时修改！', function(btn) {   
-                if (btn == 'yes') {   
-                    var tempWin = new ConfigWin();
-					tempWin.show();   
-                }   
-            });  
+			Ext.Msg.show({
+			   title: '密码修改提示',
+			   msg: '您的密码处于初始状态,请及时修改！!',
+			   buttons : {   
+					yes : '立即修改',   
+					no : '以后再说'  
+			   },
+			   fn: function(buttonId){
+				   if(buttonId == 'yes'){
+					  	var tempWin = new ConfigWin();
+							tempWin.show();   
+						}
+				},
+				icon: Ext.MessageBox.WARNING
+			});
+			
 		}
 	
 		//全局的ajax请求处理

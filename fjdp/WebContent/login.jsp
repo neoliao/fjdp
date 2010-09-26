@@ -5,7 +5,6 @@
 <head>
 	<title>用户登陆</title>
 	<s:include value="/common/header.jsp" />
-</head>
 <script>
 Ext.onReady(function(){
 	
@@ -93,6 +92,7 @@ Ext.onReady(function(){
 	});
 });
 </script>
+</head>
 <body class="login-body">
 <div id="login-copyright" class="login-copyright" >
 	<p>深圳方迪计算机系统有限公司</p>

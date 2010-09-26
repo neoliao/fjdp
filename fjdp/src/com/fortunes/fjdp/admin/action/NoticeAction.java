@@ -92,20 +92,5 @@ public class NoticeAction extends GenericAction<Notice> {
 		return organizations;
 	}
 
-	public void setNoticeService(NoticeService noticeService) {
-		this.noticeService = noticeService;
-	}
-
-	public NoticeService getNoticeService() {
-		return noticeService;
-	}
-
-	public void setOrganizationService(OrganizationService organizationService) {
-		this.organizationService = organizationService;
-	}
-
-	public OrganizationService getOrganizationService() {
-		return organizationService;
-	}
 
 }
