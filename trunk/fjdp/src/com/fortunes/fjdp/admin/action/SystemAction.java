@@ -36,7 +36,7 @@ import net.sf.json.JSONObject;
 @Component @Scope("prototype")
 public class SystemAction extends BaseAction {
 	
-	private static final boolean NOT_ALLOW_REPEAT_LOGIN = false;
+	private static final boolean NOT_ALLOW_REPEAT_LOGIN = true;
 	
 	@Resource private PrivilegeService privilegeService;
 	@Resource private MenuService menuService;
@@ -146,12 +146,10 @@ public class SystemAction extends BaseAction {
 	}
 	
 	private JSONArray getRolesArray(User user){
-		List<Role> roles = user.getRoles();
+		Role role = user.getRole();
 		JSONArray ja = new JSONArray();
-		if(roles != null){
-			for(Role role : roles){
-				ja.add(role.getName());
-			}
+		if(role != null){
+			ja.add(role.getName());
 		}
 		return ja;
 	}

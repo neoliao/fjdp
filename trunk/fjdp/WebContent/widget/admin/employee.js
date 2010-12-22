@@ -1,3 +1,15 @@
+
+function okCloseJsWin(flexObject){
+	var photoId = flexObject.photoId;
+	var o = Ext.getCmp('photoField');
+	o.setValue(photoId);
+	o.uploadWin.close();
+}
+function cancelCloseJsWin(){
+	var o = Ext.getCmp('photoField');
+	o.uploadWin.close();
+}
+
 PhotoField = Ext.extend(Ext.form.Field, {
 	noPhotoUrl : ctx+'/include/image/nophoto3.gif',
 	photoUrlPrifix : ctx+'/employee/photo?photoId=',
@@ -20,7 +32,7 @@ PhotoField = Ext.extend(Ext.form.Field, {
 					text: '设置相片',
 					style : 'margin:4 0 0 28;',
 					scope:this,
-					handler:this.setupPhoto	
+					handler:this.setPhoto	
 				}]
 			}]
         });
@@ -44,6 +56,27 @@ PhotoField = Ext.extend(Ext.form.Field, {
         Ext.destroy(this.photoPanel);
         PhotoField.superclass.beforeDestroy.call(this);
     },
+    setPhoto:function(){
+    	this.uploadWin = new Ext.app.FormWindow({
+			iconCls : 'picture',
+			winConfig : {
+				height : 520,
+				width : 660,
+				title : '设置人员相片',
+				desc : '上传并设置人员相片',
+				bigIconClass : 'pictureIcon'
+			},
+			formConfig : {
+				fileUpload : true,
+				items : [
+					{xtype:'panel',height:400,width:640,
+						border: false, autoLoad: {url: ctx + '/flash/uploadPhoto.jsp', scripts: true}}
+				]
+			}
+		});
+		this.uploadWin.show();
+    },
+    
 	setupPhoto : function(){
 		this.uploadWin = new Ext.app.FormWindow({
 			iconCls : 'picture',
@@ -90,7 +123,6 @@ Ext.reg('f-photo', PhotoField);
 
 Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 	initComponent : function(){
-		
 		var emailLink = function(v){
 		    return !v? "" : String.format('<span><a href="mailto:{0}" target="_blank" class="emailLink">{0}</a></span>',v);
 		}
@@ -107,13 +139,21 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 			}	 
 			return String.format('<span style="color:{0}">{1}</span>',map.text||'black',text);
 		}
+		var organizationRenderer = function(v){
+			return v.text;
+		}
 		
 		Ext.apply(this,{
 			gridConfig:{
+				sm:new Ext.grid.RowSelectionModel(),
 				cm:new Ext.grid.ColumnModel([
 					new Ext.grid.RowNumberer(),
 					{header: '姓名',dataIndex:'name',sortable:true},
 					{header: '工号',dataIndex:'code',sortable:true},
+					{header: '部门',dataIndex:'organization',renderer:organizationRenderer},
+					{header: '职务',dataIndex:'position',renderer:dictRenderer},
+					{header: '学历',dataIndex:'education',renderer:dictRenderer},
+					{header: '人员类型',dataIndex:'peopleType',renderer:dictRenderer},
 					{header: '性别',dataIndex:'sex',renderer:dictRenderer},
 					{header: '入职日期',dataIndex:'hireDate'},
 					{header: '办公电话',dataIndex:'phone'},
@@ -123,11 +163,11 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 					{header: '电子邮件',dataIndex:'email',renderer:emailLink}
 				]),	
 				storeMapping:[
-					'code', 'name', 'sex', 'phone', 'mobile', 'status', 'qq', 'hireDate', 'email','photoId'
+					'code', 'name','organization','position','education','peopleType', 'sex', 'phone', 'mobile', 'status', 'qq', 'hireDate', 'email','photoId'
 				]
 			},
 			winConfig : {
-				height: 440,width:440,
+				height: 520,width:440,
 				desc : '新增，修改员工的的信息',
 				bigIconClass : 'employeeIcon'
 			},
@@ -151,7 +191,13 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 	                	},
 						items: [
 							{xtype: 'f-text',fieldLabel: '姓名',name: 'name',emptyText: '请输入员工姓名',allowBlank: false}, 
+							{xtype: 'f-text',fieldLabel: '拼音缩写',name: 'pinYinName',emptyText: '请输入姓名拼音'},
 							{xtype: 'f-text',fieldLabel: '工号',name: 'code',vtype: 'digital',allowBlank: false},
+							{xtype: 'f-select',dataUrl:'/organization/getOrganizations',storeFields:['id','text','code'],
+								fieldLabel: '部门名',hiddenName: 'organization',id:'organizationSelect',listeners : {}},
+							{xtype: 'f-dict',fieldLabel: '职务',hiddenName: 'position',kind: 'position'}, 
+							{xtype: 'f-dict',fieldLabel: '学历',hiddenName: 'education',kind: 'education'}, 
+							{xtype: 'f-dict',fieldLabel: '人员类型',hiddenName: 'peopleType',kind: 'peopleType'}, 
 							{xtype: 'f-dict',fieldLabel: '性别',hiddenName: 'sex',kind: 'sex'}, 
 							{xtype: 'f-text',fieldLabel: '电子邮件',name: 'email',vtype: 'email'},
 							{xtype: 'f-text',fieldLabel: '办公电话',name: 'phone'},
@@ -160,6 +206,7 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 						]
 					},{
 						xtype : 'f-photo',
+						id:'photoField',
 						name: 'photoId',
 						allowBlank: false,
 						columnWidth:.7
@@ -180,7 +227,7 @@ Employee = Ext.extend(Ext.app.BaseFuncPanel,{
 			url:ctx+'/employee'	
 		});
 		Employee.superclass.initComponent.call(this);
-				
+		
 	}
 	
 });

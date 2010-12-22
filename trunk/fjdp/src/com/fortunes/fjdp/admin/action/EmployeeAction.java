@@ -1,6 +1,9 @@
 package com.fortunes.fjdp.admin.action;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.List;
 
@@ -40,9 +43,13 @@ public class EmployeeAction extends GenericAction<Employee> {
 		employee.setPhotoId(p("photoId"));
 		employee.setSex(AdminHelper.toDict(p("sex")));
 		employee.setStatus(AdminHelper.toDict(p("status")));
+		employee.setPosition(AdminHelper.toDict(p("position")));
+		employee.setEducation(AdminHelper.toDict(p("education")));
+		employee.setPeopleType(AdminHelper.toDict(p("peopleType")));
 		employee.setHireDate(AdminHelper.toDate(p("hireDate")));
-		employee.setPrimaryOrganization(AdminHelper.toOrganization(p("primaryOrganization")));
-		employee.getOrganizations().add(AdminHelper.toOrganization(p("primaryOrganization")));
+		//employee.setPrimaryOrganization(AdminHelper.toOrganization(p("primaryOrganization")));
+		//employee.getOrganizations().add(AdminHelper.toOrganization(p("primaryOrganization")));
+		employee.setOrganization(AdminHelper.toOrganization(p("organization")));
 		
 	}
 	
@@ -71,11 +78,11 @@ public class EmployeeAction extends GenericAction<Employee> {
 	 **/
 	public String update() throws Exception{
 		Employee entity = getDefService().get(id);
-		if(entity.getPrimaryOrganization()!=null)
-		    organizationService.removeEmployee(entity.getPrimaryOrganization().getId()+"", id);
+		if(entity.getOrganization()!=null)
+		    organizationService.removeEmployee(entity.getOrganization().getId()+"", id);
 		
 		setEntity(entity);
-		String primaryOrganization = p("primaryOrganization");
+		String primaryOrganization = p("organization");
 		if(primaryOrganization!=null&&primaryOrganization!="")
 		    organizationService.addEmployee(primaryOrganization,entity.getId()+"");
 	
@@ -92,13 +99,16 @@ public class EmployeeAction extends GenericAction<Employee> {
 		record.put("code", e.getCode());		
 		record.put("sex", e.getSex());
 		record.put("status", e.getStatus());
+		record.put("position", e.getPosition());
+		record.put("education", e.getEducation());
+		record.put("peopleType", e.getPeopleType());
 		record.put("name", e.getName());
 		record.put("phone", e.getPhone());
 		record.put("mobile", e.getMobile());
 		record.put("email", e.getEmail());
 		record.put("hireDate", e.getHireDate());
 		record.put("photoId",e.getPhotoId());
-		record.put("primaryOrganization", e.getPrimaryOrganization());
+		record.put("organization", e.getOrganization());
 		return record.getJsonObject();
 	}
 	
@@ -157,6 +167,28 @@ public class EmployeeAction extends GenericAction<Employee> {
 	public String photo() throws Exception{
 		//final String photoDir = configService.get(ConfigKey.PHOTO_DIR);
 		return render(FileUtils.readFileToByteArray(new File(PHOTO_DIR+p("photoId")+".jpg")), "image/jpeg");
+	}
+	
+	public String uploadPhoto()throws Exception {
+		String uuid = Tools.uuid();
+		File file = new File(PHOTO_DIR+uuid+".jpg");
+		
+		int size = 0;
+		int len = 0;
+		byte[] tmp = new byte[100000];
+		
+		response.setContentType("application/octet-stream");
+		InputStream is = getRequest().getInputStream();
+		DataOutputStream dos = new DataOutputStream(new FileOutputStream(file));
+		while ((len = is.read(tmp)) != -1) {
+			dos.write(tmp, 0, len);
+			size += len;
+		}
+		dos.flush();
+		dos.close();
+		jo.put("photoId", uuid);
+		setJsonMessage(true,"设置人员相片成功!");
+		return render(jo.toString());
 	}
 	//================== setter and getter ===================
 	

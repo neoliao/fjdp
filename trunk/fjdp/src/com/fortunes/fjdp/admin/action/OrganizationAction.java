@@ -145,7 +145,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 		
 		//修改员工表里面的primaryOrganization属性
 	    Employee entity=employeeService.get(p("employeeId"));
-	    entity.setPrimaryOrganization(AdminHelper.toOrganization(p("organizationId")));
+	    entity.setOrganization(AdminHelper.toOrganization(p("organizationId")));
 		employeeService.update(entity);
 		
 		return render(jo);
@@ -157,7 +157,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 		
 		//修改员工表里面的primaryOrganization属性设置为null
 		Employee entity=employeeService.get(p("employeeId"));
-	    entity.setPrimaryOrganization(AdminHelper.toOrganization(null));
+	    entity.setOrganization(AdminHelper.toOrganization(null));
 	    employeeService.update(entity);
 		return render(jo);
 	}

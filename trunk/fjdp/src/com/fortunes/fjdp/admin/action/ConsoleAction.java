@@ -94,7 +94,7 @@ public class ConsoleAction extends BaseAction implements ApplicationContextAware
 		//关联用户和角色,用户和员工
 		adminUser.setEmployee(adminEmployee);
 		
-		adminUser.getRoles().add(admin);
+		adminUser.setRole(admin);
 		
 		userService.add(adminUser);
 		

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -27,6 +28,8 @@ public class Employee extends Model{
 	
 	private String name;
 	
+	private String pinYinName;
+	
 	private String nickName;
 	
 	@ManyToOne
@@ -34,6 +37,15 @@ public class Employee extends Model{
 	
 	@ManyToOne
 	private Dict post;
+	
+	@ManyToOne
+	private Dict position;
+	
+	@ManyToOne
+	private Dict education;
+	
+	@ManyToOne
+	private Dict peopleType;
 	
 	private String email;
 	
@@ -51,12 +63,9 @@ public class Employee extends Model{
 	
 	@OneToOne(mappedBy = "employee")
 	private User user;
-	
-	@ManyToOne
-	private Organization primaryOrganization;
-	
-	@ManyToMany(mappedBy = "employees")
-	private List<Organization> organizations = new ArrayList<Organization>();
+		
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Organization organization;
 	
     public Employee() {
     }
@@ -99,6 +108,15 @@ public class Employee extends Model{
 		this.name = name;
 	}
 
+	
+	public String getPinYinName() {
+		return pinYinName;
+	}
+
+	public void setPinYinName(String pinYinName) {
+		this.pinYinName = pinYinName;
+	}
+
 	public String getNickName() {
 		return nickName;
 	}
@@ -121,6 +139,32 @@ public class Employee extends Model{
 
 	public void setPost(Dict post) {
 		this.post = post;
+	}
+	
+	
+
+	public Dict getPosition() {
+		return position;
+	}
+
+	public void setPosition(Dict position) {
+		this.position = position;
+	}
+
+	public Dict getEducation() {
+		return education;
+	}
+
+	public void setEducation(Dict education) {
+		this.education = education;
+	}
+
+	public Dict getPeopleType() {
+		return peopleType;
+	}
+
+	public void setPeopleType(Dict peopleType) {
+		this.peopleType = peopleType;
 	}
 
 	public String getEmail() {
@@ -169,23 +213,14 @@ public class Employee extends Model{
 
 	public Date getHireDate() {
 		return hireDate;
+	}	
+
+	public Organization getOrganization() {
+		return organization;
 	}
 
-
-	public void setOrganizations(List<Organization> organizations) {
-		this.organizations = organizations;
-	}
-
-	public List<Organization> getOrganizations() {
-		return organizations;
-	}
-
-	public void setPrimaryOrganization(Organization primaryOrganization) {
-		this.primaryOrganization = primaryOrganization;
-	}
-
-	public Organization getPrimaryOrganization() {
-		return primaryOrganization;
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public void setPhotoId(String photoId) {

@@ -1,7 +1,6 @@
 package com.fortunes.fjdp.admin.action;
 
 import java.text.ParseException;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -29,12 +28,9 @@ public class LogAction extends GenericAction<Log> {
 	@Override
 	public String list() throws Exception{
 		User user = (User)getSessionMap().get(AppHelper.AUTHED_USER);
-		List<Role> roles = user.getRoles();
-		String strRoles = "";
-		for(Role element: roles) {
-			strRoles += element.getName();
-		}		
-		queryMap.put("roles", strRoles);
+		Role role = user.getRole();
+			
+		queryMap.put("roles", role.getName());
 		queryMap.put("userDisplayName", user.getDisplayName());
 		
 		ListData<Log> listData = getDefService().getListData(query, queryMap, start, limit);

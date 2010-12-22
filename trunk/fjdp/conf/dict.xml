@@ -46,5 +46,33 @@
 		<dict key="S" text="公共管理与社会组织"/>
 		<dict key="T" text="国际组织"/>
 	</dict>
+	<dict key="blogType" text="文章类型">
+		<dict key="01" text="原创"/>
+		<dict key="02" text="转帖"/>
+	</dict>
+	<dict key="position" text="职务">
+		<dict key="01" text="董事长"/>
+		<dict key="02" text="总经理"/>
+		<dict key="03" text="副总经理"/>
+		<dict key="04" text="项目经理"/>
+		<dict key="05" text="组长"/>
+	</dict>
+	<dict key="education" text="学历">
+		<dict key="01" text="院士"/>
+		<dict key="02" text="博士后"/>
+		<dict key="03" text="博士"/>
+		<dict key="04" text="硕士"/>
+		<dict key="05" text="本科"/>
+		<dict key="06" text="大专"/>
+		<dict key="07" text="高中"/>
+	</dict>
+	<dict key="peopleType" text="人员类型">
+		<dict key="01" text="访客"/>
+		<dict key="02" text="工人"/>
+		<dict key="03" text="员工"/>
+		<dict key="04" text="领导"/>
+	</dict>
+	
+
 	
 </dicts>

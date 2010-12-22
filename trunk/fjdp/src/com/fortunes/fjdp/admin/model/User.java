@@ -1,13 +1,11 @@
 package com.fortunes.fjdp.admin.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -30,8 +28,8 @@ public class User extends Model implements org.jbpm.api.identity.User{
 	
 	private boolean passwordChanged;
 	
-	@ManyToMany
-	private List<Role> roles = new ArrayList<Role>(); 
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Role role; 
 	
 	@OneToOne
 	private Employee employee;
@@ -125,12 +123,12 @@ public class User extends Model implements org.jbpm.api.identity.User{
 		return displayName;
 	}
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
 	
 	public String toString() {

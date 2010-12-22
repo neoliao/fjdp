@@ -65,7 +65,8 @@
 			<func name="CodeGenerate" text="代码生成器" display="true">
 				<privilege text="浏览" name="view"/>
 			</func>
-		</func>
+		</func>		
+
 	</func>
 	
 </Functions>
