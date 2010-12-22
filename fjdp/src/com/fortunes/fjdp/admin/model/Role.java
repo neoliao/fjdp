@@ -6,10 +6,9 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToMany;
 
 import net.fortunes.core.Model;
 
@@ -30,7 +29,7 @@ public class Role extends Model implements Group{
 	
 	private String roleType;
 	
-	@ManyToMany(mappedBy = "roles")
+	@OneToMany(mappedBy = "role")
 	private List<User> users = new ArrayList<User>();
 	
 	@ManyToMany

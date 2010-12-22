@@ -72,7 +72,7 @@ public class OrganizationService extends GenericService<Organization> {
 	 */
 	public List<Employee> getUnassignEmployees() {
 		return getDefDao().findByQueryString(
-				" select e from Employee as e left join fetch e.primaryOrganization as o where o is null" );
+				" select e from Employee as e left join fetch e.organization as o where o is null" );
 	}
     
 }

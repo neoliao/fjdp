@@ -32,3 +32,4 @@
 <script type="text/javascript" src="<s:url value="/include/js/ext-extends.js"/>"></script>
 <script type="text/javascript" src="<s:url value="/include/js/fjdp-all.js"/>"></script>
 <script type="text/javascript" src="<s:url value="/widget/app-all.js"/>"></script>
+<script type="text/javascript" src="'<%=request.getContextPath()%>'/include/js/swfobject.js"></script>

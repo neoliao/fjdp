@@ -293,7 +293,10 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 					scope:this,
 					success:function(form, action) {
 						this.closeWin();
-						this.loadData();
+						this.loadData(null,function(){
+							this.getSelectionModel().selectRow(0);
+						},this);
+						
 						this.fireEvent('afteradd',form,action);
 		            },        	
 		            failure:function(form, action) {

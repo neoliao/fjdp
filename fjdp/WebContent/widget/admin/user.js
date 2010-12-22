@@ -46,11 +46,11 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 					{header: '用户显示名',dataIndex:'userDisplayName',sortable:true},
 					{header: '对应员工',dataIndex:'employee',renderer : dictRenderer},
 					{header: '最后登陆时间',dataIndex:'lastLoginTime',width:150},
-					{header: '所属角色',dataIndex:'roles',renderer:rolesRender,width:200},
+					{header: '所属角色',dataIndex:'role',renderer:dictRenderer,width:200},
 					{header: '锁定',dataIndex:'locked',renderer:lockedRender}
 				]),	
 				storeMapping:[
-					'id','userName','userDisplayName','employee','lastLoginTime','roles','locked'
+					'id','userName','userDisplayName','employee','lastLoginTime','role','locked'
 				]
 			},
 			winConfig : {
@@ -84,7 +84,7 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 					},
 					{xtype:'fieldset',title: '选择用户角色',autoHeight:true,
 						items :[
-							{xtype:'f-roleByUser',fieldLabel: '用户角色',hiddenName:'roles',emptyText: '请选择一个或多个用户角色',allowBlank: false}						
+							{xtype:'f-roleByUser',fieldLabel: '用户角色',hiddenName:'role',emptyText: '请选择一个用户角色',allowBlank: false}						
 						]
 					}
 				]

@@ -601,6 +601,12 @@ body{
 .finish-icon {
 	background-image:url(../image/bigIcon/finish.gif) !important;
 }
+.local_photo {
+	background-image: url(../image/icon/local_photo.gif) !important;
+}
+.video_photo {
+	background-image: url(../image/icon/video_photo.gif) !important;
+}
 .blankReadOnly{
 	background-image: none;
 	border: none;

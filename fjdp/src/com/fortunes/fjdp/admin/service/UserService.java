@@ -105,12 +105,10 @@ public class UserService extends GenericService<User>{
 	
 	public List<Privilege> getPrivileges(User authedUser){
 		List<Privilege> userPrivileges = new ArrayList<Privilege>();
-		List<Role> roles = authedUser.getRoles();
-		for(Role role:roles){
-			for(Privilege p:role.getPrivileges()){
-				userPrivileges.add(p);
-			}
-		}	
+		Role role = authedUser.getRole();
+		for(Privilege p:role.getPrivileges()){
+			userPrivileges.add(p);
+		}
 		return userPrivileges;
 	}
 	
