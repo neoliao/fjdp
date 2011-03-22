@@ -84,7 +84,9 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 					},
 					{xtype:'fieldset',title: '选择用户角色',autoHeight:true,
 						items :[
-							{xtype:'f-roleByUser',fieldLabel: '用户角色',hiddenName:'role',emptyText: '请选择一个用户角色',allowBlank: false}						
+//							{xtype:'f-roleByUser',fieldLabel: '用户角色',hiddenName:'role',emptyText: '请选择一个用户角色',allowBlank: false}			
+							{xtype: 'f-select',dataUrl:'/role/getRoles',storeFields:['id','text'],allowBlank: false,
+								fieldLabel: '用户角色',hiddenName: 'role',id:'roleSelect',listeners : {}}
 						]
 					}
 				]
