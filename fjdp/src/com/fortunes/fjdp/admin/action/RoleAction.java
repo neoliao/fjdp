@@ -111,6 +111,20 @@ public class RoleAction extends GenericAction<Role> {
 		return ja;
 	}
 	
+	public String getRoles()throws Exception{
+		List<Role> roles = roleService.getListData().getList();
+		JSONArray ja = new JSONArray();
+		JSONObject record = null;
+		for(Role role:roles){
+			record = new JSONObject();
+			record.put("id", role.getDbId());
+			record.put("text", role.getName());
+			ja.add(record);
+		}
+		jo.put("data", ja);
+		return render(jo);
+	}
+	
 	//================== setter and getter ===================
 	
 	@Override
