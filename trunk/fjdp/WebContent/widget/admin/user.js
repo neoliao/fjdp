@@ -125,7 +125,7 @@ User = Ext.extend(Ext.app.BaseFuncPanel,{
 				Ext.getCmp('resetPanel').setVisible(true).setDisabled(false);
 				Ext.getCmp('pswd').setDisabled(true);
 				Ext.getCmp('pswdComfirm').setDisabled(true);
-				Ext.getCmp('employeeSelect').setReadOnly();
+				Ext.getCmp('employeeSelect').setReadOnly(true);
 				Ext.getCmp('userName').setReadOnly();
 			}
 			Ext.getCmp('employeeSelect').on('select',function(combo,record,index){

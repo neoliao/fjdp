@@ -317,7 +317,8 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,Ser
 	 * @return paramValue http参数值
 	 */
 	public String p(String paramName){
-		return request.getParameter(paramName);
+		String v = request.getParameter(paramName);
+		return v == null ? "" : v;
 	}
 	
 	private void setResponse(String contentType,boolean noCache){

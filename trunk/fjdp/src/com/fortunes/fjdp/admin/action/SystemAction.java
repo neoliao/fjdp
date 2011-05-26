@@ -36,7 +36,7 @@ import net.sf.json.JSONObject;
 @Component @Scope("prototype")
 public class SystemAction extends BaseAction {
 	
-	private static final boolean NOT_ALLOW_REPEAT_LOGIN = true;
+	private static final boolean NOT_ALLOW_REPEAT_LOGIN = false;
 	
 	@Resource private PrivilegeService privilegeService;
 	@Resource private MenuService menuService;

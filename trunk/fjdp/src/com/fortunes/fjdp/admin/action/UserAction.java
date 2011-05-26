@@ -29,8 +29,9 @@ public class UserAction extends GenericAction<User> {
 		user.setDisplayName(p("userDisplayName"));
 		user.setEmployee(AdminHelper.toEmployee(p("employee")));
 		//修改时不改变密码
-		if(p("password")!=null)
+		if(StringUtils.isNotEmpty(p("password"))){
 			user.setPassword(Tools.encodePassword(p("password")));
+		}
 		
 		//user.getRoles().clear();
 		if(StringUtils.isNotEmpty(p("role"))){

@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import net.fortunes.admin.model.Dict;
+import com.fortunes.fjdp.admin.model.Dict;
 import net.fortunes.core.Model;
 
 @Entity

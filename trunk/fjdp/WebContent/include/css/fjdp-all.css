@@ -511,20 +511,22 @@ body{
 	background-color: #E8EDE7;
 	background-position: right;
 }
+
 .fjdp-win-title-content{
 	height:100%;
-	padding: 12px 0px 10px 60px;
+	padding: 10px 0px 10px 60px;
 	background-repeat: no-repeat;
 }
 
 .fjdp-win-title-body p{
-	padding-top: 5px;
+	padding-top: 4px;
 }
 
 
 .fjdp-win-title-content p{
-	font-size: 14px;
 	line-height: 20px;
+	font-size: 12px;
+	color: #777777;
 }
 
 .defaultBigIcon{
