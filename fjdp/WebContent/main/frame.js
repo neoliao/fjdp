@@ -156,7 +156,10 @@ App.MainPanel = Ext.extend( Ext.TabPanel, {
 	    });		
     },
 	
-    openTab: function(node){
+     openTab: function(nodeOrId){
+    	var node = Ext.isString(nodeOrId)? 
+    		Ext.getCmp('navMenu').getNodeById(nodeOrId) : nodeOrId;
+
         var tab = this.getComponent(node.id);
         if(tab){
             this.setActiveTab(tab);

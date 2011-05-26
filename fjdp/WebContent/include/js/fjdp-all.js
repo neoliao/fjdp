@@ -65,6 +65,11 @@ Ext.app.BaseFuncPanel = Ext.extend(Ext.grid.GridPanel, {
 		this.getSelectionModel().on('rowselect',function(sm,rowIndex,record){
 			this.itemSelect();
 		},this); 
+		
+		//点击刷新按钮时应用上次查询的条件
+		this.pagingToolBar.on('beforechange',function(toolBar,params){
+			Ext.applyIf(params,this.store.lastOptions.params);
+		},this); 
 				
 		this.store.on('load',function(store,records,options){
 			if(this.store.getTotalCount() > 0){
