@@ -15,7 +15,7 @@ import net.fortunes.core.service.GenericService;
 public class NoticeMessageService extends GenericService<NoticeMessage> {
 
 	public List<NoticeMessage> getNotReadedNoticesByUser(User authedUser) {
-		return getDefDao().findByCriteria(DetachedCriteria.forClass(NoticeMessage.class)
+		return this.getHt().findByCriteria(DetachedCriteria.forClass(NoticeMessage.class)
 				.add(Restrictions.eq("user", authedUser))
 				.add(Restrictions.eq("readed", false)));
 	}

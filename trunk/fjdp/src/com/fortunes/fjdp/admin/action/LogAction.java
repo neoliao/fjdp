@@ -25,23 +25,23 @@ public class LogAction extends GenericAction<Log> {
 	
 	@Resource private LogService logService;
 	
-	@Override
-	public String list() throws Exception{
-		User user = (User)getSessionMap().get(AppHelper.AUTHED_USER);
-		Role role = user.getRole();
-			
-		queryMap.put("roles", role.getName());
-		queryMap.put("userDisplayName", user.getDisplayName());
-		
-		ListData<Log> listData = getDefService().getListData(query, queryMap, start, limit);
-		JSONArray ja = new JSONArray();
-		for(Log entity:listData.getList()){
-			ja.add(toJsonObject(entity));
-		}
-		jo.put(DATA_KEY, ja);
-		jo.put(TOTAL_COUNT_KEY, listData.getTotal());
-		return render(jo);  
-	}
+//	@Override
+//	public String list() throws Exception{
+//		User user = (User)getSessionMap().get(AppHelper.AUTHED_USER);
+//		Role role = user.getRole();
+//			
+//		queryMap.put("roles", role.getName());
+//		queryMap.put("userDisplayName", user.getDisplayName());
+//		
+//		ListData<Log> listData = getDefService().getListData(query, queryMap, start, limit);
+//		JSONArray ja = new JSONArray();
+//		for(Log entity:listData.getList()){
+//			ja.add(toJsonObject(entity));
+//		}
+//		jo.put(DATA_KEY, ja);
+//		jo.put(TOTAL_COUNT_KEY, listData.getTotal());
+//		return render(jo);  
+//	}
 	
 	protected void setEntity(Log log) throws ParseException{
 

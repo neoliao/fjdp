@@ -118,7 +118,7 @@ public class EmployeeAction extends GenericAction<Employee> {
 	 * @throws Exception
 	 */
 	public String getEmployees() throws Exception{
-		List<Employee> employeeList = getDefService().getListData().getList();
+		List<Employee> employeeList = getDefService().findAll();
 		JSONArray ja = new JSONArray();
 		for(Employee employee:employeeList){
 			String namePy = PinYin.toPinYinString(employee.getName());

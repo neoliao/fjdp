@@ -29,11 +29,10 @@ public class MenuService extends GenericService<Menu>{
 	private PrivilegeService privilegeService;
 	
 	@Override
-	public Menu add(Menu entity) throws Exception {
+	public void add(Menu entity) throws Exception {
 		super.add(entity);
 		if(entity.getParent() != null)
 			entity.getParent().setLeaf(false);
-		return entity;
 	}
 	
 	@Override

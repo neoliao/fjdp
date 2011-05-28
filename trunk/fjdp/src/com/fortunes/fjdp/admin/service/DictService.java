@@ -23,11 +23,10 @@ public class DictService extends GenericService<Dict> {
 	public static String ROOT_DICT_KEY = "root";
 	
 	@Override
-	public Dict add(Dict entity) throws Exception {
+	public void add(Dict entity) throws Exception {
 		super.add(entity);
 		if(entity.getParent() != null)
 			entity.getParent().setLeaf(false);
-		return entity;
 	}
 	
 	@Override
@@ -53,9 +52,11 @@ public class DictService extends GenericService<Dict> {
 	}
 	
 	public List<Dict> getDictsByType(String key) {
-		return findByProperty("parent.id", key);
+		return find("from Dict d where d.parent.id = ?", key);
 	}
 	
+	
+
 	private void walkTree(Element element,Dict parentDict) throws Exception{
 		String id = "";
 		if(parentDict.getId().equals(ROOT_DICT_KEY)){

@@ -24,7 +24,7 @@ public abstract class GenericCacheService<E> extends GenericService<E> {
 	public Map<String, CachedValue> getCache(){
 		if(cache == null){
 			cache = new HashMap<String, CachedValue>();
-			List<E> list = getAll();
+			List<E> list = findAll();
 			for(E e : list){
 				addCache(e);
 			}
@@ -79,10 +79,9 @@ public abstract class GenericCacheService<E> extends GenericService<E> {
 	}
 	
 	@LoggerMethod(operateName = "新增")
-	public E add(E entity) throws Exception{
-		getDefDao().add(entity);
+	public void add(E entity) throws Exception{
+		super.add(entity);
 		addCache(entity);
-		return entity;
 	}
 	
 	@LoggerMethod(operateName = "删除")
@@ -90,14 +89,13 @@ public abstract class GenericCacheService<E> extends GenericService<E> {
 		if(entity == null)
 			return;
 		removeCache(entity);
-		getDefDao().del(entity);
+		super.del(entity);
 	}
 	
 	@LoggerMethod(operateName = "修改")
-	public E update(E entity){
-		getDefDao().update(entity);
+	public void update(E entity){
+		super.update(entity);
 		updateCache(entity);
-		return entity;
 	}
 	
 	protected void addCache(E entity){

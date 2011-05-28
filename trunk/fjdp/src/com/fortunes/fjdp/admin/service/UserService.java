@@ -64,7 +64,7 @@ public class UserService extends GenericService<User>{
 			}
 		}	
 		HQL.append(")");
-		return getDefDao().findByQueryString(HQL.toString());
+		return this.find(HQL.toString());
 		//return getDefDao().findByQueryString("from User as u where u.loginSession.logined = true");
 	}
 	
@@ -93,7 +93,7 @@ public class UserService extends GenericService<User>{
 	
 	@SuppressWarnings("unchecked")
 	public User authUser(User user){
-		List<User> userList = getDefDao().findByQueryString(
+		List<User> userList = this.find(
 				"from User as u where u.name = ? and u.password = ? and locked = ?", 
 				user.getName(),user.getPassword(),false);
 		if(userList.size() == 1){
@@ -114,7 +114,7 @@ public class UserService extends GenericService<User>{
 	
 	@SuppressWarnings("unchecked")
 	public List<User> getUsersByPrivilegeCode(String privilegeCode){
-		return getDefDao().findByQueryString(
+		return this.find(
 				"select u from User as u join u.roles as r join r.privileges as p" +
 				" where p.code = '"+privilegeCode+"'");
 	}

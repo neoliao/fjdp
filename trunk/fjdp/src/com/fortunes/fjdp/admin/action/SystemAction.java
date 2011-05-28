@@ -41,9 +41,7 @@ public class SystemAction extends BaseAction {
 	@Resource private PrivilegeService privilegeService;
 	@Resource private MenuService menuService;
 	@Resource private UserService userService;
-	@Resource private misc.InitDb initDb;
 	
-	private String initMsg;
 	
 	public String login() throws Exception {
 		User loginUser = new User();

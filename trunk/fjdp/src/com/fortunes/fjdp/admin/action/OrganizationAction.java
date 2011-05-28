@@ -80,7 +80,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	
 	//所有部门（用于下拉菜单）
 	public String getOrganizations() throws Exception{  
-		List<Organization> organizationList = organizationService.getListData().getList();
+		List<Organization> organizationList = organizationService.findAll();
 		JSONArray ja = new JSONArray();
 		JSONObject record = null;
 		for(Organization organization:organizationList){

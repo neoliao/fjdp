@@ -57,7 +57,7 @@ public class UserAction extends GenericAction<User> {
 	}
 	
 	public String getUsers() throws Exception{
-		List<User> userList = getDefService().getListData().getList();
+		List<User> userList = getDefService().findAll();
 		JSONArray ja = new JSONArray();
 		for(User user:userList){
 			JSONObject record = new JSONObject();

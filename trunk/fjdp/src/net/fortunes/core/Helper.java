@@ -39,9 +39,6 @@ public class Helper {
 	public static final String ROLES_STRING = "rolesString";//String "['系统管理员'],['会计']"
 	public static final String WIDGET_URLS = "widgets";//String "['/admin/menu.js'],['/admin/role.js']"
 	
-	DecimalFormat df = new DecimalFormat("#,##0.00");
-	DecimalFormat dft = new DecimalFormat("#,##0.000");
-	
 	private static final ThreadLocal<HttpSession> HTTP_SESSION_IN_THREAD = new ThreadLocal<HttpSession>();
 	
 	public static void setHttpSessionInThread(HttpSession httpSession) {
@@ -161,36 +158,12 @@ public class Helper {
 		return jsonObject.put(key, o);
 	}
 	
-	/*
-	public Object put(String key,double o){
-		return jsonObject.put(key, df.format(o));
-	}*/
 	public Object put(String key,double value){
 		return jsonObject.put(key, value);
 	}
-	
-	/*
-	public Object put(String key,double o,int digital){
-		return jsonObject.put(key, dft.format(o));
-	}*/
-	public Object put(String key,double o,int digital){
-		return jsonObject.put(key, o);
-	}
-	
-	/*
-	public Object put(String key,Double o){
-		return jsonObject.put(key, o != null ? df.format(o) : "");
-	}*/
+
 	public Object put(String key, Double value) {
 		return jsonObject.put(key, value);
-	}
-	
-	/*
-	public Object put(String key,Double o,int digital){
-		return jsonObject.put(key, o != null ? dft.format(o) : "");
-	}*/
-	public Object put(String key,Double o,int digital){
-		return jsonObject.put(key, o);
 	}
 	
 	public Object put(String key,long o){	
