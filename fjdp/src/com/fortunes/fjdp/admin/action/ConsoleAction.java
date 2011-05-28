@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import misc.InitDb;
 import net.fortunes.core.action.BaseAction;
 import net.fortunes.util.Tools;
 
@@ -18,12 +17,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springframework.stereotype.Component;
 
+import com.fortunes.fjdp.admin.model.Config.ConfigKey;
 import com.fortunes.fjdp.admin.model.Employee;
 import com.fortunes.fjdp.admin.model.Organization;
 import com.fortunes.fjdp.admin.model.Privilege;
 import com.fortunes.fjdp.admin.model.Role;
 import com.fortunes.fjdp.admin.model.User;
-import com.fortunes.fjdp.admin.model.Config.ConfigKey;
 import com.fortunes.fjdp.admin.service.ConfigService;
 import com.fortunes.fjdp.admin.service.DictService;
 import com.fortunes.fjdp.admin.service.EmployeeService;
@@ -59,9 +58,9 @@ public class ConsoleAction extends BaseAction implements ApplicationContextAware
 		
 		
 		menuService.initToDb(new InputStreamReader(
-				InitDb.class.getResourceAsStream(FUNC_XML_PATH),"utf-8"));
+				this.getClass().getResourceAsStream(FUNC_XML_PATH),"utf-8"));
 		dictService.initToDb(new InputStreamReader(
-				InitDb.class.getResourceAsStream(DICT_XML_PATH),"utf-8"));
+				this.getClass().getResourceAsStream(DICT_XML_PATH),"utf-8"));
 		
 		//初始化系统参数
 		Map<ConfigKey, String> maps = new EnumMap<ConfigKey, String>(ConfigKey.class);
@@ -71,7 +70,7 @@ public class ConsoleAction extends BaseAction implements ApplicationContextAware
 		configService.initConfigs(maps);
 		
 		//新建权限
-		List<Privilege> pList = privilegeService.getListData().getList();	
+		List<Privilege> pList = privilegeService.findAll();	
 		
 		//新建角色
 		Role admin = new Role("系统管理员",Role.SYSTEM_ROLE);
@@ -115,9 +114,9 @@ public class ConsoleAction extends BaseAction implements ApplicationContextAware
 	
 	public String rebuildDb() throws Exception{
 		menuService.initToDb(new InputStreamReader(
-				InitDb.class.getResourceAsStream(FUNC_XML_PATH),"utf-8"));
+				this.getClass().getResourceAsStream(FUNC_XML_PATH),"utf-8"));
 		dictService.initToDb(new InputStreamReader(
-				InitDb.class.getResourceAsStream(DICT_XML_PATH),"utf-8"));
+				this.getClass().getResourceAsStream(DICT_XML_PATH),"utf-8"));
 		return render(jo);
 	}
 

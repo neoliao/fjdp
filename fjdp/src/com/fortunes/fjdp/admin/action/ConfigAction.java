@@ -35,7 +35,7 @@ public class ConfigAction extends BaseAction {
 	}
 	
 	public String loadConfig() throws Exception{
-		List<Config> configs = configService.getAll();
+		List<Config> configs = configService.findAll();
 		JSONObject data = new JSONObject();
 		for(Config config : configs){
 			data.put(config.getConfigKey().name(), config.getConfigValue());

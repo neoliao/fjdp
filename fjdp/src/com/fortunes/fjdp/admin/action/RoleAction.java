@@ -46,7 +46,7 @@ public class RoleAction extends GenericAction<Role> {
 
 	public String getRolesByUser() throws Exception {
 		User user = userService.get(getId());
-		List<Role> roleList = roleService.getListData().getList();
+		List<Role> roleList = roleService.findAll();
 		JSONArray ja = new JSONArray();
 		for(Role role:roleList){
 			JSONObject record = new JSONObject();
@@ -112,7 +112,7 @@ public class RoleAction extends GenericAction<Role> {
 	}
 	
 	public String getRoles()throws Exception{
-		List<Role> roles = roleService.getListData().getList();
+		List<Role> roles = roleService.findAll();
 		JSONArray ja = new JSONArray();
 		JSONObject record = null;
 		for(Role role:roles){

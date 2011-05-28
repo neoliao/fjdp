@@ -22,12 +22,11 @@ public class OrganizationService extends GenericService<Organization> {
 	
 	
 	@Override
-	public Organization add(Organization entity) throws Exception {
+	public void add(Organization entity) throws Exception {
 		
 		super.add(entity);
 		if(entity.getParent() != null)
 			entity.getParent().setLeaf(false);
-		return entity;
 	}
 	
 	@Override
@@ -51,7 +50,7 @@ public class OrganizationService extends GenericService<Organization> {
 		
 		//从组织中移除员工
 		organization.getEmployees().remove(employee);
-		this.getDefDao().getHibernateTemplate().flush();
+		this.getHt().flush();
 	}
 
 	/**
@@ -60,7 +59,7 @@ public class OrganizationService extends GenericService<Organization> {
 	 * @return
 	 */
 	public List<Employee> getUnassignEmployeesByOrganizationId(String organizationId) {
-		return getDefDao().findByQueryString(
+		return this.getHt().find(
 				" select e from Employee as e left join fetch e.user where e not in " +
 				" (select oe from Organization as o join o.employees as oe where o.id =  ?)", 
 				Long.parseLong(organizationId));
@@ -71,7 +70,7 @@ public class OrganizationService extends GenericService<Organization> {
 	 * @return
 	 */
 	public List<Employee> getUnassignEmployees() {
-		return getDefDao().findByQueryString(
+		return this.getHt().find(
 				" select e from Employee as e left join fetch e.organization as o where o is null" );
 	}
     

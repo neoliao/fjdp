@@ -141,7 +141,7 @@ public class IdentitySessionImpl implements IdentitySession {
 	@Override
 	public List<User> findUsers() {
 		List<User> jbpmUsers = new ArrayList<User>();
-		List<com.fortunes.fjdp.admin.model.User> users = userService.getAll();
+		List<com.fortunes.fjdp.admin.model.User> users = userService.findAll();
 		for(com.fortunes.fjdp.admin.model.User user : users){
 			jbpmUsers.add((User)user);
 		}

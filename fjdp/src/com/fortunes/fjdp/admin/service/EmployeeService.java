@@ -32,7 +32,7 @@ public class EmployeeService extends GenericService<Employee> {
 
 	@SuppressWarnings("unchecked")
 	public List<Employee> getEmployeesUnAssign() {
-		return getDefDao().findByQueryString(
+		return this.find(
 				"select e from Employee as e left join e.user as u where u.id is null");
 	}
 }

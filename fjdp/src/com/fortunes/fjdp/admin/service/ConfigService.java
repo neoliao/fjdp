@@ -22,21 +22,21 @@ public class ConfigService extends GenericService<Config> {
 			
 			config.setLastValue(config.getConfigValue());
 			config.setConfigValue(map.getValue());
-			getDefDao().update(config);
+			this.update(config);
 		}
 	}
 	
-	public void initConfigs(Map<ConfigKey, String> maps){
+	public void initConfigs(Map<ConfigKey, String> maps) throws Exception{
 		for(Map.Entry<ConfigKey, String>  map: maps.entrySet()){
 			
 			//初始化一个设置项,将现有值,上个值,缺省值都设为相同的
 			Config config =  new Config(map.getKey(),map.getValue(),map.getValue(),map.getValue());
-			getDefDao().add(config);
+			this.add(config);
 		}
 	}
 	
 	public Config getConfigBykey(ConfigKey key) {
-		return findUniqueByProperty("configKey", key);
+		return findUnique("from Config c where c.configKey = ?", key);
 	}
 	
 	
@@ -48,7 +48,7 @@ public class ConfigService extends GenericService<Config> {
 	public String getConfigValueFromCache(ConfigKey key){
 		if(cache == null){
 			cache = new HashMap<ConfigKey, String>();
-			for(Config c : this.getAll()){
+			for(Config c : this.findAll()){
 				cache.put(c.getConfigKey(), c.getConfigValue());
 			}
 		}

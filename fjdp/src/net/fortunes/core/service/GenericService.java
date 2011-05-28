@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import net.fortunes.core.ListData;
-import net.fortunes.core.dao.GenericDao;
 import net.fortunes.core.log.annotation.LoggerMethod;
 import net.fortunes.util.GenericsUtil;
 
@@ -16,6 +15,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
@@ -23,12 +25,18 @@ import org.hibernate.criterion.Projections;
  * @param <E>　Entity的类型
  * @author Neo
  */
-public abstract class GenericService<E> extends BaseService{
+public abstract class GenericService<E>{
 	
-	@Resource
-	private GenericDao<E> defDao;
+//	@Resource
+//	private GenericDao<E> defDao;
+	
+	@Resource private HibernateTemplate hibernateTemplate;   
+      
 	
 	private Class<E> entityClass;
+	
+	@Resource private TransactionTemplate transactionTemplate;
+	@Resource private JdbcTemplate jdbcTemplate;
 	
 	/**
 	 * 子类初始时根据子类的泛型参数决定Entity的类型,这个构造函数不能直接调用
@@ -38,30 +46,30 @@ public abstract class GenericService<E> extends BaseService{
 	}
 	
 	@LoggerMethod(operateName = "新增")
-	public E add(E entity) throws Exception{
-		return defDao.add(entity);
+	public void add(E entity) throws Exception{
+		this.getHt().save(entity);
 	}
 	
 	@LoggerMethod(operateName = "删除")
 	public void del(E entity) throws Exception{
-		defDao.del(entity);
+		this.getHt().delete(entity);
 	}
 	
 	@LoggerMethod(operateName = "修改")
-	public E update(E entity){
-		return defDao.update(entity);
+	public void update(E entity){
+		this.getHt().update(entity);
 	}
 	
-	public E addOrUpdate(E entity){
-		return defDao.saveOrUpdate(entity);
+	public void addOrUpdate(E entity){
+		this.getHt().saveOrUpdate(entity);
 	}
 	
 	public E get(String id){
-		return StringUtils.isEmpty(id) ? null : defDao.getById(entityClass,getPk(id));
+		return StringUtils.isEmpty(id) ? null : (E)this.getHt().get(entityClass,getPk(id));
 	}
 	
-	public List<E> getAll(){
-		return defDao.findByCriteria(DetachedCriteria.forClass(this.entityClass));
+	public List<E> findAll(){
+		return this.getHt().findByCriteria(DetachedCriteria.forClass(this.entityClass));
 	}
 	
 	public ListData<E> getListData(String query,Map<String,String> queryMap,int start,int limit){
@@ -76,29 +84,9 @@ public abstract class GenericService<E> extends BaseService{
 		return listData;
 	}
 	
-	public ListData<E> getListData(DetachedCriteria criteria,int start,int limit){
-		int total = getTotal(criteria);
-		criteria.setProjection(null);
-		criteria.setResultTransformer(Criteria.ROOT_ENTITY);
-		if(getOrder() != null){
-			criteria.addOrder(getOrder());
-		}
-		List<E> list = defDao.findByCriteria(criteria,start, limit);
-		return new ListData<E>(list,total);
-	}
 	
-	public ListData<E> getListData(DetachedCriteria criteria){
-		if(getOrder() != null){
-			criteria.addOrder(getOrder());
-		}
-		List<E> list = defDao.findByCriteria(criteria);
-		int total = list.size();
-		return new ListData<E>(list,total);
-	}
 	
-	public ListData<E> getListData(){
-		return getListData(getConditions(null,null),0,0);
-	}
+	
 	
 	
 	/**
@@ -109,16 +97,11 @@ public abstract class GenericService<E> extends BaseService{
 		return Order.desc("id");
 	}
 	
-	public int getTotal() {
-		return defDao.getTotal();
-	}
 	
-	private int getTotal(DetachedCriteria conditions) {
-		return (Integer)defDao.getHibernateTemplate().findByCriteria(
-				conditions.setProjection(Projections.rowCount())).iterator().next();
-	}
+	
 	
 	/**
+	 * override用来过滤数据集
 	 * @param query
 	 * @param queryMap
 	 * @return
@@ -127,51 +110,25 @@ public abstract class GenericService<E> extends BaseService{
 		return DetachedCriteria.forClass(this.entityClass);
 	}
 	
-	
-	/**
-	 * 属性条件查询 例如 age > 30,name = lisa
-	 * @param propertyName 属性名
-	 * @param operator 操作符
-	 * @param value 属性值
-	 */
-	public List<E> findByProperty(String propertyName,String operator,Object value) {
-		String queryString = "from " + this.entityClass.getSimpleName()
-				+ " as e where e." + propertyName +" "+ operator +" ? ";
-		return defDao.findByQueryString(queryString,value);
+	public List<E> find(String hql, Object... objects) {
+		return this.getHt().find(hql, objects);
 	}
 	
-	/**
-	 * 属性相等条件查询 例如 name = lisa
-	 * @param propertyName 属性名
-	 * @param value 属性值
-	 * @return List<E>
-	 */
-	public List<E> findByProperty(String propertyName, Object value) {
-		return findByProperty(propertyName,"=", value);
-	}
-	
-	/**
-	 * 属性相等条件查询,得到的是一个唯一值
-	 * @param propertyName 属性名
-	 * @param value 属性值
-	 * @return E
-	 */
-	public E findUniqueByProperty(String propertyName, Object value) {
-		List<E> list = findByProperty(propertyName,value);
-		if(list != null && list.size() >=1)
-			return list.get(0);
-		else
-			return null;
+	public E findUnique(String hql, Object... objects) {
+		List<E> list = find(hql,objects);
+		return  (list != null && list.size() >0) ? list.get(0) : null;
 	}
 	
 	public E getRoot(){
-		return (E)defDao.findByQueryString(
-				"from "+entityClass.getSimpleName()+" as e where e.parent is null").get(0);
+		return this.findUnique(
+				"from "+entityClass.getSimpleName()+" as e where e.parent is null");
 	}
 	
 	public int delAll(){
-		return defDao.bulkUpdate("delete from "+entityClass.getSimpleName());
+		return this.getHt().bulkUpdate("delete from "+entityClass.getSimpleName());
 	}
+	
+	//========= private methods =========
 	
 	/**
 	 * 转换为主键的值，这种实现会有问题
@@ -185,7 +142,40 @@ public abstract class GenericService<E> extends BaseService{
 		} catch (NumberFormatException e) {
 			return id;
 		}
-	}	
+	}
+	
+	private int getTotal(DetachedCriteria conditions) {
+		return (Integer)this.getHt().findByCriteria(
+				conditions.setProjection(Projections.rowCount())).iterator().next();
+	}
+	
+	private ListData<E> getListData(DetachedCriteria criteria,int start,int limit){
+		int total = getTotal(criteria);
+		criteria.setProjection(null);
+		criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+		if(getOrder() != null){
+			criteria.addOrder(getOrder());
+		}
+		List<E> list = this.getHt().findByCriteria(criteria,start, limit);
+		return new ListData<E>(list,total);
+	}
+	
+	private ListData<E> getListData(DetachedCriteria criteria){
+		if(getOrder() != null){
+			criteria.addOrder(getOrder());
+		}
+		List<E> list = this.getHt().findByCriteria(criteria);
+		int total = list.size();
+		return new ListData<E>(list,total);
+	}
+	
+	private ListData<E> getListData(){
+		return getListData(getConditions(null,null),0,0);
+	}
+	
+	protected HibernateTemplate getHt(){
+		return hibernateTemplate;
+	}
 
 	public Class<E> getEntityClass() {
 		return entityClass;
@@ -195,11 +185,4 @@ public abstract class GenericService<E> extends BaseService{
 		this.entityClass = entityClass;
 	}
 
-	public void setDefDao(GenericDao<E> defDao) {
-		this.defDao = defDao;
-	}
-	
-	public GenericDao<E> getDefDao() {
-		return defDao;
-	}
 }

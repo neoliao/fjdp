@@ -4,14 +4,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Date;
+
+import javax.annotation.Resource;
+
 import net.fortunes.core.Helper;
 import net.fortunes.core.Model;
-import net.fortunes.core.dao.GenericDao;
 import net.fortunes.core.log.annotation.LoggerClass;
 import net.fortunes.core.log.annotation.LoggerMethod;
 import net.fortunes.util.Tools;
 
 import org.springframework.aop.AfterReturningAdvice;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.fortunes.fjdp.admin.model.Log;
 import com.fortunes.fjdp.admin.model.User;
@@ -24,7 +27,7 @@ import com.fortunes.fjdp.admin.model.User;
  */
 public class LogAdvice implements AfterReturningAdvice {
 	
-	private GenericDao<Log> genericDao; 
+	@Resource private HibernateTemplate hibernateTemplate;   
 	
 	public void afterReturning(Object returnValue, Method method, Object[] methodArgs,
 			Object target) throws Throwable {
@@ -74,7 +77,7 @@ public class LogAdvice implements AfterReturningAdvice {
 		newLog.setOpUser(opUserName);
 		newLog.setOpType(opName);
 		newLog.setContents(contents);
-		genericDao.add(newLog);
+		hibernateTemplate.save(newLog);
 		//genericDao.getHibernateTemplate().flush();
 		
 	}
@@ -92,14 +95,6 @@ public class LogAdvice implements AfterReturningAdvice {
 	//打印到控制台
 	private void printLogMsg(String contents){
 		Tools.println(contents);
-	}
-
-	public void setGenericDao(GenericDao<Log> genericDao) {
-		this.genericDao = genericDao;
-	}
-
-	public GenericDao<Log> getGenericDao() {
-		return genericDao;
 	}
 	
 }

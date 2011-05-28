@@ -63,14 +63,18 @@
         <property name="dataSource" ref="defaultDs"/>
     </bean>
     
-    <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-    	<property name="dataSource" ref="defaultDs"/>
-    	<property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-    
     <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
     	<property name="transactionManager" ref="txManager"/>
 	</bean>
+	
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"/>	
+	</bean>
+	
+	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    	<property name="dataSource" ref="defaultDs"/>
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
     
     <tx:advice id="txAdvice" transaction-manager="txManager" >
     	<tx:attributes>
@@ -90,12 +94,8 @@
     		pointcut="execution(* *.fortunes..*Service.*(..)) "/>
     </aop:config>
        
-	<bean id="genericDao" class="net.fortunes.core.dao.GenericDao">
-    	<property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+	
     
-    <bean id="initDb" class="misc.InitDb"/>
-    <bean id="test" class="misc.Test"/>
     
     <context:annotation-config/>
     <context:component-scan base-package="net.fortunes,com.fortunes"/>
