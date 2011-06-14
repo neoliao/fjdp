@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fortunes.fjdp.AppHelper;
 import com.fortunes.fjdp.admin.AdminHelper;
 import com.fortunes.fjdp.admin.model.Role;
 import com.fortunes.fjdp.admin.model.User;
@@ -40,7 +41,7 @@ public class UserAction extends GenericAction<User> {
 	}
 	
 	protected JSONObject toJsonObject(User user){
-		AdminHelper record = new AdminHelper();
+		AppHelper record = new AppHelper();
 		record.put("id", user.getId());
 		record.put("userName", user.getName());
 		record.put("userDisplayName", user.getDisplayName());

@@ -9,7 +9,7 @@ import com.fortunes.fjdp.admin.model.User;
 import net.fortunes.core.Helper;
 import net.sf.json.JSONObject;
 
-public class AdminHelper extends Helper{
+public abstract class AdminHelper extends Helper{
 	
 	/**
 	 * @param key

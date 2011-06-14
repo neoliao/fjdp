@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fortunes.fjdp.AppHelper;
 import com.fortunes.fjdp.admin.AdminHelper;
 import com.fortunes.fjdp.admin.model.Employee;
 import com.fortunes.fjdp.admin.service.EmployeeService;
@@ -94,7 +95,7 @@ public class EmployeeAction extends GenericAction<Employee> {
 	}
 	
 	protected JSONObject toJsonObject(Employee e) throws ParseException{
-		AdminHelper record = new AdminHelper();
+		AppHelper record = new AppHelper();
 		record.put("id", e.getId());
 		record.put("code", e.getCode());		
 		record.put("sex", e.getSex());
