@@ -48,7 +48,7 @@ public class LogAction extends GenericAction<Log> {
 	}
 	
 	protected JSONObject toJsonObject(Log log) throws ParseException{	
-		AdminHelper record = new AdminHelper();
+		AppHelper record = new AppHelper();
 		record.put("id", log.getId());		
 		record.put("opType", log.getOpType());
 		record.put("opUser", log.getOpUser());

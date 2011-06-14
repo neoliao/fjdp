@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fortunes.fjdp.AppHelper;
 import com.fortunes.fjdp.admin.AdminHelper;
 import com.fortunes.fjdp.admin.model.Employee;
 import com.fortunes.fjdp.admin.model.Organization;
@@ -46,7 +47,7 @@ public class OrganizationAction extends GenericAction<Organization> {
 	}
 	
 	protected JSONObject toJsonObject(Organization e) throws ParseException{
-		AdminHelper record = new AdminHelper();
+		AppHelper record = new AppHelper();
 		record.put("id", e.getId());
 		record.put("name", e.getName());
 		record.put("code",e.getCode());

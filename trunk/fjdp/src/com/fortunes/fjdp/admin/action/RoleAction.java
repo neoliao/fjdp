@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fortunes.fjdp.AppHelper;
 import com.fortunes.fjdp.admin.AdminHelper;
 import com.fortunes.fjdp.admin.model.Privilege;
 import com.fortunes.fjdp.admin.model.Role;
@@ -37,7 +38,7 @@ public class RoleAction extends GenericAction<Role> {
 	}
 	
 	protected JSONObject toJsonObject(Role role){
-		AdminHelper record = new AdminHelper();
+		AppHelper record = new AppHelper();
 		record.put("id", role.getDbId());
 		record.put("nameCn", role.getName());
 		record.put("description", role.getDescription());

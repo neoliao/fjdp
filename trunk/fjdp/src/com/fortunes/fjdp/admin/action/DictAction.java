@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fortunes.fjdp.AppHelper;
 import com.fortunes.fjdp.admin.AdminHelper;
 import com.fortunes.fjdp.admin.model.Dict;
 import com.fortunes.fjdp.admin.service.DictService;
@@ -36,7 +37,7 @@ public class DictAction extends GenericAction<Dict> {
 	}
 	
 	protected JSONObject toJsonObject(Dict dict) throws ParseException{
-		AdminHelper record = new AdminHelper();
+		AppHelper record = new AppHelper();
 		record.put("id", dict.getId());
 		record.put("text", dict.getText());
 		record.put("description", dict.getDescription());
